@@ -37,11 +37,13 @@ class DrawerItemCard extends StatelessWidget {
                   color: isSelected ? Colors.white : Colors.deepOrange.withOpacity(0.8),
                 ),
                 const SizedBox(width: 10),
-                Text(
-                  item.title,
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                Expanded(
+                  child: Text(
+                    item.title,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
                   ),
                 ),
               ],

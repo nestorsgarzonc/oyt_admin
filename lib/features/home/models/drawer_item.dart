@@ -12,33 +12,12 @@ class CardItem extends Equatable {
   List<Object> get props => [title, icon];
 
   static const items = [
-    CardItem(
-      title: 'Mesas',
-      icon: Icons.table_bar,
-    ),
-    CardItem(
-      title: 'Menu',
-      icon: Icons.menu_book_rounded,
-    ),
-    CardItem(
-      title: 'Pedidos',
-      icon: FontAwesomeIcons.burger,
-    ),
-    CardItem(
-      title: 'Meseros',
-      icon: FontAwesomeIcons.userTie,
-    ),
-    CardItem(
-      title: 'Restaurante',
-      icon: FontAwesomeIcons.building,
-    ),
-    CardItem(
-      title: 'Estadisticas',
-      icon: FontAwesomeIcons.chartArea,
-    ),
-    CardItem(
-      title: 'Ordenes',
-      icon: FontAwesomeIcons.fileLines,
-    ),
+    CardItem(title: 'Mesas', icon: Icons.table_bar),
+    CardItem(title: 'Menu', icon: Icons.menu_book_rounded),
+    CardItem(title: 'Pedidos', icon: FontAwesomeIcons.burger),
+    CardItem(title: 'Historico ordenes', icon: FontAwesomeIcons.fileLines),
+    CardItem(title: 'Meseros', icon: FontAwesomeIcons.userTie),
+    CardItem(title: 'Restaurante', icon: FontAwesomeIcons.building),
+    CardItem(title: 'Estadisticas', icon: FontAwesomeIcons.chartArea),
   ];
 }
