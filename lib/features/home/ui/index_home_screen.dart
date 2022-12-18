@@ -53,7 +53,11 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
                       const Spacer(),
                       DrawerItemCard(
                         onTap: () {},
-                        item: const CardItem(title: 'Cerrar sesión', icon: Icons.logout),
+                        item: CardItem(
+                          title: 'Cerrar sesión',
+                          icon: Icons.logout,
+                          tab: () => const SizedBox(),
+                        ),
                         isSelected: false,
                       ),
                       const SafeArea(child: SizedBox.shrink()),
@@ -63,12 +67,7 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
                 Expanded(
                   child: IndexedStack(
                     index: _index,
-                    children: const [
-                      Center(child: Text('Home')),
-                      Center(child: Text('Orders')),
-                      Center(child: Text('Products')),
-                      Center(child: Text('Settings')),
-                    ],
+                    children: CardItem.items.map((e) => e.tab()).toList(),
                   ),
                 ),
               ],
