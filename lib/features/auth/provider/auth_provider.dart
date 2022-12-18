@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/core/router/router.dart';
 import 'package:oyt_admin/features/auth/provider/auth_state.dart';
+import 'package:oyt_admin/features/auth/repositories/auth_repositories.dart';
+import 'package:oyt_admin/features/home/ui/index_home_screen.dart';
+import 'package:oyt_admin/features/on_boarding/ui/on_boarding.dart';
 import 'package:oyt_front_auth/models/user_model.dart';
-import 'package:oyt_front_auth/repositories/auth_repositories.dart';
 import 'package:oyt_front_core/external/socket_handler.dart';
 import 'package:oyt_front_core/wrappers/state_wrapper.dart';
 import 'package:oyt_front_widgets/error/error_screen.dart';
-import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 
 final authProvider = StateNotifierProvider<AuthProvider, AuthState>((ref) {
   return AuthProvider.fromRead(ref);
@@ -19,7 +20,7 @@ class AuthProvider extends StateNotifier<AuthState> {
     required this.authRepository,
     required this.ref,
     required this.socketIOHandler,
-  }) : super(AuthState(authModel: StateAsync.initial()));
+  }) : super(AuthState.initial());
 
   factory AuthProvider.fromRead(Ref ref) {
     final authRepository = ref.read(authRepositoryProvider);
@@ -32,7 +33,7 @@ class AuthProvider extends StateNotifier<AuthState> {
   }
 
   final Ref ref;
-  final AuthRepository authRepository;
+  final AdminAuthRepository authRepository;
   final SocketIOHandler socketIOHandler;
 
   Future<void> login({required String email, required String password}) async {
@@ -43,11 +44,22 @@ class AuthProvider extends StateNotifier<AuthState> {
         state = state.copyWith(authModel: StateAsync.error(l));
         ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': l.message});
       },
-      (r) {
+      (r) async {
+        await checkIfIsAdmin();
         state = state.copyWith(authModel: StateAsync.success(r));
+        ref.read(routerProvider).router.replace(IndexHomeScreen.route);
         startListeningSocket();
-        ref.read(routerProvider).router.pop();
       },
+    );
+  }
+
+  Future<void> checkIfIsAdmin() async {
+    return;
+    state = state.copyWith(checkWaiterResponse: StateAsync.loading());
+    final res = await authRepository.checkIfIsAdmin();
+    res.fold(
+      (l) => ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': l.message}),
+      (r) => state = state.copyWith(checkWaiterResponse: StateAsync.success(r)),
     );
   }
 
@@ -63,7 +75,7 @@ class AuthProvider extends StateNotifier<AuthState> {
     ref.read(routerProvider).router.pop();
   }
 
-  Future<void> logout({String? logoutMessage}) async {
+  Future<void> logout() async {
     if (state.authModel.data == null) {
       ref
           .read(routerProvider)
@@ -79,11 +91,9 @@ class AuthProvider extends StateNotifier<AuthState> {
       return;
     }
     stopListeningSocket();
-    CustomSnackbar.showSnackBar(
-      ref.read(routerProvider).context,
-      logoutMessage ?? 'Se ha cerrado sesion exitosamente.',
-    );
-    state = AuthState(authModel: StateAsync.initial());
+    Navigator.of(ref.read(routerProvider).context).popUntil((route) => route.isFirst);
+    ref.read(routerProvider).router.replace(OnBoarding.route);
+    state = AuthState.initial();
   }
 
   Future<void> restorePassword(String email) async {
@@ -96,13 +106,15 @@ class AuthProvider extends StateNotifier<AuthState> {
     final res = await authRepository.getUserByToken();
     res.fold(
       (l) => state = state.copyWith(authModel: StateAsync.error(l)),
-      (r) {
+      (r) async {
         if (r == null) {
           state = state.copyWith(authModel: StateAsync.initial());
           return;
         }
+        await checkIfIsAdmin();
         startListeningSocket();
         state = state.copyWith(authModel: StateAsync.success(r));
+        ref.read(routerProvider).router.go(IndexHomeScreen.route);
       },
     );
   }
@@ -113,14 +125,6 @@ class AuthProvider extends StateNotifier<AuthState> {
 
   Future<void> startListeningSocket() async {
     await socketIOHandler.connect();
-    //TODO: ADD SOCKET LISTENERS
-    // final socketModel = ConnectSocket(
-    //   tableId: ref.read(tableProvider).tableCode ?? '',
-    //   token: state.authModel.data?.bearerToken ?? '',
-    // );
-    // ref.read(tableProvider.notifier).listenTableUsers();
-    // ref.read(tableProvider.notifier).listenListOfOrders();
-    // ref.read(ordersProvider.notifier).listenOnPay();
-    //socketIOHandler.emitMap(SocketConstants.joinSocket, socketModel.toMap());
+    //TODO: add socket listeners
   }
 }

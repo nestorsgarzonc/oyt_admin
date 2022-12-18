@@ -3,14 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:oyt_admin/features/auth/provider/auth_provider.dart';
-import 'package:oyt_admin/features/auth/ui/register_screen.dart';
 import 'package:oyt_front_core/constants/lotti_assets.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
-import 'package:oyt_front_widgets/widgets/buttons/custom_elevated_button.dart';
-import 'package:oyt_front_widgets/widgets/backgrounds/animated_background.dart';
-import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
-import 'package:oyt_front_widgets/widgets/buttons/back_icon_button.dart';
 import 'package:oyt_front_widgets/loading/loading_widget.dart';
+import 'package:oyt_front_widgets/widgets/backgrounds/animated_background.dart';
+import 'package:oyt_front_widgets/widgets/buttons/custom_elevated_button.dart';
+import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -23,8 +21,8 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: 'waiter4@undefined.com');
+  final _passwordController = TextEditingController(text: '123456');
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +32,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         padding: const EdgeInsets.all(10),
         children: [
           const SizedBox(height: 15),
-          const BackIconButton(),
+          Row(
+            children: [
+              IconButton(
+                onPressed: GoRouter.of(context).pop,
+                icon: const Icon(Icons.arrow_back),
+              ),
+            ],
+          ),
           const Text(
             '¡Bienvenido!',
             textAlign: TextAlign.center,
@@ -55,7 +60,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             alignment: Alignment.center,
             height: 180,
             width: 180,
-            child: Lottie.asset(LottieAssets.login, height: 180.0, fit: BoxFit.fitHeight),
+            child: Lottie.asset(
+              LottieAssets.login,
+              height: 180.0,
+              fit: BoxFit.fitHeight,
+            ),
           ),
           const SizedBox(height: 10),
           Form(
@@ -93,11 +102,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               child: const Text('Ingresar'),
             ),
           ),
-          const SizedBox(height: 10),
-          TextButton(
-            onPressed: () => GoRouter.of(context).push(RegisterScreen.route),
-            child: const Text('O regístrate ahora'),
-          )
         ],
       ),
     );
