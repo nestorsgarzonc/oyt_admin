@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "111373113185",
+    "project_id": "on-your-table",
+    "storage_bucket": "on-your-table.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111373113185:android:01a8b8862f47a5e6945720",
+        "android_client_info": {
+          "package_name": "com.oyt.oyt_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111373113185-319f1t4es8dfnj8emaps69cg8gf10o57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5hpf00nyHGOXkkyzvMEgu4gVA3OIIbrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111373113185-319f1t4es8dfnj8emaps69cg8gf10o57.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "111373113185-97qvniggf93uvm87dc21sk3425ktjmsp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nw.restaurants"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111373113185:android:d45200a2ff16dff4945720",
+        "android_client_info": {
+          "package_name": "com.oyt.oyt_diner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111373113185-319f1t4es8dfnj8emaps69cg8gf10o57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5hpf00nyHGOXkkyzvMEgu4gVA3OIIbrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111373113185-319f1t4es8dfnj8emaps69cg8gf10o57.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "111373113185-97qvniggf93uvm87dc21sk3425ktjmsp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nw.restaurants"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

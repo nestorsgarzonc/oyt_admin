@@ -16,12 +16,12 @@ class DrawerItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
         color: isSelected ? Colors.deepOrange : Colors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: isSelected ? [const BoxShadow(color: Colors.black12, blurRadius: 10)] : null,
-        border: Border.all(color: Colors.black12),
+        border: isSelected ? null : Border.all(color: Colors.black12),
       ),
       child: Material(
         color: Colors.transparent,
@@ -29,7 +29,7 @@ class DrawerItemCard extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(10),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             child: Row(
               children: [
                 Icon(

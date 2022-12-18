@@ -19,5 +19,7 @@ class CardItem extends Equatable {
     CardItem(title: 'Meseros', icon: FontAwesomeIcons.userTie),
     CardItem(title: 'Restaurante', icon: FontAwesomeIcons.building),
     CardItem(title: 'Estadisticas', icon: FontAwesomeIcons.chartArea),
+    CardItem(title: 'Inventario', icon: FontAwesomeIcons.boxesStacked),
+    CardItem(title: 'Cupones', icon: FontAwesomeIcons.ticket),
   ];
 }

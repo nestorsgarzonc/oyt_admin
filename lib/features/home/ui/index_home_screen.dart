@@ -35,7 +35,7 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SafeArea(child: SizedBox.shrink()),
-                      const FlutterLogo(size: 80),
+                      const FlutterLogo(size: 70),
                       const SizedBox(height: 10),
                       const Text(
                         'Restaurant name',
