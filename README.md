@@ -1,3 +1,6 @@
+git submodule init
+git submodule update
+flutter pub get
 # oyt_admin
 
 A new Flutter project.
