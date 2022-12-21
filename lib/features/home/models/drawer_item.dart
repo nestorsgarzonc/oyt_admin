@@ -21,52 +21,51 @@ class CardItem extends Equatable {
   @override
   List<Object> get props => [title, icon];
 
-  static final  items = [
+  static final items = [
     CardItem(
       title: 'Mesas',
       icon: Icons.table_bar,
-      tab: ()=> const TablesTab(),
+      tab: () => const TablesTab(),
     ),
     CardItem(
       title: 'Menu',
       icon: Icons.menu_book_rounded,
-      tab: ()=> const  MenuTab(), 
+      tab: () => const MenuTab(),
     ),
     CardItem(
       title: 'Pedidos',
       icon: FontAwesomeIcons.burger,
-      tab: ()=> const OrdersTab(),
+      tab: () => const OrdersTab(),
     ),
     CardItem(
       title: 'Historico ordenes',
       icon: FontAwesomeIcons.fileLines,
-      tab: ()=> const HistoricalOrdersTab(),
+      tab: () => const HistoricalOrdersTab(),
     ),
     CardItem(
       title: 'Meseros',
       icon: FontAwesomeIcons.userTie,
-      tab: ()=> const WaitersTab(),
-      
+      tab: () => const WaitersTab(),
     ),
     CardItem(
       title: 'Restaurante',
       icon: FontAwesomeIcons.building,
-      tab: ()=> const RestaurantTab(),
+      tab: () => const RestaurantTab(),
     ),
     CardItem(
       title: 'Estadisticas',
       icon: FontAwesomeIcons.chartArea,
-      tab: ()=> const StatisticsTab(),
+      tab: () => const StatisticsTab(),
     ),
     CardItem(
       title: 'Inventario',
       icon: FontAwesomeIcons.boxesStacked,
-      tab: ()=> const InventoryTab(),
+      tab: () => const InventoryTab(),
     ),
     CardItem(
       title: 'Cupones',
       icon: FontAwesomeIcons.ticket,
-      tab: ()=> const CouponsTab(),
+      tab: () => const CouponsTab(),
     ),
   ];
 }

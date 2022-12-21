@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/models/drawer_item.dart';
 import 'package:oyt_admin/features/home/ui/widgets/drawer_item_card.dart';
+import 'package:oyt_front_widgets/image/image_api_widget.dart';
 
 class IndexHomeScreen extends ConsumerStatefulWidget {
   const IndexHomeScreen({super.key});
@@ -35,12 +36,16 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SafeArea(child: SizedBox.shrink()),
-                      const FlutterLogo(size: 70),
-                      const SizedBox(height: 10),
+                      const ImageApi(
+                        'https://i0.wp.com/takuma.com.co/wp-content/uploads/2021/06/2021-logo.png',
+                        width: 185,
+                        fit: BoxFit.fitWidth,
+                      ),
+                      const SizedBox(height: 5),
                       const Text(
-                        'Restaurant name',
+                        'Takuma',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                       ),
                       const Spacer(),
                       ...CardItem.items.asMap().entries.map(
@@ -65,9 +70,9 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
                   ),
                 ),
                 Expanded(
-                  child: IndexedStack(
-                    index: _index,
-                    children: CardItem.items.map((e) => e.tab()).toList(),
+                  child: SafeArea(
+                    minimum: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    child: CardItem.items[_index].tab(),
                   ),
                 ),
               ],
