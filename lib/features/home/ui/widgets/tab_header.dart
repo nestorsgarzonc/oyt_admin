@@ -11,6 +11,7 @@ class TabHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 10),
         Text(
           title,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
