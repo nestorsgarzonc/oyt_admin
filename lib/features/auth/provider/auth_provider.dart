@@ -55,12 +55,13 @@ class AuthProvider extends StateNotifier<AuthState> {
 
   Future<void> checkIfIsAdmin() async {
     return;
-    state = state.copyWith(checkWaiterResponse: StateAsync.loading());
-    final res = await authRepository.checkIfIsAdmin();
-    res.fold(
-      (l) => ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': l.message}),
-      (r) => state = state.copyWith(checkWaiterResponse: StateAsync.success(r)),
-    );
+    //TODO: Add this when the backend is ready
+    //state = state.copyWith(checkWaiterResponse: StateAsync.loading());
+    //final res = await authRepository.checkIfIsAdmin();
+    //res.fold(
+    //  (l) => ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': l.message}),
+    //  (r) => state = state.copyWith(checkWaiterResponse: StateAsync.success(r)),
+    //);
   }
 
   Future<void> register(User user, BuildContext context) async {

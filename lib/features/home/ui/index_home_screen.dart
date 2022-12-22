@@ -41,12 +41,6 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
                         width: 185,
                         fit: BoxFit.fitWidth,
                       ),
-                      const SizedBox(height: 5),
-                      const Text(
-                        'Takuma',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
                       const Spacer(),
                       ...CardItem.items.asMap().entries.map(
                             (entry) => DrawerItemCard(

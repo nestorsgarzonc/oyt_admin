@@ -29,8 +29,8 @@ class _MenuTabState extends ConsumerState<MenuTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TabHeader(
-          title: 'Menu',
-          subtitle: 'Aca puedes ver el menu del restaurante, editar y agregar productos.',
+          title: 'Menú',
+          subtitle: 'Acá puedes ver el menú del restaurante, editar y agregar productos.',
         ),
         const Divider(),
         Expanded(
@@ -43,7 +43,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                     padding: EdgeInsets.zero,
                     controller: _categoriesScrollController,
                     children: [
-                      const Text('Categorias', style: _sectionTitleStyle),
+                      const Text('Categorías', style: _sectionTitleStyle),
                       AddButton(
                         onTap: _onAddCategory,
                         text: 'Agregar categoria',

@@ -28,17 +28,17 @@ class CardItem extends Equatable {
       tab: () => const TablesTab(),
     ),
     CardItem(
-      title: 'Menu',
+      title: 'Menú',
       icon: Icons.menu_book_rounded,
       tab: () => const MenuTab(),
     ),
     CardItem(
-      title: 'Pedidos',
+      title: 'Cola de productos',
       icon: FontAwesomeIcons.burger,
-      tab: () => const OrdersTab(),
+      tab: () => const OrdersQueueTab(),
     ),
     CardItem(
-      title: 'Historico ordenes',
+      title: 'Histórico ordenes',
       icon: FontAwesomeIcons.fileLines,
       tab: () => const HistoricalOrdersTab(),
     ),
@@ -53,7 +53,7 @@ class CardItem extends Equatable {
       tab: () => const RestaurantTab(),
     ),
     CardItem(
-      title: 'Estadisticas',
+      title: 'Estadísticas',
       icon: FontAwesomeIcons.chartArea,
       tab: () => const StatisticsTab(),
     ),

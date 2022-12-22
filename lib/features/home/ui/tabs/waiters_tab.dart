@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
+import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
 class WaitersTab extends ConsumerStatefulWidget {
   const WaitersTab({super.key});
@@ -12,6 +14,18 @@ class WaitersTab extends ConsumerStatefulWidget {
 
 class _WaitersTabState extends ConsumerState<WaitersTab> {
   final _scrollController = ScrollController();
+  final _textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchWaiter(String query) {
+    Logger.log('Searching waiter: $query');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +35,23 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
         const TabHeader(
           title: 'Meseros',
           subtitle:
-              'Aca puedes ver los meseros del restaurante, editar los meseros, eliminar meseros y agregar nuevos meseros.',
+              'Acá puedes ver los meseros del restaurante, editar los meseros, eliminar meseros y agregar nuevos meseros.',
         ),
-        AddButton(onTap: _onAddWaiter, text: 'Agregar mesero'),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                label: 'Buscar mesero',
+                onChanged: _onSearchWaiter,
+                prefixIcon: const Icon(Icons.search),
+                controller: _textEditingController,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              ),
+            ),
+            AddButton(onTap: _onAddWaiter, text: 'Agregar mesero'),
+          ],
+        ),
         const Divider(),
         Expanded(
           child: Scrollbar(
@@ -33,10 +61,7 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
               itemCount: 20,
               itemBuilder: (context, index) {
                 return Card(
-                  child: ListTile(
-                    onTap: () => _onTapWaiter(),
-                    title: Text('Mesero $index'),
-                  ),
+                  child: ListTile(onTap: () => _onTapWaiter(), title: Text('Mesero $index')),
                 );
               },
             ),
