@@ -408,6 +408,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  oyt_front_orders_queue:
+    dependency: "direct main"
+    description:
+      path: "packages/oyt_front_orders_queue"
+      relative: true
+    source: path
+    version: "0.0.1"
   oyt_front_product:
     dependency: "direct main"
     description:

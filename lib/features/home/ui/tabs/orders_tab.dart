@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
 import 'package:oyt_front_widgets/dropdown/custom_dropdown_field.dart';
+import 'package:oyt_front_orders_queue/models/order_status.dart';
 
 class OrdersQueueTab extends ConsumerStatefulWidget {
   const OrdersQueueTab({super.key});
@@ -12,6 +13,7 @@ class OrdersQueueTab extends ConsumerStatefulWidget {
 
 class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
   final _scrollController = ScrollController();
+  OrderStatus? _selectedStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +31,11 @@ class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 5),
-        CustomDropdownField<String>(
-          items: const ['all', 'pending', 'preparing', 'ready', 'delivered'],
-          value: null,
-          itemAsString: (item) => item,
-          onChanged: (value) {},
+        CustomDropdownField<OrderStatus>(
+          items: OrderStatus.values,
+          value: _selectedStatus,
+          itemAsString: (item) => item.label,
+          onChanged: (value) => setState(() => _selectedStatus = value),
           labelText: 'Estado del producto',
           hintText: 'Selecciona un estado',
         ),

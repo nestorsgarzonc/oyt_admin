@@ -39,6 +39,8 @@ dependencies:
     path: ./packages/oyt_front_table
   oyt_front_menu:
     path: ./packages/oyt_front_menu
+  oyt_front_orders_queue:
+    path: ./packages/oyt_front_orders_queue
   firebase_core: ^2.4.0
   firebase_messaging: ^14.1.4
   firebase_messaging_web: ^3.2.9
