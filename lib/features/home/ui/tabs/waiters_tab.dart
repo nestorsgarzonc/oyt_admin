@@ -59,11 +59,12 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
             child: ListView.builder(
               controller: _scrollController,
               itemCount: 20,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(onTap: () => _onTapWaiter(), title: Text('Mesero $index')),
-                );
-              },
+              itemBuilder: (context, index) => Card(
+                child: ListTile(
+                  onTap: () => _onTapWaiter(),
+                  title: Text('Mesero $index'),
+                ),
+              ),
             ),
           ),
         ),

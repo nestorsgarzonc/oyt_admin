@@ -22,3 +22,6 @@
 [submodule "packages/oyt_front_widgets"]
 	path = packages/oyt_front_widgets
 	url = https://oauth2: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@github.com/nestorsgarzonc/oyt_front_widgets
+[submodule "packages/oyt_front_orders_queue"]
+	path = packages/oyt_front_orders_queue
+	url = https://oauth2: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@github.com/nestorsgarzonc/oyt_front_orders_queue

@@ -57,15 +57,15 @@ class CardItem extends Equatable {
       icon: FontAwesomeIcons.chartArea,
       tab: () => const StatisticsTab(),
     ),
-    CardItem(
-      title: 'Inventario',
-      icon: FontAwesomeIcons.boxesStacked,
-      tab: () => const InventoryTab(),
-    ),
-    CardItem(
-      title: 'Cupones',
-      icon: FontAwesomeIcons.ticket,
-      tab: () => const CouponsTab(),
-    ),
+    //CardItem(
+    //  title: 'Inventario',
+    //  icon: FontAwesomeIcons.boxesStacked,
+    //  tab: () => const InventoryTab(),
+    //),
+    //CardItem(
+    //  title: 'Cupones',
+    //  icon: FontAwesomeIcons.ticket,
+    //  tab: () => const CouponsTab(),
+    //),
   ];
 }
