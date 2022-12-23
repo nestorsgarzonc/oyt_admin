@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:oyt_admin/features/home/ui/tabs/coupons_tab.dart';
 import 'package:oyt_admin/features/home/ui/tabs/historical_orders_tab.dart';
-import 'package:oyt_admin/features/home/ui/tabs/inventory_tab.dart';
 import 'package:oyt_admin/features/home/ui/tabs/menu_tab.dart';
 import 'package:oyt_admin/features/home/ui/tabs/orders_tab.dart';
 import 'package:oyt_admin/features/home/ui/tabs/restaurant_tab.dart';
