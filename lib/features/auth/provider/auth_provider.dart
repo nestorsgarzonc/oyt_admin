@@ -47,7 +47,7 @@ class AuthProvider extends StateNotifier<AuthState> {
       (r) async {
         await checkIfIsAdmin();
         state = state.copyWith(authModel: StateAsync.success(r));
-        ref.read(routerProvider).router.replace(IndexHomeScreen.route);
+        ref.read(routerProvider).router.pushReplacement(IndexHomeScreen.route);
         startListeningSocket();
       },
     );
@@ -93,7 +93,7 @@ class AuthProvider extends StateNotifier<AuthState> {
     }
     stopListeningSocket();
     Navigator.of(ref.read(routerProvider).context).popUntil((route) => route.isFirst);
-    ref.read(routerProvider).router.replace(OnBoarding.route);
+    ref.read(routerProvider).router.pushReplacement(OnBoarding.route);
     state = AuthState.initial();
   }
 

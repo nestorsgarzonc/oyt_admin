@@ -1,10 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_core/enums/weekdays_enum.dart';
+import 'package:oyt_front_core/utils/custom_image_picker.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/cards/upload_image_card.dart';
 import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
+import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
+import 'package:oyt_front_widgets/text_field/time_text_field.dart';
 
 class RestaurantTab extends ConsumerStatefulWidget {
   const RestaurantTab({super.key});
@@ -18,6 +23,10 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _addressController = TextEditingController();
+  Uint8List? _logo;
+  Uint8List? _cover;
+  bool _isLoadinglogo = false;
+  bool _isLoadingCover = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +51,17 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                   onRemove: () => ConfirmActionDialog.show(
                     context: context,
                     title: '¿Estas seguro de eliminar el logo?',
-                    onConfirm: () {},
+                    onConfirm: _onRemoveLogo,
                   ),
                   onReplace: () => ConfirmActionDialog.show(
                     context: context,
                     title: '¿Estas seguro de remplazar el logo?',
-                    onConfirm: () {},
+                    onConfirm: _onReplaceLogo,
                   ),
-                  //TODO: ADD ON UPLOAD
-                  onUpload: () {},
+                  onUpload: _onUploadLogo,
                   url: null,
+                  isLoading: _isLoadinglogo,
+                  imgBytes: _logo,
                   recomendations: const [
                     'Tamaño recomendado: 200x200',
                     'Formato: PNG',
@@ -61,18 +71,21 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                 const SectionTitle(title: 'Portada'),
                 UploadImageCard(
                   label: 'portada',
+                  fit: BoxFit.cover,
                   onRemove: () => ConfirmActionDialog.show(
                     context: context,
                     title: '¿Estas seguro de eliminar la portada?',
-                    onConfirm: () {},
+                    onConfirm: _onRemoveCover,
                   ),
                   onReplace: () => ConfirmActionDialog.show(
                     context: context,
                     title: '¿Estas seguro de remplazar la portada?',
-                    onConfirm: () {},
+                    onConfirm: _onReplaceCover,
                   ),
-                  onUpload: () {},
+                  onUpload: _onUploadCover,
                   showLarge: true,
+                  isLoading: _isLoadingCover,
+                  imgBytes: _cover,
                   recomendations: const [
                     'Tamaño recomendado: 1000x500',
                     'Formato: PNG, JPG o JPEG',
@@ -80,10 +93,7 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                   url: null,
                 ),
                 const SectionTitle(title: 'Nombre del restaurante'),
-                CustomTextField(
-                  label: 'Nombre del restaurante',
-                  controller: _nameController,
-                ),
+                CustomTextField(label: 'Nombre del restaurante', controller: _nameController),
                 const SectionTitle(title: 'Descripción'),
                 CustomTextField(
                   label: 'Descripción del restaurante',
@@ -97,22 +107,35 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                   maxLines: 1,
                 ),
                 const SectionTitle(title: 'Horario'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Hora de apertura',
-                        controller: _nameController,
-                      ),
+                ...Weekdays.values.map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${e.name}:',
+                            style: const TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: TimeTextField(
+                            label: 'Hora de apertura',
+                            onTap: (time) {},
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          flex: 3,
+                          child: TimeTextField(
+                            label: 'Hora de cierre',
+                            onTap: (time) {},
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Hora de cierre',
-                        controller: _nameController,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SectionTitle(title: 'Redes sociales'),
                 Row(
@@ -145,24 +168,6 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                     Expanded(
                       child: CustomTextField(
                         label: 'Correo electrónico',
-                        controller: _nameController,
-                      ),
-                    ),
-                  ],
-                ),
-                const SectionTitle(title: 'Ubicación'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Latitud',
-                        controller: _nameController,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Longitud',
                         controller: _nameController,
                       ),
                     ),
@@ -204,47 +209,70 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                     ),
                   ],
                 ),
-                const SectionTitle(title: 'Métodos de envío'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Método 1',
-                        controller: _nameController,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Método 2',
-                        controller: _nameController,
-                      ),
-                    ),
-                  ],
-                ),
-                const SectionTitle(title: 'Métodos de retiro'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Método 1',
-                        controller: _nameController,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Método 2',
-                        controller: _nameController,
-                      ),
-                    ),
-                  ],
-                ),
+                const SizedBox(height: 40),
               ],
             ),
           ),
         ),
       ],
     );
+  }
+
+  Future<void> _onUploadLogo() async {
+    try {
+      setState(() => _isLoadinglogo = true);
+      final logo = await CustomImagePicker.pickImage();
+      _logo = await logo?.readAsBytes();
+      setState(() => _isLoadinglogo = false);
+    } catch (e) {
+      CustomSnackbar.showSnackBar(context, 'Error al subir la imagen');
+      setState(() => _isLoadinglogo = false);
+    }
+  }
+
+  Future<void> _onUploadCover() async {
+    try {
+      setState(() => _isLoadingCover = true);
+      final cover = await CustomImagePicker.pickImage();
+      _cover = await cover?.readAsBytes();
+      setState(() => _isLoadingCover = false);
+    } catch (e) {
+      CustomSnackbar.showSnackBar(context, 'Error al subir la imagen');
+      setState(() => _isLoadingCover = false);
+    }
+  }
+
+  Future<void> _onReplaceLogo() async {
+    _onUploadLogo().then((value) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    });
+  }
+
+  Future<void> _onReplaceCover() async {
+    _onUploadCover().then((value) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    });
+  }
+
+  Future<void> _onRemoveLogo() async {
+    if (_logo != null) {
+      _logo = null;
+      setState(() {});
+    } else {
+      //TODO: ADD FOR NETWORK IMG
+    }
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _onRemoveCover() async {
+    if (_cover != null) {
+      _cover = null;
+      setState(() {});
+    } else {
+      //TODO: ADD FOR NETWORK IMG
+    }
+    Navigator.of(context).pop();
   }
 }
