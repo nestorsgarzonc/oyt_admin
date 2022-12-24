@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_core/enums/payments_enum.dart';
 import 'package:oyt_front_core/enums/weekdays_enum.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
@@ -173,42 +174,23 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                     ),
                   ],
                 ),
-                const SectionTitle(title: 'Categorías'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Categoría 1',
-                        controller: _nameController,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Categoría 2',
-                        controller: _nameController,
-                      ),
-                    ),
-                  ],
-                ),
                 const SectionTitle(title: 'Métodos de pago'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Método 1',
-                        controller: _nameController,
+                ...PaymentMethod.values
+                    .map(
+                      (e) => Card(
+                        child: CheckboxListTile(
+                          title: Text(e.title),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          secondary: IconButton(
+                            icon: const Icon(Icons.help_outline),
+                            onPressed: () {},
+                          ),
+                          value: true,
+                          onChanged: (value) {},
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: CustomTextField(
-                        label: 'Método 2',
-                        controller: _nameController,
-                      ),
-                    ),
-                  ],
-                ),
+                    )
+                    .toList(),
                 const SizedBox(height: 40),
               ],
             ),
