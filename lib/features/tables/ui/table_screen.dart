@@ -26,6 +26,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
   final _id = TextEditingController();
   final _qrKey = GlobalKey();
   final _drawerController = ScrollController();
+  final _bodyController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +106,21 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                     icon: const Icon(Icons.update),
                     label: const Text('Actualizar mesa'),
                   ),
+                  const SafeArea(bottom: false, child: SizedBox.shrink()),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Scrollbar(
+              controller: _bodyController,
+              child: ListView(
+                padding: CustomTheme.drawerBodyPadding,
+                controller: _bodyController,
+                children: [
+                  //TODO: Add table status
+                  const SafeArea(bottom: false, child: SizedBox.shrink()),
+                  const SectionTitle(title: 'Productos'),
                   const SafeArea(bottom: false, child: SizedBox.shrink()),
                 ],
               ),
