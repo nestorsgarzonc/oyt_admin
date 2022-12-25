@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/models/drawer_item.dart';
 import 'package:oyt_admin/features/home/ui/widgets/drawer_item_card.dart';
+import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_widgets/image/image_api_widget.dart';
 
 class IndexHomeScreen extends ConsumerStatefulWidget {
@@ -25,10 +26,7 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
             child: Row(
               children: [
                 Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
-                  ),
+                  decoration: CustomTheme.drawerBoxDecoration,
                   padding: const EdgeInsets.all(15),
                   width: 200,
                   height: double.infinity,

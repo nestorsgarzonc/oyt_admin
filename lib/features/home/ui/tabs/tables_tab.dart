@@ -2,7 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:oyt_admin/features/home/ui/dialogs/add_table_dialog.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_admin/features/tables/ui/table_screen.dart';
 import 'package:oyt_front_table/models/tables_socket_response.dart';
 import 'package:oyt_front_table/models/users_table.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
@@ -45,7 +48,8 @@ class _TablesTabState extends ConsumerState<TablesTab> {
                     status: TableStatus.values[Random().nextInt(TableStatus.values.length)],
                   ),
                   isCallingTable: Random().nextBool(),
-                  onSelectTable: (item) {},
+                  onSelectTable: (item) =>
+                      GoRouter.of(context).push('${TableScreen.route}?id=${item.id}'),
                 );
               },
             ),
@@ -55,5 +59,5 @@ class _TablesTabState extends ConsumerState<TablesTab> {
     );
   }
 
-  void _onAddTable() {}
+  void _onAddTable() => AddTableDialog.show(context: context, onConfirm: () {});
 }

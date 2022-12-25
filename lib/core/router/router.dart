@@ -5,6 +5,7 @@ import 'package:oyt_admin/features/auth/ui/login_screen.dart';
 import 'package:oyt_admin/features/auth/ui/register_screen.dart';
 import 'package:oyt_admin/features/home/ui/index_home_screen.dart';
 import 'package:oyt_admin/features/on_boarding/ui/on_boarding.dart';
+import 'package:oyt_admin/features/tables/ui/table_screen.dart';
 import 'package:oyt_front_widgets/error/error_screen.dart';
 
 final routerProvider = Provider<CustomRouter>((ref) {
@@ -50,6 +51,16 @@ class CustomRouter {
           path: IndexHomeScreen.route,
           builder: (context, state) => const IndexHomeScreen(),
         ),
+        GoRoute(
+          path: TableScreen.route,
+          builder: (context, state) {
+            final id = state.queryParams['id'];
+            if (id == null) {
+              return ErrorScreen(error: atributeErrorMessage('id'));
+            }
+            return TableScreen(id: id);
+          },
+        )
       ];
 
   BuildContext get context =>
