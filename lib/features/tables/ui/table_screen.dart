@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/widget_to_img.dart';
+import 'package:oyt_front_table/modals/change_table_status_sheet.dart';
+import 'package:oyt_front_table/models/tables_socket_response.dart';
+import 'package:oyt_front_table/models/users_table.dart';
+import 'package:oyt_front_table/widgets/call_to_waiter_card.dart';
+import 'package:oyt_front_table/widgets/table_status_card.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
+import 'package:oyt_front_widgets/widgets/buttons/custom_elevated_button.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
@@ -23,7 +29,7 @@ class TableScreen extends ConsumerStatefulWidget {
 
 class _TableScreenState extends ConsumerState<TableScreen> {
   final _name = TextEditingController();
-  final _id = TextEditingController();
+  //final _id = TextEditingController();
   final _qrKey = GlobalKey();
   final _drawerController = ScrollController();
   final _bodyController = ScrollController();
@@ -56,12 +62,12 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                   ),
                   const SectionTitle(title: 'Nombre de la mesa'),
                   CustomTextField(label: 'Nombre de la mesa', controller: _name),
-                  const SectionTitle(title: 'Id de la mesa'),
-                  CustomTextField(
-                    label: 'Id de la mesa',
-                    controller: _id,
-                    enabled: false,
-                  ),
+                  // const SectionTitle(title: 'Id de la mesa'),
+                  // CustomTextField(
+                  //   label: 'Id de la mesa',
+                  //   controller: _id,
+                  //   enabled: false,
+                  // ),
                   const SectionTitle(title: 'Codigo QR de la mesa'),
                   RepaintBoundary(
                     key: _qrKey,
@@ -91,7 +97,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                     icon: const Icon(Icons.download),
                     label: const Text('Descargar codigo QR'),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   ElevatedButton.icon(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(CustomTheme.redColor),
@@ -100,7 +106,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                     icon: const Icon(Icons.delete),
                     label: const Text('Eliminar mesa'),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 5),
                   ElevatedButton.icon(
                     onPressed: _onUpdate,
                     icon: const Icon(Icons.update),
@@ -120,7 +126,20 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                 children: [
                   //TODO: Add table status
                   const SafeArea(bottom: false, child: SizedBox.shrink()),
-                  const SectionTitle(title: 'Productos'),
+                  const TableStatusCard(tableStatus: TableStatus.confirmOrder),
+                  const SizedBox(height: 10),
+                  CallToWaiterCard(
+                    needWaiter: false,
+                    onCallWaiter: (isCalling) {},
+                  ),
+                  const SizedBox(height: 10),
+                  //TODO: Show user list
+                  const Text('User list here'),
+                  const SizedBox(height: 10),
+                  CustomElevatedButton(
+                    onPressed: _onChangeStatus,
+                    child: const Text('Cambiar estado de la mesa'),
+                  ),
                   const SafeArea(bottom: false, child: SizedBox.shrink()),
                 ],
               ),
@@ -130,6 +149,12 @@ class _TableScreenState extends ConsumerState<TableScreen> {
       ),
     );
   }
+
+  void _onChangeStatus() => ChangeTableStatusSheet.show(
+        context: context,
+        table: const TableResponse(id: '1', name: '1', status: TableStatus.confirmOrder),
+        onTableStatusChanged: (status) {},
+      );
 
   void _onDownloadQr() async {
     final imgBytes = await WidgetToImg.capturePng(_qrKey);
