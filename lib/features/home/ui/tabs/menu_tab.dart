@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_admin/features/menu/ui/dialogs/add_category_dialog.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
 
 class MenuTab extends ConsumerStatefulWidget {
@@ -144,7 +145,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
     );
   }
 
-  void _onAddCategory() {}
+  void _onAddCategory() => AddCategoryDialog.show(context: context);
   void _onAddProduct() {}
   void _onAddTopping() {}
 
