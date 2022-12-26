@@ -15,6 +15,7 @@ class AddCategoryDialog extends StatefulWidget {
 
   static Future<void> show({required BuildContext context}) {
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => const AddCategoryDialog(),
     );

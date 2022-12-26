@@ -14,11 +14,8 @@ class MenuTab extends ConsumerStatefulWidget {
 class _MenuTabState extends ConsumerState<MenuTab> {
   static const _sectionTitleStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16);
   static const _cardMargin = EdgeInsets.symmetric(vertical: 5);
-  static const _selectedItemTextStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.deepOrange,
-    fontSize: 17,
-  );
+  static const _selectedItemTextStyle =
+      TextStyle(fontWeight: FontWeight.w600, color: Colors.deepOrange);
 
   final _categoriesScrollController = ScrollController();
   final _productsScrollController = ScrollController();
