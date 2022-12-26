@@ -11,25 +11,28 @@ import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 
-class AddCategoryDialog extends StatefulWidget {
-  const AddCategoryDialog({super.key});
+class AddProductDialog extends StatefulWidget {
+  const AddProductDialog({super.key});
 
   static Future<void> show({required BuildContext context}) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const AddCategoryDialog(),
+      builder: (context) => const AddProductDialog(),
     );
   }
 
   @override
-  State<AddCategoryDialog> createState() => _AddCategoryDialog();
+  State<AddProductDialog> createState() => _AddProductDialog();
 }
 
-class _AddCategoryDialog extends State<AddCategoryDialog> {
+class _AddProductDialog extends State<AddProductDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _priceController = TextEditingController(); //: Number;
+  final _taxesController = TextEditingController(); //?: Number;
+  final _discountController = TextEditingController(); //?: Number;
   Uint8List? _imgBytes;
   bool _isAvaliable = true;
   bool _isLoadinglogo = false;
@@ -42,7 +45,7 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
       actionsPadding: CustomTheme.dialogPadding,
       actionsAlignment: MainAxisAlignment.spaceAround,
       scrollable: true,
-      title: const DialogHeader(title: 'Agregar categoría'),
+      title: const DialogHeader(title: 'Agregar producto'),
       actions: [
         TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
         TextButton(onPressed: _onConfirm, child: const Text('Agregar')),
@@ -54,21 +57,42 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const DialogWidth(),
-            const SectionTitle(title: 'Nombre de la categoría'),
+            const SectionTitle(title: 'Nombre del producto'),
             CustomTextField(
               controller: _nameController,
               validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
-              label: 'Nombre de la categoría',
+              label: 'Nombre del producto',
               hintText: 'Ej: Hamburguesas',
             ),
-            const SectionTitle(title: 'Descripción de la categoría'),
+            const SectionTitle(title: 'Descripción del producto'),
             CustomTextField(
               controller: _descriptionController,
               validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
               maxLines: 3,
-              label: 'Descripción de la categoría',
+              label: 'Descripción del producto',
             ),
-            const SectionTitle(title: 'Imagen de la categoría'),
+            const SectionTitle(title: 'Precio del producto'),
+            CustomTextField(
+              controller: _priceController,
+              validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
+              label: 'Precio del producto',
+              hintText: 'Ej: 1.000',
+            ),
+            const SectionTitle(title: 'Impuestos del producto'),
+            CustomTextField(
+              controller: _taxesController,
+              validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
+              label: 'Impuestos del producto',
+              hintText: 'Ej: 100',
+            ),
+            const SectionTitle(title: 'Descuentos del producto'),
+            CustomTextField(
+              controller: _discountController,
+              validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
+              label: 'Descuentos del producto',
+              hintText: 'Ej: 100',
+            ),
+            const SectionTitle(title: 'Imagen del producto'),
             UploadImageCard(
               label: 'imagen',
               onRemove: () => ConfirmActionDialog.show(
@@ -91,7 +115,7 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
                 'Fondo transparente'
               ],
             ),
-            const SectionTitle(title: '¿Esta categoría está disponible?'),
+            const SectionTitle(title: '¿Esta producto está disponible?'),
             Card(
               child: CheckboxListTile(
                 title: const Text('Disponible'),

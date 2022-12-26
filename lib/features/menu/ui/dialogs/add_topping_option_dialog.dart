@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
@@ -11,27 +11,26 @@ import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 
-class AddCategoryDialog extends StatefulWidget {
-  const AddCategoryDialog({super.key});
+class AddToppingOptionDialog extends StatefulWidget {
+  const AddToppingOptionDialog({super.key});
 
   static Future<void> show({required BuildContext context}) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const AddCategoryDialog(),
+      builder: (context) => const AddToppingOptionDialog(),
     );
   }
 
   @override
-  State<AddCategoryDialog> createState() => _AddCategoryDialog();
+  State<AddToppingOptionDialog> createState() => _AddToppingOptionDialog();
 }
 
-class _AddCategoryDialog extends State<AddCategoryDialog> {
+class _AddToppingOptionDialog extends State<AddToppingOptionDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _priceController = TextEditingController(); //?: Number;
   Uint8List? _imgBytes;
-  bool _isAvaliable = true;
   bool _isLoadinglogo = false;
 
   @override
@@ -42,7 +41,7 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
       actionsPadding: CustomTheme.dialogPadding,
       actionsAlignment: MainAxisAlignment.spaceAround,
       scrollable: true,
-      title: const DialogHeader(title: 'Agregar categoría'),
+      title: const DialogHeader(title: 'Agregar opcion de topping'),
       actions: [
         TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
         TextButton(onPressed: _onConfirm, child: const Text('Agregar')),
@@ -54,21 +53,21 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const DialogWidth(),
-            const SectionTitle(title: 'Nombre de la categoría'),
+            const SectionTitle(title: 'Nombre del topping'),
             CustomTextField(
               controller: _nameController,
               validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
-              label: 'Nombre de la categoría',
-              hintText: 'Ej: Hamburguesas',
+              label: 'Nombre del topping',
+              hintText: 'Ej: Queso',
             ),
-            const SectionTitle(title: 'Descripción de la categoría'),
+            const SectionTitle(title: 'Precio del topping'),
             CustomTextField(
-              controller: _descriptionController,
+              controller: _priceController,
               validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
-              maxLines: 3,
-              label: 'Descripción de la categoría',
+              label: 'Precio del topping',
+              hintText: 'Ej: 1000',
             ),
-            const SectionTitle(title: 'Imagen de la categoría'),
+            const SectionTitle(title: 'Imagen del topping'),
             UploadImageCard(
               label: 'imagen',
               onRemove: () => ConfirmActionDialog.show(
@@ -90,14 +89,6 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
                 'Formato: PNG',
                 'Fondo transparente'
               ],
-            ),
-            const SectionTitle(title: '¿Esta categoría está disponible?'),
-            Card(
-              child: CheckboxListTile(
-                title: const Text('Disponible'),
-                value: _isAvaliable,
-                onChanged: (val) => val == null ? null : setState(() => _isAvaliable = val),
-              ),
             ),
           ],
         ),
@@ -136,10 +127,6 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
 
   void _onConfirm() {
     if (!_formKey.currentState!.validate()) return;
-    if (_imgBytes == null) {
-      CustomSnackbar.showSnackBar(context, 'Debes subir una imagen');
-      return;
-    }
     Navigator.of(context).pop();
   }
 }

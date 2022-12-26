@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
+import 'package:oyt_front_widgets/sizedbox/dialog_width.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
@@ -44,6 +45,7 @@ class _AddTableDialogState extends State<AddTableDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const DialogWidth(),
           const SectionTitle(title: 'Nombre de la mesa'),
           Form(
             key: _formKey,
