@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_admin/features/waiters/ui/dialogs/add_waiter_dialog.dart';
 import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
-class CashierTab extends ConsumerStatefulWidget {
-  const CashierTab({super.key});
+class WaitersTab extends ConsumerStatefulWidget {
+  const WaitersTab({super.key});
 
   @override
-  ConsumerState<CashierTab> createState() => _CashierTabState();
+  ConsumerState<WaitersTab> createState() => _WaitersTabState();
 }
 
-class _CashierTabState extends ConsumerState<CashierTab> {
+class _WaitersTabState extends ConsumerState<WaitersTab> {
   final _scrollController = ScrollController();
   final _textEditingController = TextEditingController();
 
@@ -33,23 +34,23 @@ class _CashierTabState extends ConsumerState<CashierTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TabHeader(
-          title: 'Cajeros',
+          title: 'Meseros',
           subtitle:
-              'Acá puedes ver los cajeros del restaurante, editar los cajeros, eliminar cajeros y agregar nuevos cajeros.',
+              'Acá puedes ver los meseros del restaurante, editar los meseros, eliminar meseros y agregar nuevos meseros.',
         ),
         const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
               child: CustomTextField(
-                label: 'Buscar cajero',
+                label: 'Buscar mesero',
                 onChanged: _onSearchWaiter,
                 prefixIcon: const Icon(Icons.search),
                 controller: _textEditingController,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
             ),
-            AddButton(onTap: _onAddWaiter, text: 'Agregar cajero'),
+            AddButton(onTap: _onAddWaiter, text: 'Agregar mesero'),
           ],
         ),
         const Divider(),
@@ -63,7 +64,7 @@ class _CashierTabState extends ConsumerState<CashierTab> {
                 child: ListTile(
                   onTap: () => _onTapWaiter(),
                   subtitle: Text('Correo: $index'),
-                  title: Text('Cajero $index'),
+                  title: Text('Mesero $index'),
                   trailing: const Icon(Icons.chevron_right),
                 ),
               ),
@@ -74,7 +75,7 @@ class _CashierTabState extends ConsumerState<CashierTab> {
     );
   }
 
-  void _onAddWaiter() {}
+  void _onAddWaiter() => AddWaiterDialog.show(context: context);
 
   void _onTapWaiter() {}
 }

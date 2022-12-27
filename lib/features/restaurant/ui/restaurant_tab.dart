@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_admin/features/restaurant/ui/widgets/download_restaurant_qr.dart';
 import 'package:oyt_front_core/enums/payments_enum.dart';
 import 'package:oyt_front_core/enums/weekdays_enum.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
@@ -46,6 +47,11 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
             child: ListView(
               controller: _scrollController,
               children: [
+                const SectionTitle(title: 'Codigo QR del restaurante'),
+                DownloadRestaurantQR(
+                  //TODO: Change this to the restaurant qr
+                  qrData: 'https://oyt.com',
+                ),
                 const SectionTitle(title: 'Logo'),
                 UploadImageCard(
                   label: 'logo',

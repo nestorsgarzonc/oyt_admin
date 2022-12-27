@@ -14,8 +14,8 @@ class _CouponsTabState extends ConsumerState<CouponsTab> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const TabHeader(
+      children: const [
+        TabHeader(
           title: 'Cupones',
           subtitle:
               'Acá puedes ver los meseros del restaurante, editar los meseros, eliminar meseros y agregar nuevos meseros.',

@@ -15,7 +15,7 @@ class IndexHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
-  int _index = 0;
+  int _index = 1;
 
   @override
   Widget build(BuildContext context) {

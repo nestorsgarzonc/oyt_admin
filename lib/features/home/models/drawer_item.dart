@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:oyt_admin/features/home/ui/tabs/cashier_tab.dart';
-import 'package:oyt_admin/features/home/ui/tabs/historical_orders_tab.dart';
-import 'package:oyt_admin/features/home/ui/tabs/menu_tab.dart';
-import 'package:oyt_admin/features/home/ui/tabs/orders_tab.dart';
-import 'package:oyt_admin/features/home/ui/tabs/restaurant_tab.dart';
-import 'package:oyt_admin/features/home/ui/tabs/statistics_tab.dart';
-import 'package:oyt_admin/features/home/ui/tabs/tables_tab.dart';
-import 'package:oyt_admin/features/home/ui/tabs/waiters_tab.dart';
+import 'package:oyt_admin/features/cashier/ui/cashier_tab.dart';
+import 'package:oyt_admin/features/historical_orders/ui/historical_orders_tab.dart';
+import 'package:oyt_admin/features/menu/ui/menu_tab.dart';
+import 'package:oyt_admin/features/orders/ui/orders_tab.dart';
+import 'package:oyt_admin/features/restaurant/ui/restaurant_tab.dart';
+import 'package:oyt_admin/features/statistics/ui/statistics_tab.dart';
+import 'package:oyt_admin/features/tables/ui/tables_tab.dart';
+import 'package:oyt_admin/features/waiters/ui/waiters_tab.dart';
 
 class CardItem extends Equatable {
   const CardItem({required this.title, required this.icon, required this.tab});
