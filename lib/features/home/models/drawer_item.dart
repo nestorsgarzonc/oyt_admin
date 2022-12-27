@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:oyt_admin/features/home/ui/tabs/cashier_tab.dart';
 import 'package:oyt_admin/features/home/ui/tabs/historical_orders_tab.dart';
 import 'package:oyt_admin/features/home/ui/tabs/menu_tab.dart';
 import 'package:oyt_admin/features/home/ui/tabs/orders_tab.dart';
@@ -20,6 +21,11 @@ class CardItem extends Equatable {
   List<Object> get props => [title, icon];
 
   static final items = [
+    CardItem(
+      title: 'Restaurante',
+      icon: FontAwesomeIcons.utensils,
+      tab: () => const RestaurantTab(),
+    ),
     CardItem(
       title: 'Mesas',
       icon: Icons.table_bar,
@@ -46,9 +52,9 @@ class CardItem extends Equatable {
       tab: () => const WaitersTab(),
     ),
     CardItem(
-      title: 'Restaurante',
-      icon: FontAwesomeIcons.building,
-      tab: () => const RestaurantTab(),
+      title: 'Cajeros',
+      icon: FontAwesomeIcons.cashRegister,
+      tab: () => const CashierTab(),
     ),
     CardItem(
       title: 'Estadísticas',

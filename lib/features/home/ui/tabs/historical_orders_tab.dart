@@ -38,11 +38,11 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
               itemBuilder: (context, index) => Card(
                 child: ListTile(
                   onTap: () {},
-                  title: Text('Orden $index', style: const TextStyle(fontWeight: FontWeight.w600)),
+                  title: Text('Orden $index'),
                   subtitle: const Text('Fecha: 22-12-2022 12:12'),
                   trailing: const Text(
                     '\$100.000',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                 ),
               ),

@@ -39,19 +39,26 @@ class _MenuTabState extends ConsumerState<MenuTab> {
               Expanded(
                 child: Scrollbar(
                   controller: _categoriesScrollController,
-                  child: ListView(
+                  child: ReorderableListView(
                     padding: EdgeInsets.zero,
-                    controller: _categoriesScrollController,
+                    scrollController: _categoriesScrollController,
+                    onReorder: _onReorderCategories,
                     children: [
-                      const Text('Categorías', style: _sectionTitleStyle),
+                      const Text(
+                        'Categorías',
+                        style: _sectionTitleStyle,
+                        key: Key('categoriesTitle'),
+                      ),
                       AddButton(
                         onTap: _onAddCategory,
                         text: 'Agregar categoria',
                         buttonType: ButtonType.outlined,
+                        key: const Key('addCategoryButton'),
                       ),
                       ...List.generate(
                         20,
                         (index) => Card(
+                          key: Key('$index'),
                           margin: _cardMargin,
                           elevation: index == 2 ? 3 : null,
                           child: ListTile(
@@ -76,12 +83,18 @@ class _MenuTabState extends ConsumerState<MenuTab> {
               Expanded(
                 child: Scrollbar(
                   controller: _productsScrollController,
-                  child: ListView(
+                  child: ReorderableListView(
                     padding: EdgeInsets.zero,
-                    controller: _productsScrollController,
+                    onReorder: _onReorderProducts,
+                    scrollController: _productsScrollController,
                     children: [
-                      const Text('Productos', style: _sectionTitleStyle),
+                      const Text(
+                        'Productos',
+                        style: _sectionTitleStyle,
+                        key: Key('productsTitle'),
+                      ),
                       AddButton(
+                        key: const Key('addProductButton'),
                         onTap: _onAddProduct,
                         text: 'Agregar producto',
                         buttonType: ButtonType.outlined,
@@ -89,6 +102,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                       ...List.generate(
                         20,
                         (index) => Card(
+                          key: Key('$index'),
                           margin: _cardMargin,
                           elevation: index == 3 ? 3 : null,
                           child: ListTile(
@@ -113,19 +127,26 @@ class _MenuTabState extends ConsumerState<MenuTab> {
               Expanded(
                 child: Scrollbar(
                   controller: _toppingsScrollController,
-                  child: ListView(
+                  child: ReorderableListView(
                     padding: EdgeInsets.zero,
-                    controller: _toppingsScrollController,
+                    scrollController: _toppingsScrollController,
+                    onReorder: _onReorderToppings,
                     children: [
-                      const Text('Toppings', style: _sectionTitleStyle),
+                      const Text(
+                        'Toppings',
+                        style: _sectionTitleStyle,
+                        key: Key('toppingsTitle'),
+                      ),
                       AddButton(
                         onTap: _onAddTopping,
                         text: 'Agregar topping',
                         buttonType: ButtonType.outlined,
+                        key: const Key('addToppingButton'),
                       ),
                       ...List.generate(
                         20,
                         (index) => Card(
+                          key: Key('$index'),
                           margin: _cardMargin,
                           child: ListTile(
                             onTap: () => _onEditTopping(),
@@ -142,6 +163,24 @@ class _MenuTabState extends ConsumerState<MenuTab> {
         ),
       ],
     );
+  }
+
+  void _onReorderCategories(int oldIndex, int newIndex) {
+    if (oldIndex <= 1) return;
+    oldIndex -= 2;
+    newIndex -= 2;
+  }
+
+  void _onReorderProducts(int oldIndex, int newIndex) {
+    if (oldIndex <= 1) return;
+    oldIndex -= 2;
+    newIndex -= 2;
+  }
+
+  void _onReorderToppings(int oldIndex, int newIndex) {
+    if (oldIndex <= 1) return;
+    oldIndex -= 2;
+    newIndex -= 2;
   }
 
   void _onAddCategory() => AddCategoryDialog.show(context: context);
