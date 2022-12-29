@@ -42,7 +42,7 @@ class CardItem extends Equatable {
       tab: () => const OrdersQueueTab(),
     ),
     CardItem(
-      title: 'Histórico ordenes',
+      title: 'Historial de ordenes',
       icon: FontAwesomeIcons.fileLines,
       tab: () => const HistoricalOrdersTab(),
     ),

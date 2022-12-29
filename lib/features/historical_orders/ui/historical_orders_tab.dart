@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/historical_orders/ui/modals/filter_historical_orders_modal.dart';
 import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
 
@@ -19,15 +20,10 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TabHeader(
-          title: 'Cola de productos',
-          subtitle:
-              'Acá puedes ver la cola de los productos y manejar los estados de los productos.',
+          title: 'Historial de ordenes',
+          subtitle: 'Acá puedes ver el historial de ordenes segun los filtros que uses.',
         ),
-        AddButton(
-          text: 'Filtrar ordenes',
-          icon: Icons.filter_list,
-          onTap: () {},
-        ),
+        AddButton(text: 'Filtrar ordenes', icon: Icons.filter_list, onTap: _onFilterOrders),
         const Divider(),
         Expanded(
           child: Scrollbar(
@@ -52,4 +48,6 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
       ],
     );
   }
+
+  void _onFilterOrders() => FilterHistoricalOrdersDialog.show(context: context);
 }
