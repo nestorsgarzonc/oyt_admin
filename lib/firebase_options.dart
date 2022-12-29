@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '111373113185',
     projectId: 'on-your-table',
     authDomain: 'on-your-table.firebaseapp.com',
+    databaseURL: 'https://on-your-table-default-rtdb.firebaseio.com',
     storageBucket: 'on-your-table.appspot.com',
     measurementId: 'G-1RE825RLKT',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:111373113185:android:01a8b8862f47a5e6945720',
     messagingSenderId: '111373113185',
     projectId: 'on-your-table',
+    databaseURL: 'https://on-your-table-default-rtdb.firebaseio.com',
     storageBucket: 'on-your-table.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:111373113185:ios:b3bcddeda3c6ef28945720',
     messagingSenderId: '111373113185',
     projectId: 'on-your-table',
+    databaseURL: 'https://on-your-table-default-rtdb.firebaseio.com',
     storageBucket: 'on-your-table.appspot.com',
     iosClientId: '111373113185-t2cbgkmcl5om7p1o5p0dpvs5p67iqi28.apps.googleusercontent.com',
     iosBundleId: 'com.oyt.oytAdmin',
@@ -76,6 +79,7 @@ class DefaultFirebaseOptions {
     appId: '1:111373113185:ios:b3bcddeda3c6ef28945720',
     messagingSenderId: '111373113185',
     projectId: 'on-your-table',
+    databaseURL: 'https://on-your-table-default-rtdb.firebaseio.com',
     storageBucket: 'on-your-table.appspot.com',
     iosClientId: '111373113185-t2cbgkmcl5om7p1o5p0dpvs5p67iqi28.apps.googleusercontent.com',
     iosBundleId: 'com.oyt.oytAdmin',
