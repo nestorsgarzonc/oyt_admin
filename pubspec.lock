@@ -100,7 +100,7 @@ packages:
     source: hosted
     version: "3.2.0"
   collection:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -134,13 +134,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.17.2"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5"
   dart_code_metrics:
     dependency: "direct dev"
     description:
@@ -156,7 +149,7 @@ packages:
     source: hosted
     version: "2.2.4"
   dartz:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: dartz
       url: "https://pub.dartlang.org"
@@ -170,7 +163,7 @@ packages:
     source: hosted
     version: "0.0.1+1"
   equatable:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: equatable
       url: "https://pub.dartlang.org"
@@ -198,7 +191,7 @@ packages:
     source: hosted
     version: "6.1.4"
   firebase_core:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
@@ -212,14 +205,14 @@ packages:
     source: hosted
     version: "4.5.2"
   firebase_core_web:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
   firebase_messaging:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
@@ -233,12 +226,19 @@ packages:
     source: hosted
     version: "4.2.9"
   firebase_messaging_web:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: firebase_messaging_web
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.10"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.55.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -259,7 +259,7 @@ packages:
     source: hosted
     version: "2.0.7"
   flutter_riverpod:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
@@ -276,7 +276,7 @@ packages:
     source: sdk
     version: "0.0.0"
   font_awesome_flutter:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: font_awesome_flutter
       url: "https://pub.dartlang.org"
@@ -290,7 +290,7 @@ packages:
     source: hosted
     version: "2.1.1"
   go_router:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: go_router
       url: "https://pub.dartlang.org"
@@ -304,7 +304,7 @@ packages:
     source: hosted
     version: "2.2.3"
   hive_flutter:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: hive_flutter
       url: "https://pub.dartlang.org"
@@ -367,7 +367,7 @@ packages:
     source: hosted
     version: "2.6.2"
   intl:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: intl
       url: "https://pub.dartlang.org"
@@ -402,7 +402,7 @@ packages:
     source: hosted
     version: "1.1.0"
   lottie:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: lottie
       url: "https://pub.dartlang.org"
@@ -436,13 +436,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
-  mobile_scanner:
-    dependency: "direct main"
-    description:
-      name: mobile_scanner
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   oyt_front_auth:
     dependency: "direct main"
     description:
@@ -633,7 +626,7 @@ packages:
     source: hosted
     version: "4.0.0"
   riverpod:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: riverpod
       url: "https://pub.dartlang.org"

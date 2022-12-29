@@ -45,7 +45,7 @@ class AuthProvider extends StateNotifier<AuthState> {
     final deviceToken = await FirebaseMessaging.instance.getToken(
       vapidKey: FirebaseConstants.vapidKey,
     );
-    Logger.log('deviceToken: $deviceToken');
+    print('deviceToken: $deviceToken');
     final loginModel = LoginModel(
       email: email,
       password: password,

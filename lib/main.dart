@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,9 +13,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   EquatableConfig.stringify = true;
   initializeDateFormatting('es_CO', null);
-  await Firebase.initializeApp(
-    options: Firebase.apps.isNotEmpty ? DefaultFirebaseOptions.currentPlatform : null,
-  );
+  if (kIsWeb) {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  } else {
+    await Firebase.initializeApp(
+      options: Firebase.apps.isNotEmpty ? DefaultFirebaseOptions.currentPlatform : null,
+    );
+  }
   await Hive.initFlutter();
   PushNotificationProvider.setupInteractedMessage();
   runApp(const ProviderScope(child: MyApp()));
