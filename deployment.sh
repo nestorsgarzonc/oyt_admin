@@ -1,6 +1,4 @@
-echo "Deploying to production..."
-echo "Started switching pubspect files..."
-echo "actual folders"
+echo "Started getting packages..."
 rm -rf packages
 mkdir packages
 cd packages
@@ -15,5 +13,4 @@ git clone https://oauth2:github_pat_11AJUQVOA0uUhAv9xOH9b2_rjfG4zZFRJM9LJfJADTKD
 git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_orders_queue.git
 ls -la
 cd ..
-echo "final folders"
-echo "Finished switching pubspect files..."
+echo "Finished getting packages ..."
