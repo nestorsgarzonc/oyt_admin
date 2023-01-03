@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_front_core/theme/theme.dart';
@@ -35,6 +36,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                 child: Scrollbar(
                   controller: _categoriesScrollController,
                   child: ReorderableListView(
+                    buildDefaultDragHandles: false,
                     padding: EdgeInsets.zero,
                     scrollController: _categoriesScrollController,
                     onReorder: _onReorderCategories,
@@ -58,6 +60,10 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                           elevation: index == 2 ? 3 : null,
                           child: ListTile(
                             selected: index == 2,
+                            leading: ReorderableDragStartListener(
+                              index: index + 2,
+                              child: const Icon(Icons.drag_indicator_outlined),
+                            ),
                             title: Text(
                               'Categoria $index',
                               style: index == 2 ? CustomTheme.selectedItemTextStyle : null,
@@ -80,6 +86,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                   controller: _productsScrollController,
                   child: ReorderableListView(
                     padding: EdgeInsets.zero,
+                    buildDefaultDragHandles: false,
                     onReorder: _onReorderProducts,
                     scrollController: _productsScrollController,
                     children: [
@@ -102,6 +109,10 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                           elevation: index == 3 ? 3 : null,
                           child: ListTile(
                             selected: index == 3,
+                            leading: ReorderableDragStartListener(
+                              index: index + 2,
+                              child: const Icon(Icons.drag_indicator_outlined),
+                            ),
                             title: Text(
                               'Producto $index',
                               style: index == 3 ? CustomTheme.selectedItemTextStyle : null,
@@ -124,6 +135,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                   controller: _toppingsScrollController,
                   child: ReorderableListView(
                     padding: EdgeInsets.zero,
+                    buildDefaultDragHandles: false,
                     scrollController: _toppingsScrollController,
                     onReorder: _onReorderToppings,
                     children: [
@@ -144,6 +156,10 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                           key: Key('$index'),
                           margin: CustomTheme.cardMargin,
                           child: ListTile(
+                            leading: ReorderableDragStartListener(
+                              index: index + 2,
+                              child: const Icon(Icons.drag_indicator_outlined),
+                            ),
                             onTap: () => _onEditTopping(),
                             title: Text('Topping $index'),
                           ),
