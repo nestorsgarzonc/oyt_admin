@@ -1,13 +1,19 @@
 echo "Deploying to production..."
 echo "Started switching pubspect files..."
 echo "actual folders"
-ls
-rm pubspec.yaml
-rm pubspec.lock
-rm -rf build
-mv pubspec_deploy.yaml pubspec.yaml
+rm -rf packages
+mkdir packages
+cd packages
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_core.git
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_widgets.git
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_auth.git
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_restaurant.git
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_product.git
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_order.git
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_table.git
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_menu.git
+git clone https://oauth2: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@github.com/nestorsgarzonc/oyt_front_orders_queue.git
+ls -la
+cd ..
 echo "final folders"
-ls
-echo "content"
-tail -n 20 pubspec.yaml
 echo "Finished switching pubspect files..."
