@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_admin/features/restaurant/ui/widgets/download_restaurant_qr.dart';
 import 'package:oyt_front_core/enums/payments_enum.dart';
 import 'package:oyt_front_core/enums/weekdays_enum.dart';

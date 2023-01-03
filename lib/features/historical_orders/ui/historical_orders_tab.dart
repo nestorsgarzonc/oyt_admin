@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/historical_orders/ui/modals/filter_historical_orders_modal.dart';
-import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
 
 class HistoricalOrdersTab extends ConsumerStatefulWidget {

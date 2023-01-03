@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_widgets/dropdown/custom_dropdown_field.dart';
 import 'package:oyt_front_orders_queue/models/order_status.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_core/theme/theme.dart';
+import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_admin/features/menu/ui/dialogs/add_category_dialog.dart';
 import 'package:oyt_admin/features/menu/ui/dialogs/add_product_dialog.dart';
 import 'package:oyt_admin/features/menu/ui/dialogs/add_topping_dialog.dart';
@@ -14,11 +15,6 @@ class MenuTab extends ConsumerStatefulWidget {
 }
 
 class _MenuTabState extends ConsumerState<MenuTab> {
-  static const _sectionTitleStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16);
-  static const _cardMargin = EdgeInsets.symmetric(vertical: 5);
-  static const _selectedItemTextStyle =
-      TextStyle(fontWeight: FontWeight.w600, color: Colors.deepOrange);
-
   final _categoriesScrollController = ScrollController();
   final _productsScrollController = ScrollController();
   final _toppingsScrollController = ScrollController();
@@ -45,7 +41,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                     children: [
                       const Text(
                         'Categorías',
-                        style: _sectionTitleStyle,
+                        style: CustomTheme.sectionTitleStyle,
                         key: Key('categoriesTitle'),
                       ),
                       AddButton(
@@ -58,13 +54,13 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                         20,
                         (index) => Card(
                           key: Key('$index'),
-                          margin: _cardMargin,
+                          margin: CustomTheme.cardMargin,
                           elevation: index == 2 ? 3 : null,
                           child: ListTile(
                             selected: index == 2,
                             title: Text(
                               'Categoria $index',
-                              style: index == 2 ? _selectedItemTextStyle : null,
+                              style: index == 2 ? CustomTheme.selectedItemTextStyle : null,
                             ),
                             trailing: IconButton(
                               onPressed: () => _onEditCategory(),
@@ -89,7 +85,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                     children: [
                       const Text(
                         'Productos',
-                        style: _sectionTitleStyle,
+                        style: CustomTheme.sectionTitleStyle,
                         key: Key('productsTitle'),
                       ),
                       AddButton(
@@ -102,13 +98,13 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                         20,
                         (index) => Card(
                           key: Key('$index'),
-                          margin: _cardMargin,
+                          margin: CustomTheme.cardMargin,
                           elevation: index == 3 ? 3 : null,
                           child: ListTile(
                             selected: index == 3,
                             title: Text(
                               'Producto $index',
-                              style: index == 3 ? _selectedItemTextStyle : null,
+                              style: index == 3 ? CustomTheme.selectedItemTextStyle : null,
                             ),
                             onTap: () => _onSelectProduct(),
                             trailing: IconButton(
@@ -133,7 +129,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                     children: [
                       const Text(
                         'Toppings',
-                        style: _sectionTitleStyle,
+                        style: CustomTheme.sectionTitleStyle,
                         key: Key('toppingsTitle'),
                       ),
                       AddButton(
@@ -146,7 +142,7 @@ class _MenuTabState extends ConsumerState<MenuTab> {
                         20,
                         (index) => Card(
                           key: Key('$index'),
-                          margin: _cardMargin,
+                          margin: CustomTheme.cardMargin,
                           child: ListTile(
                             onTap: () => _onEditTopping(),
                             title: Text('Topping $index'),

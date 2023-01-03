@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/inventory/ui/inventory_tab.dart';
 import 'package:oyt_front_widgets/drawer/drawer_layout.dart';
 import 'package:oyt_front_widgets/drawer/models/drawer_item.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -67,11 +68,11 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
       icon: FontAwesomeIcons.chartArea,
       tab: () => const StatisticsTab(),
     ),
-    //CardItem(
-    //  title: 'Inventario',
-    //  icon: FontAwesomeIcons.boxesStacked,
-    //  tab: () => const InventoryTab(),
-    //),
+    CardItem(
+      title: 'Inventario',
+      icon: FontAwesomeIcons.boxesStacked,
+      tab: () => const InventoryTab(),
+    ),
     //CardItem(
     //  title: 'Cupones',
     //  icon: FontAwesomeIcons.ticket,

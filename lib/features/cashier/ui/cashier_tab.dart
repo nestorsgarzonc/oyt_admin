@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/cashier/ui/dialogs/add_cashier_dialog.dart';
-import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';

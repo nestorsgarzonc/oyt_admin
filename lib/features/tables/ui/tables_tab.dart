@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:oyt_admin/features/tables/ui/dialogs/add_table_dialog.dart';
-import 'package:oyt_admin/features/home/ui/widgets/tab_header.dart';
+import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_admin/features/tables/ui/table_screen.dart';
 import 'package:oyt_front_table/models/tables_socket_response.dart';
 import 'package:oyt_front_table/models/users_table.dart';
