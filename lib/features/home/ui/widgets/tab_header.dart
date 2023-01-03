@@ -19,6 +19,8 @@ class TabHeader extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(subtitle),
+        const SizedBox(height: 10),
+        const Divider(),
       ],
     );
   }

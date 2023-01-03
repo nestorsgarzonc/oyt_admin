@@ -1,0 +1,45 @@
+name: oyt_admin
+description: A new Flutter project.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.18.5 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  oyt_front_core:
+    git: ./packages/oyt_front_core
+  oyt_front_widgets:
+    git: ./packages/oyt_front_widgets
+  oyt_front_auth:
+    git: ./packages/oyt_front_auth
+  oyt_front_restaurant:
+    git: ./packages/oyt_front_restaurant
+  oyt_front_product:
+    git: ./packages/oyt_front_product
+  oyt_front_order:
+    git: ./packages/oyt_front_order
+  oyt_front_table:
+    git: ./packages/oyt_front_table
+  oyt_front_menu:
+    git: ./packages/oyt_front_menu
+  oyt_front_orders_queue:
+    git: ./packages/oyt_front_orders_queue
+  qr_flutter: ^4.0.0
+  share_plus: ^6.3.0
+  share_plus_web: ^3.1.0
+  download: ^0.0.1+1
+  fl_chart: ^0.55.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  dart_code_metrics: ^5.3.0
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true

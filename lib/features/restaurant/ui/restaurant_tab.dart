@@ -39,8 +39,6 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
           title: 'Restaurante',
           subtitle: 'Acá puedes ver información del restaurante, administrarlo y personalizarlo.',
         ),
-        const SizedBox(height: 10),
-        const Divider(),
         Expanded(
           child: Scrollbar(
             controller: _scrollController,

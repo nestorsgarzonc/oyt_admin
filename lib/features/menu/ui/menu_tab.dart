@@ -32,7 +32,6 @@ class _MenuTabState extends ConsumerState<MenuTab> {
           title: 'Menú',
           subtitle: 'Acá puedes ver el menú del restaurante, editar y agregar productos.',
         ),
-        const Divider(),
         Expanded(
           child: Row(
             children: [
