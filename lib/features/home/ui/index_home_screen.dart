@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:oyt_admin/features/home/models/drawer_item.dart';
-import 'package:oyt_admin/features/home/ui/widgets/drawer_item_card.dart';
-import 'package:oyt_front_core/theme/theme.dart';
+import 'package:oyt_front_widgets/drawer/drawer_layout.dart';
+import 'package:oyt_front_widgets/drawer/models/drawer_item.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:oyt_admin/features/cashier/ui/cashier_tab.dart';
+import 'package:oyt_admin/features/historical_orders/ui/historical_orders_tab.dart';
+import 'package:oyt_admin/features/menu/ui/menu_tab.dart';
+import 'package:oyt_admin/features/orders/ui/orders_tab.dart';
+import 'package:oyt_admin/features/restaurant/ui/restaurant_tab.dart';
+import 'package:oyt_admin/features/statistics/ui/statistics_tab.dart';
+import 'package:oyt_admin/features/tables/ui/tables_tab.dart';
+import 'package:oyt_admin/features/waiters/ui/waiters_tab.dart';
+import 'package:oyt_front_widgets/drawer/drawer_item_card.dart';
 import 'package:oyt_front_widgets/image/image_api_widget.dart';
 
 class IndexHomeScreen extends ConsumerStatefulWidget {
@@ -17,60 +26,94 @@ class IndexHomeScreen extends ConsumerStatefulWidget {
 class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
   int _index = 1;
 
+  static final _items = [
+    CardItem(
+      title: 'Restaurante',
+      icon: FontAwesomeIcons.utensils,
+      tab: () => const RestaurantTab(),
+    ),
+    CardItem(
+      title: 'Mesas',
+      icon: Icons.table_bar,
+      tab: () => const TablesTab(),
+    ),
+    CardItem(
+      title: 'Menú',
+      icon: Icons.menu_book_rounded,
+      tab: () => const MenuTab(),
+    ),
+    CardItem(
+      title: 'Cola de productos',
+      icon: FontAwesomeIcons.burger,
+      tab: () => const OrdersQueueTab(),
+    ),
+    CardItem(
+      title: 'Historial de ordenes',
+      icon: FontAwesomeIcons.fileLines,
+      tab: () => const HistoricalOrdersTab(),
+    ),
+    CardItem(
+      title: 'Meseros',
+      icon: FontAwesomeIcons.userTie,
+      tab: () => const WaitersTab(),
+    ),
+    CardItem(
+      title: 'Cajeros',
+      icon: FontAwesomeIcons.cashRegister,
+      tab: () => const CashierTab(),
+    ),
+    CardItem(
+      title: 'Estadísticas',
+      icon: FontAwesomeIcons.chartArea,
+      tab: () => const StatisticsTab(),
+    ),
+    //CardItem(
+    //  title: 'Inventario',
+    //  icon: FontAwesomeIcons.boxesStacked,
+    //  tab: () => const InventoryTab(),
+    //),
+    //CardItem(
+    //  title: 'Cupones',
+    //  icon: FontAwesomeIcons.ticket,
+    //  tab: () => const CouponsTab(),
+    //),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                Container(
-                  decoration: CustomTheme.drawerBoxDecoration,
-                  padding: const EdgeInsets.all(15),
-                  width: 200,
-                  height: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SafeArea(child: SizedBox.shrink()),
-                      const ImageApi(
-                        'https://i0.wp.com/takuma.com.co/wp-content/uploads/2021/06/2021-logo.png',
-                        width: 185,
-                        fit: BoxFit.fitWidth,
-                      ),
-                      const Spacer(),
-                      ...CardItem.items.asMap().entries.map(
-                            (entry) => DrawerItemCard(
-                              item: entry.value,
-                              onTap: () => setState(() => _index = entry.key),
-                              isSelected: _index == entry.key,
-                            ),
-                          ),
-                      const Spacer(),
-                      DrawerItemCard(
-                        onTap: () {},
-                        item: CardItem(
-                          title: 'Cerrar sesión',
-                          icon: Icons.logout,
-                          tab: () => const SizedBox(),
-                        ),
-                        isSelected: false,
-                      ),
-                      const SafeArea(child: SizedBox.shrink()),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: SafeArea(
-                    minimum: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: CardItem.items[_index].tab(),
-                  ),
-                ),
-              ],
+      body: DrawerLayout(
+        drawerChild: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SafeArea(child: SizedBox.shrink()),
+            const ImageApi(
+              'https://i0.wp.com/takuma.com.co/wp-content/uploads/2021/06/2021-logo.png',
+              width: 185,
+              fit: BoxFit.fitWidth,
             ),
-          ),
-        ],
+            const Spacer(),
+            ..._items.asMap().entries.map(
+                  (entry) => DrawerItemCard(
+                    item: entry.value,
+                    onTap: () => setState(() => _index = entry.key),
+                    isSelected: _index == entry.key,
+                  ),
+                ),
+            const Spacer(),
+            DrawerItemCard(
+              onTap: () {},
+              item: CardItem(
+                title: 'Cerrar sesión',
+                icon: Icons.logout,
+                tab: () => const SizedBox(),
+              ),
+              isSelected: false,
+            ),
+            const SafeArea(child: SizedBox.shrink()),
+          ],
+        ),
+        bodyChild: _items[_index].tab(),
       ),
     );
   }
