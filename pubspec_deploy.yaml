@@ -12,23 +12,23 @@ dependencies:
     sdk: flutter
 
   oyt_front_core:
-    git: ./packages/oyt_front_core
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_core.git
   oyt_front_widgets:
-    git: ./packages/oyt_front_widgets
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_widgets.git
   oyt_front_auth:
-    git: ./packages/oyt_front_auth
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_auth.git
   oyt_front_restaurant:
-    git: ./packages/oyt_front_restaurant
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_restaurant.git
   oyt_front_product:
-    git: ./packages/oyt_front_product
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_product.git
   oyt_front_order:
-    git: ./packages/oyt_front_order
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_order.git
   oyt_front_table:
-    git: ./packages/oyt_front_table
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_table.git
   oyt_front_menu:
-    git: ./packages/oyt_front_menu
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_menu.git
   oyt_front_orders_queue:
-    git: ./packages/oyt_front_orders_queue
+    git: https://oauth2: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@github.com/nestorsgarzonc/oyt_front_orders_queue.git
   qr_flutter: ^4.0.0
   share_plus: ^6.3.0
   share_plus_web: ^3.1.0
