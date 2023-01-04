@@ -19,8 +19,11 @@ class CustomRouter {
     return 'Es necesario el parametro $atribute';
   }
 
+  static final globalKey = GlobalKey<NavigatorState>();
+
   final goRouter = GoRouter(
     initialLocation: OnBoarding.route,
+    navigatorKey: globalKey,
     errorBuilder: (context, state) {
       if (state.error == null) {
         return const ErrorScreen();
@@ -63,8 +66,7 @@ class CustomRouter {
         )
       ];
 
-  BuildContext get context =>
-      goRouter.routeInformationParser.configuration.navigatorKey.currentState!.context;
+  BuildContext get context => globalKey.currentState!.context;
 
   GoRouter get router => goRouter;
 }
