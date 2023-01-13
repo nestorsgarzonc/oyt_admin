@@ -45,9 +45,9 @@ class AuthProvider extends StateNotifier<AuthState> {
     state = state.copyWith(authModel: StateAsync.loading());
     String? deviceToken;
     try {
-      deviceToken = await FirebaseMessaging.instance.getToken(
-        vapidKey: FirebaseConstants.vapidKey,
-      );
+      deviceToken = await FirebaseMessaging.instance
+          .getToken(vapidKey: FirebaseConstants.vapidKey)
+          .timeout(const Duration(seconds: 5));
     } catch (e) {
       Logger.log('Error getting device token: $e');
     }
