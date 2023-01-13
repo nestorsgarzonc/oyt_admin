@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/core/router/router.dart';
@@ -9,9 +8,8 @@ import 'package:oyt_admin/features/home/ui/index_home_screen.dart';
 import 'package:oyt_admin/features/on_boarding/ui/on_boarding.dart';
 import 'package:oyt_front_auth/models/login_model.dart';
 import 'package:oyt_front_auth/models/user_model.dart';
-import 'package:oyt_front_core/constants/firebase_constants.dart';
 import 'package:oyt_front_core/external/socket_handler.dart';
-import 'package:oyt_front_core/logger/logger.dart';
+import 'package:oyt_front_core/push_notifications/push_notif_provider.dart';
 import 'package:oyt_front_core/wrappers/state_wrapper.dart';
 import 'package:oyt_front_widgets/dialogs/custom_dialogs.dart';
 import 'package:oyt_front_widgets/error/error_screen.dart';
@@ -43,20 +41,8 @@ class AuthProvider extends StateNotifier<AuthState> {
 
   Future<void> login({required String email, required String password}) async {
     state = state.copyWith(authModel: StateAsync.loading());
-    String? deviceToken;
-    try {
-      deviceToken = await FirebaseMessaging.instance
-          .getToken(vapidKey: FirebaseConstants.vapidKey)
-          .timeout(const Duration(seconds: 5));
-    } catch (e) {
-      Logger.log('Error getting device token: $e');
-    }
-    Logger.log('deviceToken: $deviceToken');
-    final loginModel = LoginModel(
-      email: email,
-      password: password,
-      deviceToken: deviceToken ?? '',
-    );
+    final fcmToken = await ref.read(pushNotificationsProvider).getToken();
+    final loginModel = LoginModel(email: email, password: password, deviceToken: fcmToken);
     final res = await authRepository.login(loginModel);
     res.fold(
       (l) {
