@@ -1,41 +1,31 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
 class CheckAdminResponse extends Equatable {
-  factory CheckAdminResponse.fromJson(String source) =>
-      CheckAdminResponse.fromMap(json.decode(source));
-
-  factory CheckAdminResponse.fromMap(Map<String, dynamic> map) {
-    return CheckAdminResponse(
-      restaurantId: map['restaurantId'] ?? '',
-    );
-  }
   const CheckAdminResponse({
-    required this.restaurantId,
+    required this.restaurantsId,
   });
 
-  final String restaurantId;
+  final List<String> restaurantsId;
+
+  @override
+  List<Object> get props => [restaurantsId];
 
   CheckAdminResponse copyWith({
-    String? restaurantId,
+    List<String>? restaurantsId,
   }) {
-    return CheckAdminResponse(
-      restaurantId: restaurantId ?? this.restaurantId,
-    );
+    return CheckAdminResponse(restaurantsId: restaurantsId ?? this.restaurantsId);
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'restaurantId': restaurantId,
-    };
+  factory CheckAdminResponse.fromMap(Map<String, dynamic> map) {
+    return CheckAdminResponse(restaurantsId: List<String>.from((map['restaurants'])));
   }
 
-  String toJson() => json.encode(toMap());
+  factory CheckAdminResponse.fromJson(String source) =>
+      CheckAdminResponse.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'CheckAdminResponse(restaurantId: $restaurantId)';
-
-  @override
-  List<Object> get props => [restaurantId];
+  bool get stringify => true;
 }

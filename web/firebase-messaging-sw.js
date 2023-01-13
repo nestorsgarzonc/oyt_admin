@@ -1,10 +1,9 @@
-importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js");
+importScripts("https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/9.10.0/firebase-messaging-compat.js");
 
 firebase.initializeApp({
     apiKey: "AIzaSyBsMUdIG1CwD_jRGS95rZGghYBp4le4roo",
     authDomain: "on-your-table.firebaseapp.com",
-    databaseURL: "...",
     projectId: "on-your-table",
     storageBucket: "on-your-table.appspot.com",
     messagingSenderId: "111373113185",

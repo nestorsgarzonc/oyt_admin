@@ -91,7 +91,7 @@ packages:
       name: download
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1+1"
+    version: "1.0.0"
   equatable:
     dependency: transitive
     description:
@@ -274,7 +274,7 @@ packages:
       name: image_picker_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.6+3"
+    version: "0.8.6+5"
   image_picker_platform_interface:
     dependency: transitive
     description:
@@ -316,7 +316,7 @@ packages:
       name: lottie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   matcher:
     dependency: transitive
     description:
@@ -344,7 +344,7 @@ packages:
       name: mime
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   oyt_front_auth:
     dependency: "direct main"
     description:
@@ -545,7 +545,7 @@ packages:
       name: socket_io_client
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   socket_io_common:
     dependency: transitive
     description:
@@ -692,7 +692,7 @@ packages:
       name: xdg_directories
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0+2"
+    version: "0.2.0+3"
 sdks:
   dart: ">=2.18.6 <3.0.0"
   flutter: ">=3.3.10"

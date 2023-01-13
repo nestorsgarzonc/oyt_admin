@@ -13,6 +13,7 @@ import 'package:oyt_front_core/constants/firebase_constants.dart';
 import 'package:oyt_front_core/external/socket_handler.dart';
 import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_core/wrappers/state_wrapper.dart';
+import 'package:oyt_front_widgets/dialogs/custom_dialogs.dart';
 import 'package:oyt_front_widgets/error/error_screen.dart';
 
 final authProvider = StateNotifierProvider<AuthProvider, AuthState>((ref) {
@@ -58,23 +59,32 @@ class AuthProvider extends StateNotifier<AuthState> {
         ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': l.message});
       },
       (r) async {
-        await checkIfIsAdmin();
+        checkIfIsAdmin();
         state = state.copyWith(authModel: StateAsync.success(r));
-        ref.read(routerProvider).router.pushReplacement(IndexHomeScreen.route);
         startListeningSocket();
       },
     );
   }
 
   Future<void> checkIfIsAdmin() async {
-    return;
-    //TODO: Add this when the backend is ready
-    //state = state.copyWith(checkWaiterResponse: StateAsync.loading());
-    //final res = await authRepository.checkIfIsAdmin();
-    //res.fold(
-    //  (l) => ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': l.message}),
-    //  (r) => state = state.copyWith(checkWaiterResponse: StateAsync.success(r)),
-    //);
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    state = state.copyWith(checkWaiterResponse: StateAsync.loading());
+    final res = await authRepository.checkIfIsAdmin();
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    res.fold(
+      (l) => ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': l.message}),
+      (r) async {
+        state = state.copyWith(checkWaiterResponse: StateAsync.success(r));
+        if (r.restaurantsId.isEmpty) {
+          //TODO: GO TO CREATE A RESTAURANT
+        } else if (r.restaurantsId.length > 1) {
+          //TODO: GO TO CHOOSE A RESTAURANT
+        } else {
+          await authRepository.chooseRestaurantId(r.restaurantsId.first);
+          ref.read(routerProvider).router.pushReplacement(IndexHomeScreen.route);
+        }
+      },
+    );
   }
 
   Future<void> register(User user, BuildContext context) async {
@@ -125,10 +135,9 @@ class AuthProvider extends StateNotifier<AuthState> {
           state = state.copyWith(authModel: StateAsync.initial());
           return;
         }
-        await checkIfIsAdmin();
+        checkIfIsAdmin();
         startListeningSocket();
         state = state.copyWith(authModel: StateAsync.success(r));
-        ref.read(routerProvider).router.go(IndexHomeScreen.route);
       },
     );
   }
