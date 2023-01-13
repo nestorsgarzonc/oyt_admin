@@ -43,9 +43,14 @@ class AuthProvider extends StateNotifier<AuthState> {
 
   Future<void> login({required String email, required String password}) async {
     state = state.copyWith(authModel: StateAsync.loading());
-    final deviceToken = await FirebaseMessaging.instance.getToken(
-      vapidKey: FirebaseConstants.vapidKey,
-    );
+    String? deviceToken;
+    try {
+      deviceToken = await FirebaseMessaging.instance.getToken(
+        vapidKey: FirebaseConstants.vapidKey,
+      );
+    } catch (e) {
+      Logger.log('Error getting device token: $e');
+    }
     Logger.log('deviceToken: $deviceToken');
     final loginModel = LoginModel(
       email: email,
