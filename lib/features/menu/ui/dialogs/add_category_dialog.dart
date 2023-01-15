@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
@@ -110,6 +113,10 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
       setState(() => _isLoadinglogo = true);
       final logo = await CustomImagePicker.pickImage();
       _imgBytes = await logo?.readAsBytes();
+      if (_imgBytes != null) {
+        final encoded = await compute(base64Encode, _imgBytes!);
+        Logger.log('Encoded64: $encoded');
+      }
     } catch (e) {
       CustomSnackbar.showSnackBar(context, 'Error al subir la imagen');
     } finally {

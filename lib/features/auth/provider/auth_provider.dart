@@ -59,18 +59,19 @@ class AuthProvider extends StateNotifier<AuthState> {
 
   Future<void> checkIfIsAdmin() async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
-    state = state.copyWith(checkWaiterResponse: StateAsync.loading());
+    state = state.copyWith(checkAdminResponse: StateAsync.loading());
     final res = await authRepository.checkIfIsAdmin();
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
     res.fold(
       (l) => ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': l.message}),
       (r) async {
-        state = state.copyWith(checkWaiterResponse: StateAsync.success(r));
+        state = state.copyWith(checkAdminResponse: StateAsync.success(r));
         if (r.restaurantsId.isEmpty) {
           //TODO: GO TO CREATE A RESTAURANT
         } else if (r.restaurantsId.length > 1) {
           //TODO: GO TO CHOOSE A RESTAURANT
         } else {
+          state = state.copyWith(selectedRestaurantId: StateAsync.success(r.restaurantsId.first));
           await authRepository.chooseRestaurantId(r.restaurantsId.first);
           ref.read(routerProvider).router.pushReplacement(IndexHomeScreen.route);
         }

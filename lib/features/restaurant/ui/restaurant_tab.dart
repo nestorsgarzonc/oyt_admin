@@ -1,6 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
+import 'package:oyt_front_core/url/url_builder.dart';
+import 'package:oyt_front_restaurant/models/restaurant_model.dart';
+import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_admin/features/restaurant/ui/widgets/download_restaurant_qr.dart';
 import 'package:oyt_front_core/enums/payments_enum.dart';
@@ -13,22 +17,64 @@ import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 import 'package:oyt_front_widgets/text_field/time_text_field.dart';
 
-class RestaurantTab extends ConsumerStatefulWidget {
+class RestaurantTab extends ConsumerWidget {
   const RestaurantTab({super.key});
 
   @override
-  ConsumerState<RestaurantTab> createState() => _RestaurantTab();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final restaurantState = ref.watch(restaurantProvider);
+    return restaurantState.restaurant.on(
+      onError: (error) => Text(error.toString()),
+      onLoading: () => const ScreenLoadingWidget(),
+      onInitial: () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ref.read(restaurantProvider.notifier).getRestaurant();
+        });
+        return const ScreenLoadingWidget();
+      },
+      onData: (restaurant) => RestaurantTabBody(restaurant: restaurant),
+    );
+  }
 }
 
-class _RestaurantTab extends ConsumerState<RestaurantTab> {
+class RestaurantTabBody extends ConsumerStatefulWidget {
+  const RestaurantTabBody({required this.restaurant, super.key});
+
+  final RestaurantModel? restaurant;
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _RestaurantTabBodyState();
+}
+
+class _RestaurantTabBodyState extends ConsumerState<RestaurantTabBody> {
   final _scrollController = ScrollController();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _addressController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _instagramController = TextEditingController();
+  final _facebookController = TextEditingController();
   Uint8List? _logo;
   Uint8List? _cover;
   bool _isLoadinglogo = false;
   bool _isLoadingCover = false;
+  RestaurantModel? restaurant;
+
+  @override
+  void initState() {
+    restaurant = widget.restaurant;
+    if (restaurant == null) {
+      super.initState();
+      return;
+    }
+    _nameController.text = restaurant?.name ?? '';
+    _descriptionController.text = restaurant?.description ?? '';
+    _addressController.text = restaurant?.address ?? '';
+    _emailController.text = restaurant?.email ?? '';
+    _phoneController.text = restaurant?.phone.toString() ?? '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +92,11 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
               controller: _scrollController,
               children: [
                 const SectionTitle(title: 'Codigo QR del restaurante'),
-                DownloadRestaurantQR(
-                  //TODO: Change this to the restaurant qr
-                  qrData: 'https://oyt.com',
-                ),
+                if (restaurant?.id != null)
+                  DownloadRestaurantQR(
+                    restaurantName: restaurant!.name,
+                    qrData: UrlBuilder.dinnerWithRestaurantId(restaurant!.id),
+                  ),
                 const SectionTitle(title: 'Logo'),
                 UploadImageCard(
                   label: 'logo',
@@ -64,7 +111,7 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                     onConfirm: _onReplaceLogo,
                   ),
                   onUpload: _onUploadLogo,
-                  url: null,
+                  url: restaurant?.logoUrl,
                   isLoading: _isLoadinglogo,
                   imgBytes: _logo,
                   recomendations: const [
@@ -95,7 +142,7 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                     'Tamaño recomendado: 1000x500',
                     'Formato: PNG, JPG o JPEG',
                   ],
-                  url: null,
+                  url: restaurant?.imageUrl,
                 ),
                 const SectionTitle(title: 'Nombre del restaurante'),
                 CustomTextField(label: 'Nombre del restaurante', controller: _nameController),
@@ -146,17 +193,11 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                 Row(
                   children: [
                     Expanded(
-                      child: CustomTextField(
-                        label: 'Facebook',
-                        controller: _nameController,
-                      ),
+                      child: CustomTextField(label: 'Facebook', controller: _facebookController),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: CustomTextField(
-                        label: 'Instagram',
-                        controller: _nameController,
-                      ),
+                      child: CustomTextField(label: 'Instagram', controller: _instagramController),
                     ),
                   ],
                 ),
@@ -166,14 +207,14 @@ class _RestaurantTab extends ConsumerState<RestaurantTab> {
                     Expanded(
                       child: CustomTextField(
                         label: 'Teléfono',
-                        controller: _nameController,
+                        controller: _phoneController,
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: CustomTextField(
                         label: 'Correo electrónico',
-                        controller: _nameController,
+                        controller: _emailController,
                       ),
                     ),
                   ],

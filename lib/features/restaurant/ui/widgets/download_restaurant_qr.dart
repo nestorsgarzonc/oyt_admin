@@ -7,9 +7,10 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 class DownloadRestaurantQR extends StatelessWidget {
-  DownloadRestaurantQR({super.key, required this.qrData});
+  DownloadRestaurantQR({super.key, required this.qrData, required this.restaurantName});
 
   final String qrData;
+  final String restaurantName;
   final _qrKey = GlobalKey();
 
   @override
