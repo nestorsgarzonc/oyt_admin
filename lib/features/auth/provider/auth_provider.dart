@@ -6,6 +6,7 @@ import 'package:oyt_admin/features/auth/provider/auth_state.dart';
 import 'package:oyt_admin/features/auth/repositories/auth_repositories.dart';
 import 'package:oyt_admin/features/home/ui/index_home_screen.dart';
 import 'package:oyt_admin/features/on_boarding/ui/on_boarding.dart';
+import 'package:oyt_admin/features/on_boarding/ui/on_boarding_admin_screen.dart';
 import 'package:oyt_front_auth/models/login_model.dart';
 import 'package:oyt_front_auth/models/user_model.dart';
 import 'package:oyt_front_core/external/socket_handler.dart';
@@ -67,7 +68,7 @@ class AuthProvider extends StateNotifier<AuthState> {
       (r) async {
         state = state.copyWith(checkAdminResponse: StateAsync.success(r));
         if (r.restaurantsId.isEmpty) {
-          //TODO: GO TO CREATE A RESTAURANT
+          ref.read(routerProvider).router.pushReplacement(OnBoardingAdminScreen.route);
         } else if (r.restaurantsId.length > 1) {
           //TODO: GO TO CHOOSE A RESTAURANT
         } else {

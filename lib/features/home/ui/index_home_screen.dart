@@ -87,7 +87,7 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
     final restaurantState = ref.watch(restaurantProvider);
     return Scaffold(
       body: restaurantState.restaurant.on(
-        onError: (error) => Text(error.toString()),
+        onError: (error) => Center(child: Text(error.toString())),
         onLoading: () => const ScreenLoadingWidget(),
         onInitial: () {
           WidgetsBinding.instance.addPostFrameCallback((_) {

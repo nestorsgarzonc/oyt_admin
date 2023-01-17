@@ -180,7 +180,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
               if (selectedCategory != null) const VerticalDivider(),
               if (selectedCategory != null)
                 selectedProduct == null
-                    ? const Center(child: Text('Selecciona una categoria para ver los toppings...'))
+                    ? const Center(child: Text('Selecciona un producto para ver los toppings...'))
                     : Expanded(
                         child: productState.productDetail.on(
                           onError: (error) => Center(child: Text(error.message)),

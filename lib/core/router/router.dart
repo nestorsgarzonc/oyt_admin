@@ -5,6 +5,8 @@ import 'package:oyt_admin/features/auth/ui/login_screen.dart';
 import 'package:oyt_admin/features/auth/ui/register_screen.dart';
 import 'package:oyt_admin/features/home/ui/index_home_screen.dart';
 import 'package:oyt_admin/features/on_boarding/ui/on_boarding.dart';
+import 'package:oyt_admin/features/on_boarding/ui/on_boarding_admin_screen.dart';
+import 'package:oyt_admin/features/restaurant/ui/register_restaurant_screen.dart';
 import 'package:oyt_admin/features/tables/ui/table_screen.dart';
 import 'package:oyt_front_widgets/error/error_screen.dart';
 
@@ -36,6 +38,14 @@ class CustomRouter {
   static List<GoRoute> get routes => [
         GoRoute(path: OnBoarding.route, builder: (context, state) => const OnBoarding()),
         GoRoute(path: RegisterScreen.route, builder: (context, state) => const RegisterScreen()),
+        GoRoute(
+          path: RegisterRestaurant.route,
+          builder: (context, state) => const RegisterRestaurant(),
+        ),
+        GoRoute(
+          path: OnBoardingAdminScreen.route,
+          builder: (context, state) => const OnBoardingAdminScreen(),
+        ),
         GoRoute(
           path: ErrorScreen.route,
           builder: (context, state) {
