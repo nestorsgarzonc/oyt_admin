@@ -3,21 +3,24 @@ import 'package:oyt_admin/features/menu/ui/dialogs/add_topping_option_dialog.dar
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
 import 'package:oyt_front_menu/enum/topping_options_type.dart';
+import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
 import 'package:oyt_front_widgets/sizedbox/dialog_width.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
 class AddToppingDialog extends StatefulWidget {
-  const AddToppingDialog({super.key});
+  const AddToppingDialog({super.key, this.toppingItem});
 
-  static Future<void> show({required BuildContext context}) {
+  static Future<void> show({required BuildContext context, Topping? toppingItem}) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const AddToppingDialog(),
+      builder: (context) => AddToppingDialog(toppingItem: toppingItem),
     );
   }
+
+  final Topping? toppingItem;
 
   @override
   State<AddToppingDialog> createState() => _AddToppingDialog();
@@ -29,6 +32,20 @@ class _AddToppingDialog extends State<AddToppingDialog> {
   final _minOptionsController = TextEditingController(); //?: Number;
   final _maxOptionsController = TextEditingController(); //?: Number;
   ToppingOptionsType _typeEnum = ToppingOptionsType.single;
+
+  @override
+  void initState() {
+    if (widget.toppingItem != null) setInitialValues();
+    super.initState();
+  }
+
+  void setInitialValues() {
+    _nameController.text = widget.toppingItem?.name ?? '';
+    _maxOptionsController.text = widget.toppingItem?.maxOptions.toString() ?? '';
+    _minOptionsController.text = widget.toppingItem?.minOptions.toString() ?? '';
+    _typeEnum =
+        ToppingOptionsType.fromString(widget.toppingItem?.type ?? '') ?? ToppingOptionsType.single;
+  }
 
   @override
   Widget build(BuildContext context) {

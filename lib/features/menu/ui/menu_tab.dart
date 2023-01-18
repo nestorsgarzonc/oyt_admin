@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/product/provider/product_provider.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_front_core/theme/theme.dart';
+import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:oyt_front_widgets/loading/loading_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
@@ -109,7 +110,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                                     : null,
                               ),
                               trailing: IconButton(
-                                onPressed: () => _onEditCategory(),
+                                onPressed: () => _onEditCategory(item),
                                 icon: const Icon(Icons.edit),
                               ),
                               onTap: () => _onSelectCategory(item),
@@ -166,7 +167,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                                     ),
                                     onTap: () => _onSelectProduct(item),
                                     trailing: IconButton(
-                                      onPressed: () => _onEditProduct(),
+                                      onPressed: () => _onEditProduct(item),
                                       icon: const Icon(Icons.edit),
                                     ),
                                   ),
@@ -217,7 +218,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                                           index: index + 2,
                                           child: const Icon(Icons.drag_indicator_outlined),
                                         ),
-                                        onTap: () => _onEditTopping(),
+                                        onTap: () => _onEditTopping(item),
                                         title: Text(item.name),
                                       ),
                                     );
@@ -268,7 +269,8 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
     ref.read(productProvider.notifier).productDetail(product.id);
   }
 
-  void _onEditCategory() {}
-  void _onEditProduct() {}
-  void _onEditTopping() {}
+  void _onEditCategory(Menu item) => AddCategoryDialog.show(context: context, categoryItem: item);
+  void _onEditProduct(MenuItem product) =>
+      AddProductDialog.show(context: context, menuItem: product);
+  void _onEditTopping(Topping item) => AddToppingDialog.show(context: context, toppingItem: item);
 }

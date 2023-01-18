@@ -6,6 +6,7 @@ import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
+import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:oyt_front_widgets/cards/upload_image_card.dart';
 import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
@@ -15,15 +16,17 @@ import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 
 class AddCategoryDialog extends StatefulWidget {
-  const AddCategoryDialog({super.key});
+  const AddCategoryDialog({required this.categoryItem, super.key});
 
-  static Future<void> show({required BuildContext context}) {
+  static Future<void> show({required BuildContext context, Menu? categoryItem}) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const AddCategoryDialog(),
+      builder: (context) => AddCategoryDialog(categoryItem: categoryItem),
     );
   }
+
+  final Menu? categoryItem;
 
   @override
   State<AddCategoryDialog> createState() => _AddCategoryDialog();
@@ -36,6 +39,18 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
   Uint8List? _imgBytes;
   bool _isAvaliable = true;
   bool _isLoadinglogo = false;
+
+  @override
+  void initState() {
+    if (widget.categoryItem != null) setInitialValues();
+    super.initState();
+  }
+
+  void setInitialValues() {
+    _nameController.text = widget.categoryItem?.name ?? '';
+    _descriptionController.text = widget.categoryItem?.description ?? '';
+    _isAvaliable = widget.categoryItem?.isAvaliable ?? true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +100,7 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
                 onConfirm: _onReplaceLogo,
               ),
               onUpload: _onUploadLogo,
-              url: null,
+              url: widget.categoryItem?.imgUrl,
               isLoading: _isLoadinglogo,
               imgBytes: _imgBytes,
               recomendations: const [

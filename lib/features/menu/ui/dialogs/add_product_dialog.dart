@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide MenuItem;
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
+import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:oyt_front_widgets/cards/upload_image_card.dart';
 import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
@@ -12,15 +13,17 @@ import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 
 class AddProductDialog extends StatefulWidget {
-  const AddProductDialog({super.key});
+  const AddProductDialog({super.key, this.menuItem});
 
-  static Future<void> show({required BuildContext context}) {
+  static Future<void> show({required BuildContext context, MenuItem? menuItem}) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const AddProductDialog(),
+      builder: (context) => AddProductDialog(menuItem: menuItem),
     );
   }
+
+  final MenuItem? menuItem;
 
   @override
   State<AddProductDialog> createState() => _AddProductDialog();
@@ -36,6 +39,20 @@ class _AddProductDialog extends State<AddProductDialog> {
   Uint8List? _imgBytes;
   bool _isAvaliable = true;
   bool _isLoadinglogo = false;
+
+  @override
+  void initState() {
+    if (widget.menuItem != null) setInitialValues();
+    super.initState();
+  }
+
+  void setInitialValues() {
+    final menuItem = widget.menuItem!;
+    _nameController.text = menuItem.name;
+    _descriptionController.text = menuItem.description;
+    _priceController.text = menuItem.price.toString();
+    _isAvaliable = menuItem.isAvaliable;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,20 +95,20 @@ class _AddProductDialog extends State<AddProductDialog> {
               label: 'Precio del producto',
               hintText: 'Ej: 1.000',
             ),
-            const SectionTitle(title: 'Impuestos del producto'),
-            CustomTextField(
-              controller: _taxesController,
-              validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
-              label: 'Impuestos del producto',
-              hintText: 'Ej: 100',
-            ),
-            const SectionTitle(title: 'Descuentos del producto'),
-            CustomTextField(
-              controller: _discountController,
-              validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
-              label: 'Descuentos del producto',
-              hintText: 'Ej: 100',
-            ),
+            // const SectionTitle(title: 'Impuestos del producto'),
+            // CustomTextField(
+            //   controller: _taxesController,
+            //   validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
+            //   label: 'Impuestos del producto',
+            //   hintText: 'Ej: 100',
+            // ),
+            // const SectionTitle(title: 'Descuentos del producto'),
+            // CustomTextField(
+            //   controller: _discountController,
+            //   validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
+            //   label: 'Descuentos del producto',
+            //   hintText: 'Ej: 100',
+            // ),
             const SectionTitle(title: 'Imagen del producto'),
             UploadImageCard(
               label: 'imagen',
@@ -106,7 +123,7 @@ class _AddProductDialog extends State<AddProductDialog> {
                 onConfirm: _onReplaceLogo,
               ),
               onUpload: _onUploadLogo,
-              url: null,
+              url: widget.menuItem?.imgUrl,
               isLoading: _isLoadinglogo,
               imgBytes: _imgBytes,
               recomendations: const [
