@@ -8,6 +8,7 @@ import 'package:oyt_admin/features/on_boarding/ui/on_boarding.dart';
 import 'package:oyt_admin/features/on_boarding/ui/on_boarding_admin_screen.dart';
 import 'package:oyt_admin/features/restaurant/ui/register_restaurant_screen.dart';
 import 'package:oyt_admin/features/tables/ui/table_screen.dart';
+import 'package:oyt_front_table/models/tables_socket_response.dart';
 import 'package:oyt_front_widgets/error/error_screen.dart';
 
 final routerProvider = Provider<CustomRouter>((ref) {
@@ -67,11 +68,10 @@ class CustomRouter {
         GoRoute(
           path: TableScreen.route,
           builder: (context, state) {
-            final id = state.queryParams['id'];
-            if (id == null) {
-              return ErrorScreen(error: atributeErrorMessage('id'));
-            }
-            return TableScreen(id: id);
+            final extra = state.extra;
+            if (extra is! TableResponse) return ErrorScreen(error: atributeErrorMessage('mesa'));
+
+            return TableScreen(table: extra);
           },
         )
       ];

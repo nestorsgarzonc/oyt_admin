@@ -22,6 +22,8 @@ class AuthState extends Equatable {
   final StateAsync<CheckAdminResponse> checkAdminResponse;
   final StateAsync<String> selectedRestaurantId;
 
+  String get restaurantId => selectedRestaurantId.data ?? '';
+
   AuthState copyWith({
     StateAsync<AuthModel>? authModel,
     StateAsync<CheckAdminResponse>? checkAdminResponse,
