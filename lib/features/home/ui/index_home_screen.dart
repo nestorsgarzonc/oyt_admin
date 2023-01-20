@@ -51,7 +51,7 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
       tab: () => const OrdersQueueTab(),
     ),
     CardItem(
-      title: 'Historial de ordenes',
+      title: 'Historial de órdenes',
       icon: FontAwesomeIcons.fileLines,
       tab: () => const HistoricalOrdersTab(),
     ),

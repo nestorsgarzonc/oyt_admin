@@ -81,12 +81,12 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
                   label: 'logo',
                   onRemove: () => ConfirmActionDialog.show(
                     context: context,
-                    title: '¿Estas seguro de eliminar el logo?',
+                    title: '¿Estás seguro de eliminar el logo?',
                     onConfirm: _onRemoveLogo,
                   ),
                   onReplace: () => ConfirmActionDialog.show(
                     context: context,
-                    title: '¿Estas seguro de remplazar el logo?',
+                    title: '¿Estás seguro de remplazar el logo?',
                     onConfirm: _onReplaceLogo,
                   ),
                   onUpload: _onUploadLogo,
@@ -105,12 +105,12 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
                   fit: BoxFit.cover,
                   onRemove: () => ConfirmActionDialog.show(
                     context: context,
-                    title: '¿Estas seguro de eliminar la portada?',
+                    title: '¿Estás seguro de eliminar la portada?',
                     onConfirm: _onRemoveCover,
                   ),
                   onReplace: () => ConfirmActionDialog.show(
                     context: context,
-                    title: '¿Estas seguro de remplazar la portada?',
+                    title: '¿Estás seguro de remplazar la portada?',
                     onConfirm: _onReplaceCover,
                   ),
                   onUpload: _onUploadCover,
