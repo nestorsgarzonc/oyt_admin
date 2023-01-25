@@ -19,7 +19,7 @@ class CarrouselItemModel extends Equatable {
       LottieAssets.adminCrm,
     ),
     CarrouselItemModel(
-      'Lo que no se mide no se mejora!\nPor ello maneja todas los datos clave de tu restaurante en al modulo de analitica.',
+      'Lo que no se mide no se mejora!\nPor ello maneja todas los datos clave de tu restaurante en el modulo de analitica.',
       LottieAssets.analytics,
     ),
     CarrouselItemModel(

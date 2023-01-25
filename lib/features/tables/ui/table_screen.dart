@@ -12,7 +12,6 @@ import 'package:oyt_front_table/widgets/table_user_card.dart';
 import 'package:oyt_front_widgets/drawer/drawer_layout.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
-import 'package:oyt_front_widgets/widgets/buttons/custom_elevated_button.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
@@ -116,7 +115,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                   label: const Text('Descargar codigo QR'),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton.icon(
+                FilledButton.icon(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(CustomTheme.redColor),
                   ),
@@ -125,7 +124,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                   label: const Text('Eliminar mesa'),
                 ),
                 const SizedBox(height: 5),
-                ElevatedButton.icon(
+                FilledButton.icon(
                   onPressed: canUpdate ? _onUpdate : null,
                   icon: const Icon(Icons.update),
                   label: const Text('Actualizar mesa'),
@@ -156,7 +155,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                     ],
                   ),
                 ),
-                CustomElevatedButton(
+                FilledButton(
                   onPressed: onChangeStatus,
                   child: const Text('Cambiar estado de la mesa'),
                 ),

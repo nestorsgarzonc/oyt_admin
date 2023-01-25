@@ -59,7 +59,7 @@ class DownloadRestaurantQR extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            ElevatedButton.icon(
+            FilledButton.icon(
               onPressed: _onDownloadQr,
               icon: const Icon(Icons.download),
               label: const Text('Descargar codigo QR'),

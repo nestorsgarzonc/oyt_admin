@@ -6,7 +6,6 @@ import 'package:oyt_admin/features/auth/provider/auth_provider.dart';
 import 'package:oyt_admin/features/auth/ui/login_screen.dart';
 import 'package:oyt_admin/features/auth/ui/register_screen.dart';
 import 'package:oyt_front_core/constants/lotti_assets.dart';
-import 'package:oyt_front_widgets/widgets/buttons/custom_elevated_button.dart';
 import 'package:oyt_front_widgets/widgets/cards/on_boarding_animation_title.dart';
 import 'package:oyt_front_widgets/widgets/divider.dart';
 
@@ -65,7 +64,7 @@ class _OnBoardingBody extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          CustomElevatedButton(
+          FilledButton(
             onPressed: () => handleOnLogin(context),
             child: const Text('Iniciar sesión'),
           ),

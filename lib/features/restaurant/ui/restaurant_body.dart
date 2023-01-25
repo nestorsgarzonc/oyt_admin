@@ -232,7 +232,7 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
                       )
                       .toList(),
                   const SizedBox(height: 20),
-                  ElevatedButton(onPressed: _onSave, child: const Text('Guardar')),
+                  FilledButton(onPressed: _onSave, child: const Text('Guardar')),
                   const SizedBox(height: 40),
                 ],
               ),
@@ -282,9 +282,9 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
       setState(() => _isLoadinglogo = true);
       final logo = await CustomImagePicker.pickImage();
       _logo = await logo?.readAsBytes();
-      setState(() => _isLoadinglogo = false);
     } catch (e) {
       CustomSnackbar.showSnackBar(context, 'Error al subir la imagen');
+    } finally {
       setState(() => _isLoadinglogo = false);
     }
   }
@@ -294,9 +294,9 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
       setState(() => _isLoadingCover = true);
       final cover = await CustomImagePicker.pickImage();
       _cover = await cover?.readAsBytes();
-      setState(() => _isLoadingCover = false);
     } catch (e) {
       CustomSnackbar.showSnackBar(context, 'Error al subir la imagen');
+    } finally {
       setState(() => _isLoadingCover = false);
     }
   }

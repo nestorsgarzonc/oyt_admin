@@ -33,7 +33,7 @@ class _OnBoardingAdminScreenState extends State<OnBoardingAdminScreen> {
   }
 
   void autoChangePage() {
-    Timer.periodic(const Duration(seconds: 5), (timer) {
+    Timer.periodic(const Duration(seconds: 8), (timer) {
       if (!mounted) {
         timer.cancel();
         return;
@@ -106,7 +106,7 @@ class _OnBoardingAdminScreenState extends State<OnBoardingAdminScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          ElevatedButton(onPressed: onContinue, child: const Text('Continuar')),
+          FilledButton(onPressed: onContinue, child: const Text('Continuar')),
           const SizedBox(height: 20),
         ],
       ),

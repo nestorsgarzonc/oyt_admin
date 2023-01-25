@@ -48,7 +48,7 @@ class _RestorePasswordScreen extends ConsumerState<RestorePasswordScreen> {
             const SizedBox(
               height: 20,
             ),
-            ElevatedButton(
+            FilledButton(
               onPressed: handleOnResetPassword,
               child: const Text('Restaurar contraseña'),
             )
