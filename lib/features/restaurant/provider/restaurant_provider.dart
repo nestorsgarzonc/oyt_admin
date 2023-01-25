@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/core/router/router.dart';
 import 'package:oyt_admin/features/auth/provider/auth_provider.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_state.dart';
-import 'package:oyt_front_core/failure/failure.dart';
 import 'package:oyt_front_core/wrappers/state_wrapper.dart';
 import 'package:oyt_front_restaurant/models/restaurant_creation_model.dart';
 import 'package:oyt_front_restaurant/repositories/restaurant_repository.dart';
@@ -28,17 +27,8 @@ class RestaurantProvider extends StateNotifier<RestaurantState> {
   final RestaurantRepository restaurantRepository;
 
   Future<void> getRestaurant() async {
-    final selectedRestaurant = ref.read(authProvider).selectedRestaurantId.data;
-    if (selectedRestaurant == null) {
-      state = state.copyWith(
-        restaurant: StateAsync.error(
-          const Failure('Oops, ha ocurrido un error.'),
-        ),
-      );
-      return;
-    }
     state = state.copyWith(restaurant: StateAsync.loading());
-    final result = await restaurantRepository.getMenuByRestaurant(selectedRestaurant);
+    final result = await restaurantRepository.getMenuByRestaurant();
     result.fold(
       (failure) => state = state.copyWith(restaurant: StateAsync.error(failure)),
       (restaurant) => state = state.copyWith(restaurant: StateAsync.success(restaurant)),
@@ -46,7 +36,14 @@ class RestaurantProvider extends StateNotifier<RestaurantState> {
   }
 
   Future<void> updateRestaurant(RestaurantCreationModel restaurant) async {
-    //TODO: CONTINUE updateRestaurant
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    final failure = await restaurantRepository.updateRestaurant(restaurant);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    if (failure != null) {
+      ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': failure.message});
+      return;
+    }
+    getRestaurant();
   }
 
   Future<void> createRestaurant(RestaurantCreationModel restaurant) async {

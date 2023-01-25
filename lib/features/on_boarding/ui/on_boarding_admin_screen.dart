@@ -99,7 +99,7 @@ class _OnBoardingAdminScreenState extends State<OnBoardingAdminScreen> {
                 height: 10,
                 width: currentIndex == index ? 20 : 10,
                 decoration: BoxDecoration(
-                  color: currentIndex == index ? Colors.deepOrange : Colors.grey,
+                  color: currentIndex == index ? Theme.of(context).primaryColor : Colors.grey,
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),

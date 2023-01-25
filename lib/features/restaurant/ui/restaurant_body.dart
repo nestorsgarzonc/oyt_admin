@@ -37,9 +37,9 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
   final _phoneController = TextEditingController();
   final _instagramController = TextEditingController();
   final _facebookController = TextEditingController();
-  final _weekDays = Weekday.weekdays;
   final _paymentMethods = <PaymentMethod>{};
   final _formKey = GlobalKey<FormState>();
+  List<Weekday> _weekDays = Weekday.weekdays;
   Uint8List? _logo;
   Uint8List? _cover;
   bool _isLoadinglogo = false;
@@ -60,6 +60,12 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
     _addressController.text = restaurant?.address ?? '';
     _emailController.text = restaurant?.email ?? '';
     _phoneController.text = restaurant?.phone.toString() ?? '';
+    _instagramController.text = restaurant?.instagram ?? '';
+    _facebookController.text = restaurant?.facebook ?? '';
+    _primaryColor = restaurant?.primaryColor ?? Colors.deepOrange;
+    _secondaryColor = restaurant?.secondaryColor ?? Colors.blue;
+    _paymentMethods.addAll(restaurant?.paymentMethods ?? []);
+    _weekDays = restaurant?.weekDays ?? Weekday.weekdays;
     super.initState();
   }
 
@@ -158,7 +164,7 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
                         children: [
                           Expanded(
                             child: Text(
-                              '${e.weekday.name}:',
+                              '${e.weekday.spanishName}:',
                               style: const TextStyle(fontWeight: FontWeight.w500),
                             ),
                           ),
