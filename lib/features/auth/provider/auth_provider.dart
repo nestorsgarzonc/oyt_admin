@@ -101,7 +101,6 @@ class AuthProvider extends StateNotifier<AuthState> {
           .push(ErrorScreen.route, extra: {'error': 'No tienes una sesion activa'});
       return;
     }
-
     final res = await authRepository.logout();
     if (res != null) {
       state = state.copyWith(authModel: StateAsync.error(res));
