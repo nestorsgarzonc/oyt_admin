@@ -105,6 +105,7 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
               restaurant.imageUrl == null
                   ? const SizedBox.shrink()
                   : ImageApi(restaurant.logoUrl!, width: 150, fit: BoxFit.fitWidth),
+              const SizedBox(height: 10),
               Expanded(
                 child: Scrollbar(
                   controller: _scrollController,
@@ -128,6 +129,7 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
                 ),
                 isSelected: false,
               ),
+              const SizedBox(height: 10),
               const SafeArea(child: SizedBox.shrink()),
             ],
           ),

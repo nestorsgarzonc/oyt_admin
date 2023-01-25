@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_front_restaurant/models/restaurant_creation_model.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_admin/features/restaurant/ui/widgets/download_restaurant_qr.dart';
@@ -311,6 +312,8 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
     _onUploadLogo().then((value) {
       if (!mounted) return;
       Navigator.of(context).pop();
+      if (widget.restaurant == null || _logo == null) return;
+      ref.read(restaurantProvider.notifier).updateRestaurantLogo(_logo!);
     });
   }
 
@@ -318,6 +321,8 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
     _onUploadCover().then((value) {
       if (!mounted) return;
       Navigator.of(context).pop();
+      if (widget.restaurant == null || _cover == null) return;
+      ref.read(restaurantProvider.notifier).updateRestaurantImage(_cover!);
     });
   }
 }

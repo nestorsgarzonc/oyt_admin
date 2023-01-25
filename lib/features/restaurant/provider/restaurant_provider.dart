@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/core/router/router.dart';
 import 'package:oyt_admin/features/auth/provider/auth_provider.dart';
@@ -26,8 +28,8 @@ class RestaurantProvider extends StateNotifier<RestaurantState> {
   final Ref ref;
   final RestaurantRepository restaurantRepository;
 
-  Future<void> getRestaurant() async {
-    state = state.copyWith(restaurant: StateAsync.loading());
+  Future<void> getRestaurant({bool silent = false}) async {
+    if (!silent) state = state.copyWith(restaurant: StateAsync.loading());
     final result = await restaurantRepository.getMenuByRestaurant();
     result.fold(
       (failure) => state = state.copyWith(restaurant: StateAsync.error(failure)),
@@ -43,7 +45,7 @@ class RestaurantProvider extends StateNotifier<RestaurantState> {
       ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': failure.message});
       return;
     }
-    getRestaurant();
+    getRestaurant(silent: true);
   }
 
   Future<void> createRestaurant(RestaurantCreationModel restaurant) async {
@@ -55,5 +57,27 @@ class RestaurantProvider extends StateNotifier<RestaurantState> {
       return;
     }
     ref.read(authProvider.notifier).checkIfIsAdmin();
+  }
+
+  Future<void> updateRestaurantLogo(Uint8List logo) async {
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    final failure = await restaurantRepository.updateRestaurantLogo(logo);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    if (failure != null) {
+      ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': failure.message});
+      return;
+    }
+    getRestaurant(silent: true);
+  }
+
+  Future<void> updateRestaurantImage(Uint8List image) async {
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    final failure = await restaurantRepository.updateRestaurantImage(image);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    if (failure != null) {
+      ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': failure.message});
+      return;
+    }
+    getRestaurant(silent: true);
   }
 }
