@@ -7,7 +7,6 @@ import 'package:oyt_front_core/constants/lotti_assets.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
 import 'package:oyt_front_widgets/loading/loading_widget.dart';
 import 'package:oyt_front_widgets/widgets/backgrounds/animated_background.dart';
-import 'package:oyt_front_widgets/widgets/buttons/custom_elevated_button.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -88,16 +87,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
           const SizedBox(height: 20),
           authState.authModel.on(
-            onData: (u) => CustomElevatedButton(
+            onData: (u) => FilledButton(
               onPressed: handleOnLogin,
               child: const Text('Ingresar'),
             ),
-            onError: (f) => CustomElevatedButton(
+            onError: (f) => FilledButton(
               onPressed: handleOnLogin,
               child: const Text('Ingresar'),
             ),
             onLoading: () => const LoadingWidget(),
-            onInitial: () => CustomElevatedButton(
+            onInitial: () => FilledButton(
               onPressed: handleOnLogin,
               child: const Text('Ingresar'),
             ),

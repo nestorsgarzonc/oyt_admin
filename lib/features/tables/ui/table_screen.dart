@@ -12,7 +12,6 @@ import 'package:oyt_front_table/widgets/table_user_card.dart';
 import 'package:oyt_front_widgets/drawer/drawer_layout.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
-import 'package:oyt_front_widgets/widgets/buttons/custom_elevated_button.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
@@ -156,7 +155,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                     ],
                   ),
                 ),
-                CustomElevatedButton(
+                FilledButton(
                   onPressed: onChangeStatus,
                   child: const Text('Cambiar estado de la mesa'),
                 ),

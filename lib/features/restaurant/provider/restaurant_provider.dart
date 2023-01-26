@@ -34,7 +34,7 @@ class RestaurantProvider extends StateNotifier<RestaurantState> {
       return;
     }
     state = state.copyWith(restaurant: StateAsync.loading());
-    final result = await restaurantRepository.getMenuByRestaurant(waiterResponse);
+    final result = await restaurantRepository.getMenuByRestaurant();
     result.fold(
       (failure) => state = state.copyWith(restaurant: StateAsync.error(failure)),
       (restaurant) => state = state.copyWith(restaurant: StateAsync.success(restaurant)),
