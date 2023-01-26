@@ -55,7 +55,7 @@ class DownloadRestaurantQR extends StatelessWidget {
             SizedBox(
               width: size.width - 600,
               child: const Text(
-                'Nota: para hacer uso de comunicación en tiempo real, interacción con mesero, cocina y entre otros genera un codigo QR para cada mesa de tu restaurante. Éste QR solo habilita la visualización del menu.',
+                'Nota: para hacer uso de comunicación en tiempo real, interacción con mesero, cocina y entre otros genera un codigo QR para cada mesa de tu restaurante. Éste QR solo habilita la visualización del menú.',
               ),
             ),
             const SizedBox(height: 15),
