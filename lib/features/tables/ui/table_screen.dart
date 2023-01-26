@@ -218,7 +218,11 @@ class _TableScreenState extends ConsumerState<TableScreen> {
   void _onDelete() => ConfirmActionDialog.show(
         context: context,
         title: '¿Estas seguro de eliminar la mesa?',
-        onConfirm: () {},
+        onConfirm: () async {
+          await ref.read(tableProvider.notifier).deleteTable(widget.table.id);
+          if (!mounted) return;
+          Navigator.of(context).pop();
+        },
       );
 
   void _onUpdateTable() {

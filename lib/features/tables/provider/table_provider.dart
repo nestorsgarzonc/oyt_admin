@@ -89,6 +89,18 @@ class TableProvider extends StateNotifier<TableState> {
     CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Mesa creada con éxito');
   }
 
+  Future<void> deleteTable(String tableId) async {
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    final failure = await tableRepository.deleteTable(tableId);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    if (failure != null) {
+      ref.read(routerProvider).router.push(ErrorScreen.route, extra: {'error': failure.message});
+      return;
+    }
+    ref.read(routerProvider).goRouter.pop();
+    CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Mesa eliminada con éxito');
+  }
+
   Future<void> updateTable(TableResponse table) async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
     final failure = await tableRepository.updateTable(table);
