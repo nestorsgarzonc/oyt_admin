@@ -9,11 +9,11 @@ import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 class AddTableDialog extends StatefulWidget {
   const AddTableDialog({super.key, required this.onConfirm});
 
-  final VoidCallback onConfirm;
+  final Future<void> Function(String) onConfirm;
 
   static Future<void> show({
     required BuildContext context,
-    required VoidCallback onConfirm,
+    required Future<void> Function(String) onConfirm,
     String subtitle = 'Esta acción no se puede deshacer',
   }) {
     return showDialog(
@@ -53,7 +53,7 @@ class _AddTableDialogState extends State<AddTableDialog> {
               controller: _nameController,
               validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
               label: 'Nombre de la mesa',
-              hintText: 'Ej: Mesa 1',
+              hintText: 'Ej: 1',
             ),
           ),
         ],
@@ -61,9 +61,10 @@ class _AddTableDialogState extends State<AddTableDialog> {
     );
   }
 
-  void _onConfirm() {
+  void _onConfirm() async {
     if (_formKey.currentState!.validate()) {
-      widget.onConfirm();
+      await widget.onConfirm(_nameController.text.trim());
+      if (!mounted) return;
       Navigator.of(context).pop();
     }
   }
