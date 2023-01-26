@@ -14,6 +14,8 @@ import 'package:oyt_admin/features/statistics/ui/statistics_tab.dart';
 import 'package:oyt_admin/features/tables/ui/tables_tab.dart';
 import 'package:oyt_admin/features/waiters/ui/waiters_tab.dart';
 import 'package:oyt_front_widgets/drawer/drawer_item_card.dart';
+import 'package:oyt_front_core/constants/lotti_assets.dart';
+import 'package:lottie/lottie.dart';
 import 'package:oyt_front_widgets/image/image_api_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 
@@ -87,7 +89,29 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
     final restaurantState = ref.watch(restaurantProvider);
     return Scaffold(
       body: restaurantState.restaurant.on(
-        onError: (error) => Center(child: Text(error.toString())),
+        onError: (error) => ListView(
+          padding: const EdgeInsets.all(10),
+          children: [
+            Container(
+              alignment: Alignment.center,
+              height: 250,
+              width: 250,
+              child: Lottie.asset(
+                LottieAssets.notFound,
+                height: 250.0,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+            const SizedBox(height: 15),
+            Text(
+              error.toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 18.0,
+              ),
+            ),
+          ],
+        ),
         onLoading: () => const ScreenLoadingWidget(),
         onInitial: () {
           WidgetsBinding.instance.addPostFrameCallback((_) {

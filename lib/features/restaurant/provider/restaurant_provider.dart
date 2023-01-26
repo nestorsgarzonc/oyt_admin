@@ -28,7 +28,7 @@ class RestaurantProvider extends StateNotifier<RestaurantState> {
     if (waiterResponse == null) {
       state = state.copyWith(
         restaurant: StateAsync.error(
-          const Failure('Oops, ha ocurrido un error.'),
+          const Failure('No se ha encontrado el restaurante.'),
         ),
       );
       return;
