@@ -15,10 +15,10 @@ class OrdersQueueTab extends ConsumerStatefulWidget {
 
 class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
   OrderStatus? _selectedStatus;
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
     final ordersQueueState = ref.watch(ordersQueueProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
