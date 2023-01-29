@@ -118,7 +118,7 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
                     fit: BoxFit.cover,
                     onReplace: () => ConfirmActionDialog.show(
                       context: context,
-                      title: '¿Estas seguro de remplazar la portada?',
+                      title: '¿Estás seguro de remplazar la portada?',
                       onConfirm: _onReplaceCover,
                     ),
                     onUpload: _onUploadCover,

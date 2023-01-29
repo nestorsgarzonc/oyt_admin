@@ -28,7 +28,7 @@ class _TablesTabState extends ConsumerState<TablesTab> {
         const TabHeader(
           title: 'Mesas',
           subtitle:
-              'Aca puedes ver las mesas del restaurante, editar las mesas, eliminar las mesas y agregar nuevas mesas.',
+              'Acá puedes ver las mesas del restaurante, editar las mesas, eliminar las mesas y agregar nuevas mesas.',
         ),
         AddButton(onTap: _onAddTable, text: 'Agregar mesa'),
         const Divider(),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/orders_queue/orders_queue_provider.dart';
+import 'package:oyt_front_widgets/loading/loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_widgets/dropdown/custom_dropdown_field.dart';
 import 'package:oyt_front_orders_queue/models/order_status.dart';
@@ -12,11 +14,12 @@ class OrdersQueueTab extends ConsumerStatefulWidget {
 }
 
 class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
-  final _scrollController = ScrollController();
   OrderStatus? _selectedStatus;
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    final ordersQueueState = ref.watch(ordersQueueProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,21 +45,32 @@ class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
         const Divider(),
         Expanded(
           child: Scrollbar(
-            controller: _scrollController,
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: 50,
-              itemBuilder: (context, index) => Card(
-                child: ListTile(
-                  onTap: () {},
-                  title: Text('Producto $index'),
-                  trailing: const Text('Estado: \nPendiente'),
-                  subtitle: Text('Mesa: $index'),
-                ),
-              ),
+            controller: scrollController,
+            child: ordersQueueState.ordersQueue.on(
+              onError: (err) => Center(child: Text(err.message)),
+              onLoading: () => const LoadingWidget(),
+              onInitial: () => const Center(child: Text('No hay productos en cola')),
+              onData: (data) => data.isEmpty
+                  ? const Center(child: Text('No hay productos en cola'))
+                  : ListView(
+                      children: data
+                          .map(
+                            (e) => Card(
+                              child: ListTile(
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                horizontalTitleGap: 10,
+                                title: Text('Producto: ${e.productName}'),
+                                subtitle: Text('Mesa: ${e.tableName}'),
+                                trailing: Text('Estado: \n${e.estado}'),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
             ),
           ),
-        ),
+        )
       ],
     );
   }

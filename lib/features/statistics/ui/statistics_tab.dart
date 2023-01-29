@@ -31,7 +31,7 @@ class _StatisticsTab extends ConsumerState<StatisticsTab> {
       children: [
         const TabHeader(
           title: 'Estadísticas',
-          subtitle: 'Acá puedes ver las principales metricas de tu restaurante.',
+          subtitle: 'Acá puedes ver las principales métricas de tu restaurante.',
         ),
         Expanded(
           child: Scrollbar(
