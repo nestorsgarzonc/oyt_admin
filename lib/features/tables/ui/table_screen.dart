@@ -2,6 +2,7 @@ import 'package:download/download.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_admin/features/tables/provider/table_provider.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/widget_to_img.dart';
@@ -10,6 +11,7 @@ import 'package:oyt_front_table/models/tables_socket_response.dart';
 import 'package:oyt_front_table/widgets/table_status_card.dart';
 import 'package:oyt_front_table/widgets/table_user_card.dart';
 import 'package:oyt_front_widgets/drawer/drawer_layout.dart';
+import 'package:oyt_front_widgets/loading/loading_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
@@ -29,7 +31,7 @@ class TableScreen extends ConsumerStatefulWidget {
 }
 
 class _TableScreenState extends ConsumerState<TableScreen> {
-  final _name = TextEditingController();
+  final _tableName = TextEditingController();
   final _qrKey = GlobalKey();
   final _drawerController = ScrollController();
   final _bodyController = ScrollController();
@@ -37,8 +39,8 @@ class _TableScreenState extends ConsumerState<TableScreen> {
 
   @override
   void initState() {
-    _name.text = widget.table.name;
-    _name.addListener(onUpdateText);
+    _tableName.text = widget.table.name;
+    _tableName.addListener(onUpdateText);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(tableProvider.notifier).joinToTable(widget.table);
     });
@@ -47,7 +49,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
 
   void onUpdateText() {
     if (!mounted) return;
-    if (_name.text.trim() != widget.table.name) {
+    if (_tableName.text.trim() != widget.table.name) {
       canUpdate = true;
     } else {
       canUpdate = false;
@@ -58,6 +60,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
   @override
   Widget build(BuildContext context) {
     final tableState = ref.watch(tableProvider);
+    final restaurantState = ref.watch(restaurantProvider);
     return WillPopScope(
       onWillPop: () async {
         ref.read(tableProvider.notifier).leaveTable(widget.table);
@@ -84,29 +87,34 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                   ],
                 ),
                 const SectionTitle(title: 'Nombre de la mesa'),
-                CustomTextField(label: 'Nombre de la mesa', controller: _name),
+                CustomTextField(label: 'Nombre de la mesa', controller: _tableName),
                 const SectionTitle(title: 'Codigo QR de la mesa'),
-                RepaintBoundary(
-                  key: _qrKey,
-                  child: Container(
-                    decoration: CustomTheme.drawerBoxDecoration.copyWith(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.black12),
-                    ),
-                    padding: const EdgeInsets.all(5),
-                    child: Column(
-                      children: [
-                        QrImage(data: widget.table.id),
-                        const Text(
-                          'Takuma',
-                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
-                        ),
-                        const SizedBox(height: 2),
-                        Text('Mesa ${widget.table.name}'),
-                        const SizedBox(height: 5),
-                      ],
+                restaurantState.restaurant.on(
+                  onData: (restaurant) => RepaintBoundary(
+                    key: _qrKey,
+                    child: Container(
+                      decoration: CustomTheme.drawerBoxDecoration.copyWith(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                        children: [
+                          QrImage(data: widget.table.id),
+                          Text(
+                            restaurant.name,
+                            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+                          ),
+                          const SizedBox(height: 2),
+                          Text('Mesa ${widget.table.name}'),
+                          const SizedBox(height: 5),
+                        ],
+                      ),
                     ),
                   ),
+                  onError: (_) => const Center(child: Text('Error al cargar el restaurante')),
+                  onLoading: () => const LoadingWidget(),
+                  onInitial: () => const LoadingWidget(),
                 ),
                 const SizedBox(height: 10),
                 OutlinedButton.icon(
@@ -115,7 +123,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                   label: const Text('Descargar codigo QR'),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton.icon(
+                FilledButton.icon(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(CustomTheme.redColor),
                   ),
@@ -124,8 +132,8 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                   label: const Text('Eliminar mesa'),
                 ),
                 const SizedBox(height: 5),
-                ElevatedButton.icon(
-                  onPressed: canUpdate ? _onUpdate : null,
+                FilledButton.icon(
+                  onPressed: canUpdate ? _onUpdateTable : null,
                   icon: const Icon(Icons.update),
                   label: const Text('Actualizar mesa'),
                 ),
@@ -137,22 +145,26 @@ class _TableScreenState extends ConsumerState<TableScreen> {
             onData: (data) => Column(
               children: [
                 Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                    children: [
-                      TableStatusCard(tableStatus: data.tableStatus),
-                      const SizedBox(height: 10),
-                      ListView.separated(
-                        separatorBuilder: (context, index) => const Divider(),
-                        shrinkWrap: true,
-                        primary: false,
-                        itemCount: data.users.length,
-                        itemBuilder: (context, index) {
-                          final item = data.users[index];
-                          return TableUserCard(userTable: item, showPrice: true, onEdit: null);
-                        },
-                      ),
-                    ],
+                  child: Scrollbar(
+                    controller: _bodyController,
+                    child: ListView(
+                      controller: _bodyController,
+                      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                      children: [
+                        TableStatusCard(tableStatus: data.tableStatus),
+                        const SizedBox(height: 10),
+                        ListView.separated(
+                          separatorBuilder: (context, index) => const Divider(),
+                          shrinkWrap: true,
+                          primary: false,
+                          itemCount: data.users.length,
+                          itemBuilder: (context, index) {
+                            final item = data.users[index];
+                            return TableUserCard(userTable: item, showPrice: true, onEdit: null);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 FilledButton(
@@ -206,8 +218,16 @@ class _TableScreenState extends ConsumerState<TableScreen> {
   void _onDelete() => ConfirmActionDialog.show(
         context: context,
         title: '¿Estas seguro de eliminar la mesa?',
-        onConfirm: () {},
+        onConfirm: () async {
+          await ref.read(tableProvider.notifier).deleteTable(widget.table.id);
+          if (!mounted) return;
+          Navigator.of(context).pop();
+        },
       );
 
-  void _onUpdate() {}
+  void _onUpdateTable() {
+    ref
+        .read(tableProvider.notifier)
+        .updateTable(widget.table.copyWith(name: _tableName.text.trim()));
+  }
 }

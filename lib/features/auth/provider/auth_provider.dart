@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/core/router/router.dart';
@@ -102,7 +101,6 @@ class AuthProvider extends StateNotifier<AuthState> {
           .push(ErrorScreen.route, extra: {'error': 'No tienes una sesion activa'});
       return;
     }
-
     final res = await authRepository.logout();
     if (res != null) {
       state = state.copyWith(authModel: StateAsync.error(res));

@@ -43,8 +43,7 @@ class _AddToppingDialog extends State<AddToppingDialog> {
     _nameController.text = widget.toppingItem?.name ?? '';
     _maxOptionsController.text = widget.toppingItem?.maxOptions.toString() ?? '';
     _minOptionsController.text = widget.toppingItem?.minOptions.toString() ?? '';
-    _typeEnum =
-        ToppingOptionsType.fromString(widget.toppingItem?.type ?? '') ?? ToppingOptionsType.single;
+    _typeEnum = widget.toppingItem?.type ?? ToppingOptionsType.single;
   }
 
   @override

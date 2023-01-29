@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/auth/provider/auth_provider.dart';
 import 'package:oyt_admin/features/inventory/ui/inventory_tab.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_front_widgets/drawer/drawer_layout.dart';
@@ -30,6 +31,7 @@ class IndexHomeScreen extends ConsumerStatefulWidget {
 
 class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
   int _index = 1;
+  final _scrollController = ScrollController();
 
   static final _items = [
     CardItem(
@@ -126,18 +128,24 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
               const SafeArea(child: SizedBox.shrink()),
               restaurant.imageUrl == null
                   ? const SizedBox.shrink()
-                  : ImageApi(restaurant.logoUrl!, width: 185, fit: BoxFit.fitWidth),
-              const Spacer(),
-              ..._items.asMap().entries.map(
-                    (entry) => DrawerItemCard(
-                      item: entry.value,
-                      onTap: () => setState(() => _index = entry.key),
-                      isSelected: _index == entry.key,
+                  : ImageApi(restaurant.logoUrl!, width: 150, fit: BoxFit.fitWidth),
+              const SizedBox(height: 10),
+              Expanded(
+                child: Scrollbar(
+                  controller: _scrollController,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: _items.length,
+                    itemBuilder: (context, index) => DrawerItemCard(
+                      item: _items[index],
+                      onTap: () => setState(() => _index = index),
+                      isSelected: _index == index,
                     ),
                   ),
-              const Spacer(),
+                ),
+              ),
               DrawerItemCard(
-                onTap: () {},
+                onTap: ref.read(authProvider.notifier).logout,
                 item: CardItem(
                   title: 'Cerrar sesión',
                   icon: Icons.logout,
@@ -145,6 +153,7 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
                 ),
                 isSelected: false,
               ),
+              const SizedBox(height: 10),
               const SafeArea(child: SizedBox.shrink()),
             ],
           ),

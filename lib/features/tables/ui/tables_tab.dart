@@ -61,5 +61,8 @@ class _TablesTabState extends ConsumerState<TablesTab> {
     );
   }
 
-  void _onAddTable() => AddTableDialog.show(context: context, onConfirm: () {});
+  void _onAddTable() => AddTableDialog.show(
+        context: context,
+        onConfirm: ref.read(tableProvider.notifier).addTable,
+      );
 }

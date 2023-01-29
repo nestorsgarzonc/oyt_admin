@@ -33,7 +33,7 @@ class _OnBoardingAdminScreenState extends State<OnBoardingAdminScreen> {
   }
 
   void autoChangePage() {
-    Timer.periodic(const Duration(seconds: 5), (timer) {
+    Timer.periodic(const Duration(seconds: 8), (timer) {
       if (!mounted) {
         timer.cancel();
         return;
@@ -99,14 +99,14 @@ class _OnBoardingAdminScreenState extends State<OnBoardingAdminScreen> {
                 height: 10,
                 width: currentIndex == index ? 20 : 10,
                 decoration: BoxDecoration(
-                  color: currentIndex == index ? Colors.deepOrange : Colors.grey,
+                  color: currentIndex == index ? Theme.of(context).primaryColor : Colors.grey,
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
             ),
           ),
           const SizedBox(height: 20),
-          ElevatedButton(onPressed: onContinue, child: const Text('Continuar')),
+          FilledButton(onPressed: onContinue, child: const Text('Continuar')),
           const SizedBox(height: 20),
         ],
       ),

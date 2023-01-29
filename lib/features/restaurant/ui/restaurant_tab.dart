@@ -21,9 +21,7 @@ class RestaurantTab extends ConsumerWidget {
       },
       onData: (restaurant) => RestaurantBody(
         restaurant: restaurant,
-        onRestaurantChanged: (value) {
-          //TODO: IMPLEMENT onRestaurantChanged
-        },
+        onRestaurantChanged: ref.read(restaurantProvider.notifier).updateRestaurant,
       ),
     );
   }
