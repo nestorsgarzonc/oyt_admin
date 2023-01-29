@@ -47,7 +47,6 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
   bool _isLoadingCover = false;
   RestaurantModel? restaurant;
   Color _primaryColor = Colors.deepOrange;
-  Color _secondaryColor = Colors.blue;
 
   @override
   void initState() {
@@ -64,7 +63,6 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
     _instagramController.text = restaurant?.instagram ?? '';
     _facebookController.text = restaurant?.facebook ?? '';
     _primaryColor = restaurant?.primaryColor ?? Colors.deepOrange;
-    _secondaryColor = restaurant?.secondaryColor ?? Colors.blue;
     _paymentMethods.addAll(restaurant?.paymentMethods ?? []);
     _weekDays = restaurant?.weekDays ?? Weekday.weekdays;
     super.initState();
@@ -136,12 +134,6 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
                     pickerAreaBorderRadius: BorderRadius.circular(12),
                     pickerColor: _primaryColor,
                     onColorChanged: (color) => _primaryColor = color,
-                  ),
-                  const SectionTitle(title: 'Color secundario'),
-                  ColorPicker(
-                    pickerAreaBorderRadius: BorderRadius.circular(12),
-                    pickerColor: _secondaryColor,
-                    onColorChanged: (color) => _secondaryColor = color,
                   ),
                   const SectionTitle(title: 'Nombre del restaurante'),
                   CustomTextField(label: 'Nombre del restaurante', controller: _nameController),
@@ -265,7 +257,6 @@ class _RestaurantTabBodyState extends ConsumerState<RestaurantBody> {
       paymentMethods: _paymentMethods.toList(),
       phone: _phoneController.text,
       primaryColor: _primaryColor,
-      secondaryColor: _secondaryColor,
       weekDays: _weekDays,
     );
     widget.onRestaurantChanged(restaurantModel);

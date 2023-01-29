@@ -47,7 +47,7 @@ class _StatisticsTab extends ConsumerState<StatisticsTab> {
                   aspectRatio: 2.6,
                   child: Container(
                     padding: const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
-                    decoration: CustomTheme.roundedBoxDecoration,
+                    decoration: ref.watch(themeProvider.notifier).roundedBoxDecoration,
                     child: LineChart(
                       LineChartData(
                         lineTouchData: LineTouchData(

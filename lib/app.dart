@@ -29,7 +29,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       title: 'OYT - Admin',
       routerConfig: routerProv.goRouter,
       debugShowCheckedModeBanner: false,
-      theme: CustomTheme.myTheme,
+      theme: ref.watch(themeProvider),
     );
   }
 }

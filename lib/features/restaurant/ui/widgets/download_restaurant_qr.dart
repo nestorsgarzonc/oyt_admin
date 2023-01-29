@@ -1,4 +1,5 @@
 import 'package:download/download.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:oyt_front_core/theme/theme.dart';
@@ -6,7 +7,7 @@ import 'package:oyt_front_core/utils/widget_to_img.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
-class DownloadRestaurantQR extends StatelessWidget {
+class DownloadRestaurantQR extends ConsumerWidget {
   DownloadRestaurantQR({super.key, required this.qrData, required this.restaurantName});
 
   final String qrData;
@@ -14,7 +15,7 @@ class DownloadRestaurantQR extends StatelessWidget {
   final _qrKey = GlobalKey();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
     return Row(
       children: [
@@ -22,10 +23,10 @@ class DownloadRestaurantQR extends StatelessWidget {
           key: _qrKey,
           child: Container(
             width: 200,
-            decoration: CustomTheme.drawerBoxDecoration.copyWith(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.black12),
-            ),
+            decoration: ref.watch(themeProvider.notifier).drawerBoxDecoration.copyWith(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.black12),
+                ),
             padding: const EdgeInsets.all(5),
             child: Column(
               children: [

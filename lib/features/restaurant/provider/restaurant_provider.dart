@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/core/router/router.dart';
 import 'package:oyt_admin/features/auth/provider/auth_provider.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_state.dart';
+import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/wrappers/state_wrapper.dart';
 import 'package:oyt_front_restaurant/models/restaurant_creation_model.dart';
 import 'package:oyt_front_restaurant/repositories/restaurant_repository.dart';
@@ -33,7 +34,12 @@ class RestaurantProvider extends StateNotifier<RestaurantState> {
     final result = await restaurantRepository.getMenuByRestaurant();
     result.fold(
       (failure) => state = state.copyWith(restaurant: StateAsync.error(failure)),
-      (restaurant) => state = state.copyWith(restaurant: StateAsync.success(restaurant)),
+      (restaurant) {
+        if (restaurant.primaryColor != null) {
+          ref.read(themeProvider.notifier).changeSeedColor(restaurant.primaryColor!);
+        }
+        state = state.copyWith(restaurant: StateAsync.success(restaurant));
+      },
     );
   }
 

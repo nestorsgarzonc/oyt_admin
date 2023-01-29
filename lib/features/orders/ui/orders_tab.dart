@@ -44,31 +44,28 @@ class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
         ),
         const Divider(),
         Expanded(
-          child: Scrollbar(
-            controller: scrollController,
-            child: ordersQueueState.ordersQueue.on(
-              onError: (err) => Center(child: Text(err.message)),
-              onLoading: () => const LoadingWidget(),
-              onInitial: () => const Center(child: Text('No hay productos en cola')),
-              onData: (data) => data.isEmpty
-                  ? const Center(child: Text('No hay productos en cola'))
-                  : ListView(
-                      children: data
-                          .map(
-                            (e) => Card(
-                              child: ListTile(
-                                contentPadding:
-                                    const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                horizontalTitleGap: 10,
-                                title: Text('Producto: ${e.productName}'),
-                                subtitle: Text('Mesa: ${e.tableName}'),
-                                trailing: Text('Estado: \n${e.estado}'),
-                              ),
-                            ),
-                          )
-                          .toList(),
+          child: ordersQueueState.ordersQueue.on(
+            onError: (err) => Center(child: Text(err.message)),
+            onLoading: () => const LoadingWidget(),
+            onInitial: () => const Center(child: Text('No hay productos en cola')),
+            onData: (data) => data.isEmpty
+                ? const Center(child: Text('No hay productos en cola'))
+                : Scrollbar(
+                    controller: scrollController,
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: data.length,
+                      itemBuilder: (context, i) => Card(
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                          horizontalTitleGap: 10,
+                          title: Text('Producto: ${data[i].productName}'),
+                          subtitle: Text('Mesa: ${data[i].tableName}'),
+                          trailing: Text('Estado: \n${data[i].estado}'),
+                        ),
+                      ),
                     ),
-            ),
+                  ),
           ),
         )
       ],
