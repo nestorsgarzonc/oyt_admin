@@ -1,7 +1,9 @@
 import 'dart:convert';
-
+import 'package:oyt_front_core/extensions/uint8list_extension.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:oyt_admin/features/menu/provider/menu_provider.dart';
 import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
@@ -15,7 +17,7 @@ import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 
-class AddCategoryDialog extends StatefulWidget {
+class AddCategoryDialog extends ConsumerStatefulWidget {
   const AddCategoryDialog({required this.categoryItem, super.key});
 
   static Future<void> show({required BuildContext context, Menu? categoryItem}) {
@@ -29,27 +31,29 @@ class AddCategoryDialog extends StatefulWidget {
   final Menu? categoryItem;
 
   @override
-  State<AddCategoryDialog> createState() => _AddCategoryDialog();
+  ConsumerState<AddCategoryDialog> createState() => _AddCategoryDialog();
 }
 
-class _AddCategoryDialog extends State<AddCategoryDialog> {
+class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   Uint8List? _imgBytes;
   bool _isAvaliable = true;
   bool _isLoadinglogo = false;
+  Menu? categoryItem;
 
   @override
   void initState() {
+    categoryItem = widget.categoryItem;
     if (widget.categoryItem != null) setInitialValues();
     super.initState();
   }
 
   void setInitialValues() {
-    _nameController.text = widget.categoryItem?.name ?? '';
-    _descriptionController.text = widget.categoryItem?.description ?? '';
-    _isAvaliable = widget.categoryItem?.isAvaliable ?? true;
+    _nameController.text = categoryItem?.name ?? '';
+    _descriptionController.text = categoryItem?.description ?? '';
+    _isAvaliable = categoryItem?.isAvaliable ?? true;
   }
 
   @override
@@ -63,7 +67,10 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
       title: const DialogHeader(title: 'Agregar categoría'),
       actions: [
         TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
-        TextButton(onPressed: _onConfirm, child: const Text('Agregar')),
+        TextButton(
+          onPressed: _onConfirm,
+          child: Text(widget.categoryItem == null ? 'Agregar' : 'Editar'),
+        ),
       ],
       content: Form(
         key: _formKey,
@@ -89,18 +96,13 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
             const SectionTitle(title: 'Imagen de la categoría'),
             UploadImageCard(
               label: 'imagen',
-              onRemove: () => ConfirmActionDialog.show(
-                context: context,
-                title: '¿Estas seguro de eliminar la imagen?',
-                onConfirm: _onRemoveLogo,
-              ),
               onReplace: () => ConfirmActionDialog.show(
                 context: context,
                 title: '¿Estas seguro de remplazar la imagen?',
                 onConfirm: _onReplaceLogo,
               ),
               onUpload: _onUploadLogo,
-              url: widget.categoryItem?.imgUrl,
+              url: categoryItem?.imgUrl,
               isLoading: _isLoadinglogo,
               imgBytes: _imgBytes,
               recomendations: const [
@@ -146,22 +148,33 @@ class _AddCategoryDialog extends State<AddCategoryDialog> {
     });
   }
 
-  Future<void> _onRemoveLogo() async {
-    if (_imgBytes != null) {
-      _imgBytes = null;
-      setState(() {});
-    } else {
-      //TODO: ADD FOR NETWORK IMG
-    }
-    Navigator.of(context).pop();
-  }
-
-  void _onConfirm() {
+  void _onConfirm() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_imgBytes == null) {
+    if (_imgBytes == null && categoryItem?.imgUrl == null) {
       CustomSnackbar.showSnackBar(context, 'Debes subir una imagen');
       return;
     }
-    Navigator.of(context).pop();
+    if (categoryItem != null) {
+      await ref.read(menuProvider.notifier).updateCategory(
+            categoryItem!.copyWithForUpdate(
+              img: _imgBytes?.toBase64,
+              name: _nameController.text,
+              description: _descriptionController.text,
+              isAvaliable: _isAvaliable,
+            ),
+          );
+    } else {
+      await ref.read(menuProvider.notifier).addCategory(
+            Menu(
+              id: '',
+              menuItems: const [],
+              imgUrl: _imgBytes!.toBase64,
+              name: _nameController.text,
+              description: _descriptionController.text,
+              isAvaliable: _isAvaliable,
+            ),
+          );
+    }
+    if (context.mounted) Navigator.of(context).pop();
   }
 }

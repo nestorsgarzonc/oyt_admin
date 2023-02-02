@@ -4,23 +4,29 @@ import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
 import 'package:oyt_front_menu/enum/topping_options_type.dart';
 import 'package:oyt_front_product/models/product_model.dart';
+import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
 import 'package:oyt_front_widgets/sizedbox/dialog_width.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
 class AddToppingDialog extends StatefulWidget {
-  const AddToppingDialog({super.key, this.toppingItem});
+  const AddToppingDialog({super.key, this.toppingItem, required this.menuItem});
 
-  static Future<void> show({required BuildContext context, Topping? toppingItem}) {
+  static Future<void> show({
+    required BuildContext context,
+    Topping? toppingItem,
+    required MenuItem menuItem,
+  }) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => AddToppingDialog(toppingItem: toppingItem),
+      builder: (context) => AddToppingDialog(toppingItem: toppingItem, menuItem: menuItem),
     );
   }
 
   final Topping? toppingItem;
+  final MenuItem menuItem;
 
   @override
   State<AddToppingDialog> createState() => _AddToppingDialog();
@@ -54,10 +60,13 @@ class _AddToppingDialog extends State<AddToppingDialog> {
       actionsPadding: CustomTheme.dialogPadding,
       actionsAlignment: MainAxisAlignment.spaceAround,
       scrollable: true,
-      title: const DialogHeader(title: 'Agregar topping'),
+      title: DialogHeader(title: '${widget.toppingItem == null ? 'Agregar' : 'Editar'} topping'),
       actions: [
         TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
-        TextButton(onPressed: _onConfirm, child: const Text('Agregar')),
+        TextButton(
+          onPressed: _onConfirm,
+          child: Text(widget.toppingItem == null ? 'Agregar' : 'Editar'),
+        ),
       ],
       content: Form(
         key: _formKey,
@@ -80,12 +89,20 @@ class _AddToppingDialog extends State<AddToppingDialog> {
                   title: Text(e.label),
                   value: e,
                   groupValue: _typeEnum,
-                  onChanged: (val) => val == null ? null : setState(() => _typeEnum = val),
+                  onChanged: (val) {
+                    if (val == null) return;
+                    if (val == ToppingOptionsType.single) {
+                      _minOptionsController.text = '0';
+                      _maxOptionsController.text = '1';
+                    }
+                    setState(() => _typeEnum = val);
+                  },
                 ),
               ),
             ),
             const SectionTitle(title: 'Minimo de opciones'),
             CustomTextField(
+              enabled: ToppingOptionsType.single != _typeEnum,
               controller: _minOptionsController,
               validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
               label: 'Minimo de opciones',
@@ -93,31 +110,35 @@ class _AddToppingDialog extends State<AddToppingDialog> {
             ),
             const SectionTitle(title: 'Maximo de opciones'),
             CustomTextField(
+              enabled: ToppingOptionsType.single != _typeEnum,
               controller: _maxOptionsController,
               validator: (val) => TextFormValidator.mandatoryFieldValidator(val),
               label: 'Maximo de opciones',
               hintText: 'Ej: 1',
             ),
-            const SectionTitle(title: 'Opciones de topping'),
-            ...List.generate(
-              3,
-              (index) => Card(
-                child: ListTile(
-                  title: Text('Opcion $index'),
-                  trailing: const Icon(Icons.arrow_right),
-                  subtitle: const Text('Precio: \$ 100'),
-                  leading: const FlutterLogo(),
-                  onTap: () {},
+            if (widget.toppingItem != null) ...[
+              const SectionTitle(title: 'Opciones de topping'),
+              //TODO: Agregar opciones de topping
+              ...List.generate(
+                3,
+                (index) => Card(
+                  child: ListTile(
+                    title: Text('Opcion $index'),
+                    trailing: const Icon(Icons.arrow_right),
+                    subtitle: const Text('Precio: \$ 100'),
+                    leading: const FlutterLogo(),
+                    onTap: () {},
+                  ),
                 ),
               ),
-            ),
-            Card(
-              child: ListTile(
-                onTap: _onAddOptions,
-                title: const Text('Agregar opciones'),
-                trailing: const Icon(Icons.add),
+              Card(
+                child: ListTile(
+                  onTap: _onAddOptions,
+                  title: const Text('Agregar opciones'),
+                  trailing: const Icon(Icons.add),
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),
@@ -126,8 +147,9 @@ class _AddToppingDialog extends State<AddToppingDialog> {
 
   void _onAddOptions() => AddToppingOptionDialog.show(context: context);
 
-  void _onConfirm() {
+  void _onConfirm() async {
     if (!_formKey.currentState!.validate()) return;
+    //TODO: Agregar topping o editar topping
     Navigator.of(context).pop();
   }
 }
