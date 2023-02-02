@@ -46,7 +46,9 @@ class _InventoryTab extends ConsumerState<InventoryTab> {
                             selected: index == 2,
                             title: Text(
                               'Categoria $index',
-                              style: index == 2 ? CustomTheme.selectedItemTextStyle : null,
+                              style: index == 2
+                                  ? ref.watch(themeProvider.notifier).selectedItemTextStyle
+                                  : null,
                             ),
                             onTap: () => _onSelectCategory(),
                           ),
@@ -75,7 +77,9 @@ class _InventoryTab extends ConsumerState<InventoryTab> {
                             selected: index == 3,
                             title: Text(
                               'Producto $index',
-                              style: index == 3 ? CustomTheme.selectedItemTextStyle : null,
+                              style: index == 3
+                                  ? ref.watch(themeProvider.notifier).selectedItemTextStyle
+                                  : null,
                             ),
                             onTap: () => _onSelectProduct(),
                             trailing: IconButton(

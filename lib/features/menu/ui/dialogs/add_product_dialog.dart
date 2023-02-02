@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:oyt_admin/features/menu/provider/menu_provider.dart';
+import 'package:oyt_front_core/extensions/uint8list_extension.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
@@ -11,31 +13,35 @@ import 'package:oyt_front_widgets/sizedbox/dialog_width.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddProductDialog extends StatefulWidget {
-  const AddProductDialog({super.key, this.menuItem});
+class AddProductDialog extends ConsumerStatefulWidget {
+  const AddProductDialog({required this.category, super.key, this.menuItem});
 
-  static Future<void> show({required BuildContext context, MenuItem? menuItem}) {
+  static Future<void> show({
+    required BuildContext context,
+    MenuItem? menuItem,
+    required Menu category,
+  }) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => AddProductDialog(menuItem: menuItem),
+      builder: (context) => AddProductDialog(menuItem: menuItem, category: category),
     );
   }
 
   final MenuItem? menuItem;
+  final Menu category;
 
   @override
-  State<AddProductDialog> createState() => _AddProductDialog();
+  ConsumerState<AddProductDialog> createState() => _AddProductDialog();
 }
 
-class _AddProductDialog extends State<AddProductDialog> {
+class _AddProductDialog extends ConsumerState<AddProductDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController(); //: Number;
-  final _taxesController = TextEditingController(); //?: Number;
-  final _discountController = TextEditingController(); //?: Number;
   Uint8List? _imgBytes;
   bool _isAvaliable = true;
   bool _isLoadinglogo = false;
@@ -65,7 +71,10 @@ class _AddProductDialog extends State<AddProductDialog> {
       title: const DialogHeader(title: 'Agregar producto'),
       actions: [
         TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
-        TextButton(onPressed: _onConfirm, child: const Text('Agregar')),
+        TextButton(
+          onPressed: _onConfirm,
+          child: Text(widget.menuItem == null ? 'Agregar' : 'Editar'),
+        ),
       ],
       content: Form(
         key: _formKey,
@@ -112,11 +121,6 @@ class _AddProductDialog extends State<AddProductDialog> {
             const SectionTitle(title: 'Imagen del producto'),
             UploadImageCard(
               label: 'imagen',
-              onRemove: () => ConfirmActionDialog.show(
-                context: context,
-                title: '¿Estas seguro de eliminar la imagen?',
-                onConfirm: _onRemoveLogo,
-              ),
               onReplace: () => ConfirmActionDialog.show(
                 context: context,
                 title: '¿Estas seguro de remplazar la imagen?',
@@ -165,22 +169,35 @@ class _AddProductDialog extends State<AddProductDialog> {
     });
   }
 
-  Future<void> _onRemoveLogo() async {
-    if (_imgBytes != null) {
-      _imgBytes = null;
-      setState(() {});
-    } else {
-      //TODO: ADD FOR NETWORK IMG
-    }
-    Navigator.of(context).pop();
-  }
-
-  void _onConfirm() {
+  void _onConfirm() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_imgBytes == null) {
+    if (_imgBytes == null && widget.menuItem == null) {
       CustomSnackbar.showSnackBar(context, 'Debes subir una imagen');
       return;
     }
-    Navigator.of(context).pop();
+    if (widget.menuItem != null) {
+      await ref.read(menuProvider.notifier).updateMenuItem(
+            widget.menuItem!.copyWithForUpdate(
+              description: _descriptionController.text,
+              name: _nameController.text,
+              price: int.tryParse(_priceController.text),
+              isAvaliable: _isAvaliable,
+              img: _imgBytes?.toBase64,
+            ),
+          );
+    } else {
+      await ref.read(menuProvider.notifier).addMenuItem(
+            widget.category,
+            MenuItem(
+              description: _descriptionController.text,
+              name: _nameController.text,
+              price: int.tryParse(_priceController.text) ?? 0,
+              isAvaliable: _isAvaliable,
+              imgUrl: _imgBytes?.toBase64 ?? '',
+              id: '',
+            ),
+          );
+    }
+    if (mounted) Navigator.of(context).pop();
   }
 }

@@ -46,15 +46,8 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
   final _categoriesScrollController = ScrollController();
   final _productsScrollController = ScrollController();
   final _toppingsScrollController = ScrollController();
-  late RestaurantModel? restaurant;
   Menu? selectedCategory;
   MenuItem? selectedProduct;
-
-  @override
-  void initState() {
-    restaurant = widget.restaurant;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +83,9 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                         key: const Key('addCategoryButton'),
                       ),
                       ...List.generate(
-                        restaurant?.categories.length ?? 0,
+                        widget.restaurant?.categories.length ?? 0,
                         (index) {
-                          final item = restaurant!.categories[index];
+                          final item = widget.restaurant!.categories[index];
                           return Card(
                             key: Key(item.id),
                             margin: CustomTheme.cardMargin,
@@ -106,7 +99,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                               title: Text(
                                 item.name,
                                 style: item == selectedCategory
-                                    ? CustomTheme.selectedItemTextStyle
+                                    ? ref.watch(themeProvider.notifier).selectedItemTextStyle
                                     : null,
                               ),
                               trailing: IconButton(
@@ -141,7 +134,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                             ),
                             AddButton(
                               key: const Key('addProductButton'),
-                              onTap: _onAddProduct,
+                              onTap: () => _onAddProduct(selectedCategory!),
                               text: 'Agregar producto',
                               buttonType: ButtonType.outlined,
                             ),
@@ -162,12 +155,12 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                                     title: Text(
                                       item.name,
                                       style: selectedProduct == item
-                                          ? CustomTheme.selectedItemTextStyle
+                                          ? ref.watch(themeProvider.notifier).selectedItemTextStyle
                                           : null,
                                     ),
                                     onTap: () => _onSelectProduct(item),
                                     trailing: IconButton(
-                                      onPressed: () => _onEditProduct(item),
+                                      onPressed: () => _onEditProduct(item, selectedCategory!),
                                       icon: const Icon(Icons.edit),
                                     ),
                                   ),
@@ -201,7 +194,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                                   key: Key('toppingsTitle'),
                                 ),
                                 AddButton(
-                                  onTap: _onAddTopping,
+                                  onTap: () => _onAddTopping(selectedProduct!),
                                   text: 'Agregar topping',
                                   buttonType: ButtonType.outlined,
                                   key: const Key('addToppingButton'),
@@ -218,7 +211,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                                           index: index + 2,
                                           child: const Icon(Icons.drag_indicator_outlined),
                                         ),
-                                        onTap: () => _onEditTopping(item),
+                                        onTap: () => _onEditTopping(item, selectedProduct!),
                                         title: Text(item.name),
                                       ),
                                     );
@@ -255,10 +248,15 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
   }
 
   void _onAddCategory() => AddCategoryDialog.show(context: context);
-  void _onAddProduct() => AddProductDialog.show(context: context);
-  void _onAddTopping() => AddToppingDialog.show(context: context);
+  void _onAddProduct(Menu category) async {
+    await AddProductDialog.show(context: context, category: category);
+    _onSelectCategory(null);
+  }
 
-  void _onSelectCategory(Menu category) {
+  void _onAddTopping(MenuItem menuItem) =>
+      AddToppingDialog.show(context: context, menuItem: menuItem);
+
+  void _onSelectCategory(Menu? category) {
     selectedCategory = category;
     selectedProduct = null;
     setState(() {});
@@ -270,7 +268,11 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
   }
 
   void _onEditCategory(Menu item) => AddCategoryDialog.show(context: context, categoryItem: item);
-  void _onEditProduct(MenuItem product) =>
-      AddProductDialog.show(context: context, menuItem: product);
-  void _onEditTopping(Topping item) => AddToppingDialog.show(context: context, toppingItem: item);
+  void _onEditProduct(MenuItem product, Menu category) async {
+    await AddProductDialog.show(context: context, menuItem: product, category: category);
+    _onSelectCategory(null);
+  }
+
+  void _onEditTopping(Topping item, MenuItem menuItem) =>
+      AddToppingDialog.show(context: context, toppingItem: item, menuItem: menuItem);
 }
