@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
+import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_widgets/cards/upload_image_card.dart';
 import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
@@ -10,28 +11,42 @@ import 'package:oyt_front_widgets/sizedbox/dialog_width.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddToppingOptionDialog extends StatefulWidget {
-  const AddToppingOptionDialog({super.key});
+class AddToppingOptionDialog extends ConsumerStatefulWidget {
+  const AddToppingOptionDialog({super.key, required this.toppingOption});
 
-  static Future<void> show({required BuildContext context}) {
+  static Future<void> show({required BuildContext context, required Option? toppingOption}) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const AddToppingOptionDialog(),
+      builder: (context) => AddToppingOptionDialog(toppingOption: toppingOption),
     );
   }
 
+  final Option? toppingOption;
+
   @override
-  State<AddToppingOptionDialog> createState() => _AddToppingOptionDialog();
+  ConsumerState<AddToppingOptionDialog> createState() => _AddToppingOptionDialog();
 }
 
-class _AddToppingOptionDialog extends State<AddToppingOptionDialog> {
+class _AddToppingOptionDialog extends ConsumerState<AddToppingOptionDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController(); //?: Number;
   Uint8List? _imgBytes;
   bool _isLoadinglogo = false;
+
+  @override
+  void initState() {
+    setInitialValues();
+    super.initState();
+  }
+
+  void setInitialValues() {
+    _nameController.text = widget.toppingOption?.name ?? '';
+    _priceController.text = widget.toppingOption?.price.toString() ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {

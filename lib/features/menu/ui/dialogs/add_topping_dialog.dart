@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:oyt_admin/features/menu/provider/menu_provider.dart';
 import 'package:oyt_admin/features/menu/ui/dialogs/add_topping_option_dialog.dart';
 import 'package:oyt_front_core/theme/theme.dart';
+import 'package:oyt_front_core/utils/currency_formatter.dart';
+import 'package:oyt_front_core/utils/formatters.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
 import 'package:oyt_front_menu/enum/topping_options_type.dart';
 import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
+import 'package:oyt_front_widgets/image/image_api_widget.dart';
 import 'package:oyt_front_widgets/sizedbox/dialog_width.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddToppingDialog extends StatefulWidget {
+class AddToppingDialog extends ConsumerStatefulWidget {
   const AddToppingDialog({super.key, this.toppingItem, required this.menuItem});
 
   static Future<void> show({
@@ -29,10 +34,10 @@ class AddToppingDialog extends StatefulWidget {
   final MenuItem menuItem;
 
   @override
-  State<AddToppingDialog> createState() => _AddToppingDialog();
+  ConsumerState<AddToppingDialog> createState() => _AddToppingDialog();
 }
 
-class _AddToppingDialog extends State<AddToppingDialog> {
+class _AddToppingDialog extends ConsumerState<AddToppingDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _minOptionsController = TextEditingController(); //?: Number;
@@ -41,14 +46,14 @@ class _AddToppingDialog extends State<AddToppingDialog> {
 
   @override
   void initState() {
-    if (widget.toppingItem != null) setInitialValues();
+    setInitialValues();
     super.initState();
   }
 
   void setInitialValues() {
     _nameController.text = widget.toppingItem?.name ?? '';
-    _maxOptionsController.text = widget.toppingItem?.maxOptions.toString() ?? '';
-    _minOptionsController.text = widget.toppingItem?.minOptions.toString() ?? '';
+    _maxOptionsController.text = widget.toppingItem?.maxOptions.toString() ?? '1';
+    _minOptionsController.text = widget.toppingItem?.minOptions.toString() ?? '0';
     _typeEnum = widget.toppingItem?.type ?? ToppingOptionsType.single;
   }
 
@@ -118,22 +123,20 @@ class _AddToppingDialog extends State<AddToppingDialog> {
             ),
             if (widget.toppingItem != null) ...[
               const SectionTitle(title: 'Opciones de topping'),
-              //TODO: Agregar opciones de topping
-              ...List.generate(
-                3,
-                (index) => Card(
+              ...widget.toppingItem!.options.map(
+                (e) => Card(
                   child: ListTile(
-                    title: Text('Opcion $index'),
+                    title: Text(e.name),
                     trailing: const Icon(Icons.arrow_right),
-                    subtitle: const Text('Precio: \$ 100'),
-                    leading: const FlutterLogo(),
-                    onTap: () {},
+                    subtitle: Text('Precio: \$ ${CurrencyFormatter.format(e.price)}'),
+                    leading: ImageApi(e.imgUrl, width: 50, height: 50, fit: BoxFit.cover),
+                    onTap: () => _onAddOptions(toppingOption: e),
                   ),
                 ),
               ),
               Card(
                 child: ListTile(
-                  onTap: _onAddOptions,
+                  onTap: () => _onAddOptions(),
                   title: const Text('Agregar opciones'),
                   trailing: const Icon(Icons.add),
                 ),
@@ -145,11 +148,35 @@ class _AddToppingDialog extends State<AddToppingDialog> {
     );
   }
 
-  void _onAddOptions() => AddToppingOptionDialog.show(context: context);
+  void _onAddOptions({Option? toppingOption}) => AddToppingOptionDialog.show(
+        context: context,
+        toppingOption: toppingOption,
+      );
 
   void _onConfirm() async {
     if (!_formKey.currentState!.validate()) return;
-    //TODO: Agregar topping o editar topping
-    Navigator.of(context).pop();
+    if (widget.toppingItem != null) {
+      await ref.read(menuProvider.notifier).updateTopping(
+            widget.toppingItem!.copyWith(
+              name: _nameController.text,
+              type: _typeEnum,
+              minOptions: int.parse(_minOptionsController.text),
+              maxOptions: int.parse(_maxOptionsController.text),
+            ),
+          );
+    } else {
+      await ref.read(menuProvider.notifier).addTopping(
+            widget.menuItem,
+            Topping(
+              name: _nameController.text,
+              type: _typeEnum,
+              minOptions: int.parse(_minOptionsController.text),
+              maxOptions: int.parse(_maxOptionsController.text),
+              id: '',
+              options: const [],
+            ),
+          );
+    }
+    if (mounted) Navigator.of(context).pop();
   }
 }

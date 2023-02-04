@@ -1,5 +1,6 @@
 import 'package:oyt_admin/features/menu/data_source/menu_data_source.dart';
 import 'package:oyt_front_core/failure/failure.dart';
+import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +11,8 @@ abstract class MenuRepository {
   Future<Failure?> updateCategory(Menu category);
   Future<Failure?> createMenuItem(Menu category, MenuItem menuItem);
   Future<Failure?> updateMenuItem(MenuItem menuItem);
+  Future<Failure?> addTopping(MenuItem menuItem, Topping topping);
+  Future<Failure?> updateTopping(Topping topping);
 }
 
 class MenuRepositoryImpl implements MenuRepository {
@@ -56,6 +59,26 @@ class MenuRepositoryImpl implements MenuRepository {
   Future<Failure?> updateMenuItem(MenuItem menuItem) async {
     try {
       await dataSource.updateMenuItem(menuItem);
+      return null;
+    } catch (e) {
+      return Failure(e.toString());
+    }
+  }
+
+  @override
+  Future<Failure?> addTopping(MenuItem menuItem, Topping topping) async {
+    try {
+      await dataSource.addTopping(menuItem, topping);
+      return null;
+    } catch (e) {
+      return Failure(e.toString());
+    }
+  }
+
+  @override
+  Future<Failure?> updateTopping(Topping topping) async {
+    try {
+      await dataSource.updateTopping(topping);
       return null;
     } catch (e) {
       return Failure(e.toString());

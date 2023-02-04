@@ -253,8 +253,12 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
     _onSelectCategory(null);
   }
 
-  void _onAddTopping(MenuItem menuItem) =>
-      AddToppingDialog.show(context: context, menuItem: menuItem);
+  void _onAddTopping(MenuItem menuItem) async {
+    await AddToppingDialog.show(context: context, menuItem: menuItem);
+    if (selectedProduct != null) {
+      ref.read(productProvider.notifier).productDetail(selectedProduct!.id);
+    }
+  }
 
   void _onSelectCategory(Menu? category) {
     selectedCategory = category;
@@ -273,6 +277,10 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
     _onSelectCategory(null);
   }
 
-  void _onEditTopping(Topping item, MenuItem menuItem) =>
-      AddToppingDialog.show(context: context, toppingItem: item, menuItem: menuItem);
+  void _onEditTopping(Topping item, MenuItem menuItem) async {
+    AddToppingDialog.show(context: context, toppingItem: item, menuItem: menuItem);
+    if (selectedProduct != null) {
+      ref.read(productProvider.notifier).productDetail(selectedProduct!.id);
+    }
+  }
 }

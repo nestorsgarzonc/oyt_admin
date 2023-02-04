@@ -1,5 +1,6 @@
 import 'package:oyt_front_core/external/api_handler.dart';
 import 'package:oyt_front_core/logger/logger.dart';
+import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +11,8 @@ abstract class MenuDataSource {
   Future<void> updateCategory(Menu category);
   Future<void> createMenuItem(Menu category, MenuItem menuItem);
   Future<void> updateMenuItem(MenuItem menuItem);
+  Future<void> addTopping(MenuItem menuItem, Topping topping);
+  Future<void> updateTopping(Topping topping);
 }
 
 class MenuDataSourceImpl implements MenuDataSource {
@@ -67,6 +70,32 @@ class MenuDataSourceImpl implements MenuDataSource {
       await apiHandler.put(
         '/menu/item/${menuItem.id}',
         menuItem.toMapCRUD(),
+      );
+    } catch (e, s) {
+      Logger.logError(e.toString(), s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addTopping(MenuItem menuItem, Topping topping) async {
+    try {
+      await apiHandler.post(
+        '/menu/toppings/${menuItem.id}',
+        topping.toMapCRUD(),
+      );
+    } catch (e, s) {
+      Logger.logError(e.toString(), s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateTopping(Topping topping) async {
+    try {
+      await apiHandler.put(
+        '/menu/toppings/${topping.id}',
+        topping.toMapCRUD(),
       );
     } catch (e, s) {
       Logger.logError(e.toString(), s);

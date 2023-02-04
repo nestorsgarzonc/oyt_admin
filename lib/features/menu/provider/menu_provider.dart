@@ -2,6 +2,7 @@ import 'package:oyt_admin/core/router/router.dart';
 import 'package:oyt_admin/features/menu/provider/menu_state.dart';
 import 'package:oyt_admin/features/menu/repositories/menu_repository.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
+import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:oyt_front_widgets/dialogs/custom_dialogs.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
@@ -44,7 +45,9 @@ class MenuProvider extends StateNotifier<MenuState> {
     await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
     CustomSnackbar.showSnackBar(
-        ref.read(routerProvider).context, 'Categoria actualizada correctamente');
+      ref.read(routerProvider).context,
+      'Categoria actualizada correctamente',
+    );
   }
 
   Future<void> addMenuItem(Menu category, MenuItem menuItem) async {
@@ -71,6 +74,37 @@ class MenuProvider extends StateNotifier<MenuState> {
     await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
     CustomSnackbar.showSnackBar(
-        ref.read(routerProvider).context, 'Categoria actualizada correctamente');
+      ref.read(routerProvider).context,
+      'Categoria actualizada correctamente',
+    );
+  }
+
+  Future<void> addTopping(MenuItem menuItem, Topping topping) async {
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    final failure = await repository.addTopping(menuItem, topping);
+    if (failure != null) {
+      ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, failure.message);
+      return;
+    }
+    await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Categoria creada correctamente');
+  }
+
+  Future<void> updateTopping(Topping topping) async {
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    final failure = await repository.updateTopping(topping);
+    if (failure != null) {
+      ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, failure.message);
+      return;
+    }
+    await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    CustomSnackbar.showSnackBar(
+      ref.read(routerProvider).context,
+      'Categoria actualizada correctamente',
+    );
   }
 }
