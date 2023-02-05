@@ -22,7 +22,7 @@ class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
   @override
   Widget build(BuildContext context) {
     final ordersQueueState = ref.watch(ordersQueueProvider);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,38 +64,42 @@ class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
             onError: (err) => Center(child: Text(err.message)),
             onLoading: () => const LoadingWidget(),
             onInitial: () => const Center(child: Text('No hay productos en cola')),
-            onData: (data) {if (data.isEmpty) {
-              return const Center(child: Text('No hay productos en cola'));
+            onData: (data) {
+              if (data.isEmpty) {
+                return const Center(child: Text('No hay productos en cola'));
               }
               final filteredList = doFilter(_selectedStatus, data);
-              return Scrollbar(
-                controller: scrollController,
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: filteredList.length,
-                  itemBuilder: (context, i) => Card(
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      horizontalTitleGap: 10,
-                      title: Text('Producto: ${filteredList[i].productName}'),
-                      subtitle: Text('Mesa: ${filteredList[i].tableName}'),
-                      trailing: Text('Estado: \n${filteredList[i].estado}'),
-                    ),
-                  ),
-                ),
-              );},
+              return filteredList.isNotEmpty
+                  ? Scrollbar(
+                      controller: scrollController,
+                      child: ListView.builder(
+                        controller: scrollController,
+                        itemCount: filteredList.length,
+                        itemBuilder: (context, i) => Card(
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                            horizontalTitleGap: 10,
+                            title: Text('Producto: ${filteredList[i].productName}'),
+                            subtitle: Text('Mesa: ${filteredList[i].tableName}'),
+                            trailing: Text('Estado: \n${filteredList[i].estado}'),
+                          ),
+                        ),
+                      ),
+                    )
+                  : const Center(child: Text('No hay productos en cola'));
+            },
           ),
         )
       ],
     );
   }
 
-  void onClean () {
+  void onClean() {
     _selectedStatus = null;
     setState(() {});
   }
 
-  List<OrdersQueueModel> doFilter (OrderStatus? filter, List<OrdersQueueModel> data){
+  List<OrdersQueueModel> doFilter(OrderStatus? filter, List<OrdersQueueModel> data) {
     if (filter == null) {
       return data;
     }
