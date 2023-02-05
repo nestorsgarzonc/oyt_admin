@@ -130,13 +130,14 @@ class _AddToppingDialog extends ConsumerState<AddToppingDialog> {
                     trailing: const Icon(Icons.arrow_right),
                     subtitle: Text('Precio: \$ ${CurrencyFormatter.format(e.price)}'),
                     leading: ImageApi(e.imgUrl, width: 50, height: 50, fit: BoxFit.cover),
-                    onTap: () => _onAddOptions(toppingOption: e),
+                    onTap: () => _onAddOptions(toppingOption: e, topping: widget.toppingItem!),
                   ),
                 ),
               ),
+              const Divider(),
               Card(
                 child: ListTile(
-                  onTap: () => _onAddOptions(),
+                  onTap: () => _onAddOptions(topping: widget.toppingItem!),
                   title: const Text('Agregar opciones'),
                   trailing: const Icon(Icons.add),
                 ),
@@ -148,9 +149,11 @@ class _AddToppingDialog extends ConsumerState<AddToppingDialog> {
     );
   }
 
-  void _onAddOptions({Option? toppingOption}) => AddToppingOptionDialog.show(
+  void _onAddOptions({Option? toppingOption, required Topping topping}) =>
+      AddToppingOptionDialog.show(
         context: context,
         toppingOption: toppingOption,
+        topping: topping,
       );
 
   void _onConfirm() async {

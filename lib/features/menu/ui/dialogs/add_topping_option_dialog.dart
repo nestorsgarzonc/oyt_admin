@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+import 'package:oyt_front_core/extensions/uint8list_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:oyt_admin/features/menu/provider/menu_provider.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/custom_image_picker.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
@@ -14,17 +16,22 @@ import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddToppingOptionDialog extends ConsumerStatefulWidget {
-  const AddToppingOptionDialog({super.key, required this.toppingOption});
+  const AddToppingOptionDialog({super.key, required this.toppingOption, required this.topping});
 
-  static Future<void> show({required BuildContext context, required Option? toppingOption}) {
+  static Future<void> show({
+    required BuildContext context,
+    required Option? toppingOption,
+    required Topping topping,
+  }) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => AddToppingOptionDialog(toppingOption: toppingOption),
+      builder: (context) => AddToppingOptionDialog(toppingOption: toppingOption, topping: topping),
     );
   }
 
   final Option? toppingOption;
+  final Topping topping;
 
   @override
   ConsumerState<AddToppingOptionDialog> createState() => _AddToppingOptionDialog();
@@ -56,10 +63,15 @@ class _AddToppingOptionDialog extends ConsumerState<AddToppingOptionDialog> {
       actionsPadding: CustomTheme.dialogPadding,
       actionsAlignment: MainAxisAlignment.spaceAround,
       scrollable: true,
-      title: const DialogHeader(title: 'Agregar opcion de topping'),
+      title: DialogHeader(
+        title: '${widget.toppingOption == null ? 'Agregar' : 'Editar'} opcion de topping',
+      ),
       actions: [
         TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
-        TextButton(onPressed: _onConfirm, child: const Text('Agregar')),
+        TextButton(
+          onPressed: _onConfirm,
+          child: Text(widget.toppingOption == null ? 'Agregar' : 'Editar'),
+        ),
       ],
       content: Form(
         key: _formKey,
@@ -85,18 +97,13 @@ class _AddToppingOptionDialog extends ConsumerState<AddToppingOptionDialog> {
             const SectionTitle(title: 'Imagen del topping'),
             UploadImageCard(
               label: 'imagen',
-              onRemove: () => ConfirmActionDialog.show(
-                context: context,
-                title: '¿Estas seguro de eliminar la imagen?',
-                onConfirm: _onRemoveLogo,
-              ),
               onReplace: () => ConfirmActionDialog.show(
                 context: context,
                 title: '¿Estas seguro de remplazar la imagen?',
                 onConfirm: _onReplaceLogo,
               ),
               onUpload: _onUploadLogo,
-              url: null,
+              url: widget.toppingOption?.imgUrl,
               isLoading: _isLoadinglogo,
               imgBytes: _imgBytes,
               recomendations: const [
@@ -130,18 +137,31 @@ class _AddToppingOptionDialog extends ConsumerState<AddToppingOptionDialog> {
     });
   }
 
-  Future<void> _onRemoveLogo() async {
-    if (_imgBytes != null) {
-      _imgBytes = null;
-      setState(() {});
-    } else {
-      //TODO: ADD FOR NETWORK IMG
-    }
-    Navigator.of(context).pop();
-  }
-
-  void _onConfirm() {
+  void _onConfirm() async {
     if (!_formKey.currentState!.validate()) return;
-    Navigator.of(context).pop();
+    if (_imgBytes == null && widget.toppingOption == null) {
+      CustomSnackbar.showSnackBar(context, 'Debes subir una imagen');
+      return;
+    }
+    if (widget.toppingOption != null) {
+      await ref.read(menuProvider.notifier).updateToppingOption(
+            widget.toppingOption!.copyWith(
+              name: _nameController.text,
+              price: int.parse(_priceController.text),
+              imgUrl: _imgBytes?.toBase64 ?? '',
+            ),
+          );
+    } else {
+      await ref.read(menuProvider.notifier).addToppingOption(
+            widget.topping,
+            Option(
+              id: '',
+              name: _nameController.text,
+              price: int.parse(_priceController.text),
+              imgUrl: _imgBytes!.toBase64,
+            ),
+          );
+    }
+    if (mounted) Navigator.of(context).pop();
   }
 }

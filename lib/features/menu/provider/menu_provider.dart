@@ -60,7 +60,7 @@ class MenuProvider extends StateNotifier<MenuState> {
     }
     await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
-    CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Categoria creada correctamente');
+    CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Item creado correctamente');
   }
 
   Future<void> updateMenuItem(MenuItem menuItem) async {
@@ -75,7 +75,7 @@ class MenuProvider extends StateNotifier<MenuState> {
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
     CustomSnackbar.showSnackBar(
       ref.read(routerProvider).context,
-      'Categoria actualizada correctamente',
+      'Item actualizado correctamente',
     );
   }
 
@@ -89,7 +89,7 @@ class MenuProvider extends StateNotifier<MenuState> {
     }
     await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
-    CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Categoria creada correctamente');
+    CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Topping creado correctamente');
   }
 
   Future<void> updateTopping(Topping topping) async {
@@ -104,7 +104,39 @@ class MenuProvider extends StateNotifier<MenuState> {
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
     CustomSnackbar.showSnackBar(
       ref.read(routerProvider).context,
-      'Categoria actualizada correctamente',
+      'Topping actualizado correctamente',
+    );
+  }
+
+  Future<void> addToppingOption(Topping topping, Option toppingOption) async {
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    final failure = await repository.addToppingOption(topping, toppingOption);
+    if (failure != null) {
+      ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, failure.message);
+      return;
+    }
+    await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    CustomSnackbar.showSnackBar(
+      ref.read(routerProvider).context,
+      'Topping item creado correctamente',
+    );
+  }
+
+  Future<void> updateToppingOption(Option toppingOption) async {
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
+    final failure = await repository.updateToppingOption(toppingOption);
+    if (failure != null) {
+      ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, failure.message);
+      return;
+    }
+    await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    CustomSnackbar.showSnackBar(
+      ref.read(routerProvider).context,
+      'Topping item actualizado correctamente',
     );
   }
 }

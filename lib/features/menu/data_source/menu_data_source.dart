@@ -13,6 +13,8 @@ abstract class MenuDataSource {
   Future<void> updateMenuItem(MenuItem menuItem);
   Future<void> addTopping(MenuItem menuItem, Topping topping);
   Future<void> updateTopping(Topping topping);
+  Future<void> addToppingOption(Topping topping, Option toppingOption);
+  Future<void> updateToppingOption(Option toppingOption);
 }
 
 class MenuDataSourceImpl implements MenuDataSource {
@@ -96,6 +98,32 @@ class MenuDataSourceImpl implements MenuDataSource {
       await apiHandler.put(
         '/menu/toppings/${topping.id}',
         topping.toMapCRUD(),
+      );
+    } catch (e, s) {
+      Logger.logError(e.toString(), s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> addToppingOption(Topping topping, Option toppingOption) async {
+    try {
+      await apiHandler.post(
+        '/menu/option/${topping.id}',
+        toppingOption.toMapCRUD(),
+      );
+    } catch (e, s) {
+      Logger.logError(e.toString(), s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateToppingOption(Option toppingOption) async {
+    try {
+      await apiHandler.put(
+        '/menu/option/${toppingOption.id}',
+        toppingOption.toMapCRUD(),
       );
     } catch (e, s) {
       Logger.logError(e.toString(), s);
