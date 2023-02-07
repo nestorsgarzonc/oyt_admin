@@ -23,10 +23,10 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TabHeader(
-          title: 'Historial de ordenes',
-          subtitle: 'Acá puedes ver el historial de ordenes segun los filtros que uses.',
+          title: 'Historial de órdenes',
+          subtitle: 'Acá puedes ver el historial de órdenes según los filtros que uses.',
         ),
-        AddButton(text: 'Filtrar ordenes', icon: Icons.filter_list, onTap: _onFilterOrders),
+        AddButton(text: 'Filtrar órdenes', icon: Icons.filter_list, onTap: _onFilterOrders),
         const Divider(),
         Expanded(
           child: historicalOrdersState.historicalOrders.on(
@@ -41,7 +41,7 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
                 itemBuilder: (context, i) => Card(
                   child: ListTile(
                     onTap: () {},
-                    title: Text('Orden ${data.orders[i].id}'),
+                    title: Text('Orden $i'),
                     subtitle: Text('Fecha: ${data.orders[i].creationDate}'),
                     trailing: Text(
                       '\$${data.orders[i].totalPrice}',
