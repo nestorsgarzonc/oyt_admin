@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/orders_queue/orders_queue_provider.dart';
-import 'package:oyt_admin/features/orders_queue/orders_queue_state.dart';
 import 'package:oyt_front_orders_queue/models/orders_queue.dart';
 import 'package:oyt_front_widgets/loading/loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
@@ -86,7 +85,7 @@ class _OrdersTabState extends ConsumerState<OrdersQueueTab> {
                         ),
                       ),
                     )
-                  : const Center(child: Text('No hay productos en cola'));
+                  : Center(child: Text('No se encontraron coincidencias para los productos en $_selectedStatus'));
             },
           ),
         )

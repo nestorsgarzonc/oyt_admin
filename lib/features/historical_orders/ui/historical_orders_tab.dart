@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/historical_orders/ui/modals/filter_historical_orders_modal.dart';
+import 'package:oyt_admin/features/historical_orders/provider/historical_orders_provider.dart';
+import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
 
@@ -16,6 +18,7 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
 
   @override
   Widget build(BuildContext context) {
+    final historicalOrdersState = ref.watch(historicalOrdersProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -26,25 +29,30 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
         AddButton(text: 'Filtrar ordenes', icon: Icons.filter_list, onTap: _onFilterOrders),
         const Divider(),
         Expanded(
-          child: Scrollbar(
-            controller: _scrollController,
-            child: ListView.builder(
+          child: historicalOrdersState.historicalOrders.on(
+            onError: (err) => Center(child: Text(err.message)),
+            onInitial: () => const Center(child: Text('No se ha hecho ninguna orden')),
+            onLoading: () => const ScreenLoadingWidget(),
+            onData: (data) => Scrollbar(
               controller: _scrollController,
-              itemCount: 50,
-              itemBuilder: (context, index) => Card(
-                child: ListTile(
-                  onTap: () {},
-                  title: Text('Orden $index'),
-                  subtitle: const Text('Fecha: 22-12-2022 12:12'),
-                  trailing: const Text(
-                    '\$100.000',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: data.orders.length,
+                itemBuilder: (context, i) => Card(
+                  child: ListTile(
+                    onTap: () {},
+                    title: Text('Orden ${data.orders[i].id}'),
+                    subtitle: Text('Fecha: ${data.orders[i].creationDate}'),
+                    trailing: Text(
+                      '\$${data.orders[i].totalPrice}',
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
+        )
       ],
     );
   }
