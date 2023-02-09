@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/core/router/router.dart';
 import 'package:oyt_admin/features/auth/provider/auth_state.dart';
 import 'package:oyt_admin/features/auth/repositories/auth_repositories.dart';
+import 'package:oyt_admin/features/event_bus/provider/event_bus_provider.dart';
 import 'package:oyt_admin/features/home/ui/index_home_screen.dart';
 import 'package:oyt_admin/features/on_boarding/ui/on_boarding.dart';
 import 'package:oyt_admin/features/on_boarding/ui/on_boarding_admin_screen.dart';
@@ -141,6 +142,7 @@ class AuthProvider extends StateNotifier<AuthState> {
   Future<void> startListeningSocket() async {
     await socketIOHandler.connect();
     ref.read(tableProvider.notifier).startListeningSocket();
+    ref.read(eventBusProvider.notifier).startListeningSocket();
     //TODO: add socket listeners
   }
 }

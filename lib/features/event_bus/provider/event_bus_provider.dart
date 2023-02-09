@@ -21,7 +21,7 @@ class EventBusProvider extends StateNotifier<EventBusState> {
   final Ref ref;
   final SocketIOHandler socketIOHandler;
 
-  void startListening() {
+  void startListeningSocket() {
     socketIOHandler.onMap(SocketConstants.eventBus, (data) {
       final rawEventName = data['eventName'];
       if (rawEventName is! String) return;
