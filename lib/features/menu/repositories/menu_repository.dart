@@ -13,8 +13,8 @@ abstract class MenuRepository {
   Future<Failure?> updateMenuItem(MenuItem menuItem);
   Future<Failure?> addTopping(MenuItem menuItem, Topping topping);
   Future<Failure?> updateTopping(Topping topping);
-  Future<Failure?> addToppingOption(Topping topping, Option toppingOption);
-  Future<Failure?> updateToppingOption(Option toppingOption);
+  Future<Failure?> addToppingOption(Topping topping, ToppingOption toppingOption);
+  Future<Failure?> updateToppingOption(ToppingOption toppingOption);
 }
 
 class MenuRepositoryImpl implements MenuRepository {
@@ -88,7 +88,7 @@ class MenuRepositoryImpl implements MenuRepository {
   }
 
   @override
-  Future<Failure?> addToppingOption(Topping topping, Option toppingOption) async {
+  Future<Failure?> addToppingOption(Topping topping, ToppingOption toppingOption) async {
     try {
       await dataSource.addToppingOption(topping, toppingOption);
       return null;
@@ -98,7 +98,7 @@ class MenuRepositoryImpl implements MenuRepository {
   }
 
   @override
-  Future<Failure?> updateToppingOption(Option toppingOption) async {
+  Future<Failure?> updateToppingOption(ToppingOption toppingOption) async {
     try {
       await dataSource.updateToppingOption(toppingOption);
       return null;

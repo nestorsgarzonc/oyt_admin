@@ -108,7 +108,7 @@ class MenuProvider extends StateNotifier<MenuState> {
     );
   }
 
-  Future<void> addToppingOption(Topping topping, Option toppingOption) async {
+  Future<void> addToppingOption(Topping topping, ToppingOption toppingOption) async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
     final failure = await repository.addToppingOption(topping, toppingOption);
     if (failure != null) {
@@ -124,7 +124,7 @@ class MenuProvider extends StateNotifier<MenuState> {
     );
   }
 
-  Future<void> updateToppingOption(Option toppingOption) async {
+  Future<void> updateToppingOption(ToppingOption toppingOption) async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
     final failure = await repository.updateToppingOption(toppingOption);
     if (failure != null) {

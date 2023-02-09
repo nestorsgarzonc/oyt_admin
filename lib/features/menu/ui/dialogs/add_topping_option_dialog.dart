@@ -20,7 +20,7 @@ class AddToppingOptionDialog extends ConsumerStatefulWidget {
 
   static Future<void> show({
     required BuildContext context,
-    required Option? toppingOption,
+    required ToppingOption? toppingOption,
     required Topping topping,
   }) {
     return showDialog(
@@ -30,7 +30,7 @@ class AddToppingOptionDialog extends ConsumerStatefulWidget {
     );
   }
 
-  final Option? toppingOption;
+  final ToppingOption? toppingOption;
   final Topping topping;
 
   @override
@@ -154,7 +154,7 @@ class _AddToppingOptionDialog extends ConsumerState<AddToppingOptionDialog> {
     } else {
       await ref.read(menuProvider.notifier).addToppingOption(
             widget.topping,
-            Option(
+            ToppingOption(
               id: '',
               name: _nameController.text,
               price: int.parse(_priceController.text),

@@ -149,7 +149,7 @@ class _AddToppingDialog extends ConsumerState<AddToppingDialog> {
     );
   }
 
-  void _onAddOptions({Option? toppingOption, required Topping topping}) =>
+  void _onAddOptions({ToppingOption? toppingOption, required Topping topping}) =>
       AddToppingOptionDialog.show(
         context: context,
         toppingOption: toppingOption,
