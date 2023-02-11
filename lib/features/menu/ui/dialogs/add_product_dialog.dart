@@ -43,7 +43,7 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController(); //: Number;
   Uint8List? _imgBytes;
-  bool _isAvaliable = true;
+  bool _isAvailable = true;
   bool _isLoadinglogo = false;
 
   @override
@@ -57,7 +57,7 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
     _nameController.text = menuItem.name;
     _descriptionController.text = menuItem.description;
     _priceController.text = menuItem.price.toString();
-    _isAvaliable = menuItem.isAvaliable;
+    _isAvailable = menuItem.isAvailable;
   }
 
   @override
@@ -140,8 +140,8 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
             Card(
               child: CheckboxListTile(
                 title: const Text('Disponible'),
-                value: _isAvaliable,
-                onChanged: (val) => val == null ? null : setState(() => _isAvaliable = val),
+                value: _isAvailable,
+                onChanged: (val) => val == null ? null : setState(() => _isAvailable = val),
               ),
             ),
           ],
@@ -181,7 +181,7 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
               description: _descriptionController.text,
               name: _nameController.text,
               price: int.tryParse(_priceController.text),
-              isAvaliable: _isAvaliable,
+              isAvailable: _isAvailable,
               img: _imgBytes?.toBase64,
             ),
           );
@@ -192,7 +192,7 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
               description: _descriptionController.text,
               name: _nameController.text,
               price: int.tryParse(_priceController.text) ?? 0,
-              isAvaliable: _isAvaliable,
+              isAvailable: _isAvailable,
               imgUrl: _imgBytes?.toBase64 ?? '',
               id: '',
             ),

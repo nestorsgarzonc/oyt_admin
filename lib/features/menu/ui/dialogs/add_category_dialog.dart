@@ -39,7 +39,7 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   Uint8List? _imgBytes;
-  bool _isAvaliable = true;
+  bool _isAvailable = true;
   bool _isLoadinglogo = false;
   Menu? categoryItem;
 
@@ -53,7 +53,7 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
   void setInitialValues() {
     _nameController.text = categoryItem?.name ?? '';
     _descriptionController.text = categoryItem?.description ?? '';
-    _isAvaliable = categoryItem?.isAvaliable ?? true;
+    _isAvailable = categoryItem?.isAvailable ?? true;
   }
 
   @override
@@ -115,8 +115,8 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
             Card(
               child: CheckboxListTile(
                 title: const Text('Disponible'),
-                value: _isAvaliable,
-                onChanged: (val) => val == null ? null : setState(() => _isAvaliable = val),
+                value: _isAvailable,
+                onChanged: (val) => val == null ? null : setState(() => _isAvailable = val),
               ),
             ),
           ],
@@ -160,7 +160,7 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
               img: _imgBytes?.toBase64,
               name: _nameController.text,
               description: _descriptionController.text,
-              isAvaliable: _isAvaliable,
+              isAvailable: _isAvailable,
             ),
           );
     } else {
@@ -171,7 +171,7 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
               imgUrl: _imgBytes!.toBase64,
               name: _nameController.text,
               description: _descriptionController.text,
-              isAvaliable: _isAvaliable,
+              isAvailable: _isAvailable,
             ),
           );
     }
