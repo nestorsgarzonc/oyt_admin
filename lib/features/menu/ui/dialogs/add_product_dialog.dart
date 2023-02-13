@@ -184,6 +184,7 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
               isAvailable: _isAvailable,
               img: _imgBytes?.toBase64,
             ),
+            widget.menuItem!.isAvailable != _isAvailable,
           );
     } else {
       await ref.read(menuProvider.notifier).addMenuItem(

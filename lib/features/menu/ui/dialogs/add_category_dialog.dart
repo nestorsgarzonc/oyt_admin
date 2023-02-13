@@ -162,6 +162,7 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
               description: _descriptionController.text,
               isAvailable: _isAvailable,
             ),
+            categoryItem!.isAvailable!=_isAvailable,
           );
     } else {
       await ref.read(menuProvider.notifier).addCategory(

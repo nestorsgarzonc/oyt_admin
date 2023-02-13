@@ -166,6 +166,8 @@ class _AddToppingDialog extends ConsumerState<AddToppingDialog> {
               minOptions: int.parse(_minOptionsController.text),
               maxOptions: int.parse(_maxOptionsController.text),
             ),
+            //TODO: ADD AVAILABILITY
+            false,
           );
     } else {
       await ref.read(menuProvider.notifier).addTopping(

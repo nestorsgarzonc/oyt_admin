@@ -150,6 +150,9 @@ class _AddToppingOptionDialog extends ConsumerState<AddToppingOptionDialog> {
               price: int.parse(_priceController.text),
               imgUrl: _imgBytes?.toBase64 ?? '',
             ),
+            //TODO: ADD AVAILABILITY
+            //widget.toppingOption!.isAvailable != _isAvailable,
+            false
           );
     } else {
       await ref.read(menuProvider.notifier).addToppingOption(

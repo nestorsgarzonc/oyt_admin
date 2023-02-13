@@ -1,6 +1,6 @@
 import 'package:oyt_admin/core/router/router.dart';
 import 'package:oyt_admin/features/menu/provider/menu_state.dart';
-import 'package:oyt_admin/features/menu/repositories/menu_repository.dart';
+import 'package:oyt_front_menu/repositories/menu_repository.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_restaurant/models/restaurant_model.dart';
@@ -34,12 +34,19 @@ class MenuProvider extends StateNotifier<MenuState> {
     CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Categoria creada correctamente');
   }
 
-  Future<void> updateCategory(Menu category) async {
+  Future<void> updateCategory(Menu category, bool toggleAviability) async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
-    final failure = await repository.updateCategory(category);
-    if (failure != null) {
+    final failures = await Future.wait([
+      repository.updateCategory(category),
+      repository.toggleCategoryAviability(category),
+    ]);
+    if (failures.contains(null)) {
+      final failure = failures.firstWhere((element) => element == null);
       ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
-      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, failure.message);
+      CustomSnackbar.showSnackBar(
+        ref.read(routerProvider).context,
+        failure?.message ?? 'Ha ocurrido un error',
+      );
       return;
     }
     await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
@@ -63,12 +70,19 @@ class MenuProvider extends StateNotifier<MenuState> {
     CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Item creado correctamente');
   }
 
-  Future<void> updateMenuItem(MenuItem menuItem) async {
+  Future<void> updateMenuItem(MenuItem menuItem, bool toggleAviability) async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
-    final failure = await repository.updateMenuItem(menuItem);
-    if (failure != null) {
+    final failures = await Future.wait([
+      repository.updateMenuItem(menuItem),
+      repository.toggleMenuItemAviability(menuItem),
+    ]);
+    if (failures.contains(null)) {
+      final failure = failures.firstWhere((element) => element == null);
       ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
-      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, failure.message);
+      CustomSnackbar.showSnackBar(
+        ref.read(routerProvider).context,
+        failure?.message ?? 'Ha ocurrido un error',
+      );
       return;
     }
     await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
@@ -92,12 +106,19 @@ class MenuProvider extends StateNotifier<MenuState> {
     CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Topping creado correctamente');
   }
 
-  Future<void> updateTopping(Topping topping) async {
+  Future<void> updateTopping(Topping topping, bool toggleAviability) async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
-    final failure = await repository.updateTopping(topping);
-    if (failure != null) {
+    final failures = await Future.wait([
+      repository.updateTopping(topping),
+      repository.toggleToppingAviability(topping),
+    ]);
+    if (failures.contains(null)) {
+      final failure = failures.firstWhere((element) => element == null);
       ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
-      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, failure.message);
+      CustomSnackbar.showSnackBar(
+        ref.read(routerProvider).context,
+        failure?.message ?? 'Ha ocurrido un error',
+      );
       return;
     }
     await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
@@ -124,12 +145,19 @@ class MenuProvider extends StateNotifier<MenuState> {
     );
   }
 
-  Future<void> updateToppingOption(ToppingOption toppingOption) async {
+  Future<void> updateToppingOption(ToppingOption toppingOption, bool toggleAviability) async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, null);
-    final failure = await repository.updateToppingOption(toppingOption);
-    if (failure != null) {
+    final failures = await Future.wait([
+      repository.updateToppingOption(toppingOption),
+      repository.toggleToppingOptionAviability(toppingOption),
+    ]);
+    if (failures.contains(null)) {
+      final failure = failures.firstWhere((element) => element == null);
       ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
-      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, failure.message);
+      CustomSnackbar.showSnackBar(
+        ref.read(routerProvider).context,
+        failure?.message ?? 'Ha ocurrido un error',
+      );
       return;
     }
     await ref.read(restaurantProvider.notifier).getRestaurant(silent: true);
