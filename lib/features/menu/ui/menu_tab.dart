@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/product/provider/product_provider.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_front_core/theme/theme.dart';
+import 'package:oyt_front_menu/ui/widgets/menu_item_card.dart';
 import 'package:oyt_front_product/models/product_model.dart';
 import 'package:oyt_front_restaurant/models/restaurant_model.dart';
 import 'package:oyt_front_widgets/loading/loading_widget.dart';
@@ -86,28 +87,16 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                         widget.restaurant?.categories.length ?? 0,
                         (index) {
                           final item = widget.restaurant!.categories[index];
-                          return Card(
-                            key: Key(item.id),
-                            margin: CustomTheme.cardMargin,
-                            elevation: item == selectedCategory ? 3 : null,
-                            child: ListTile(
-                              selected: item == selectedCategory,
-                              leading: ReorderableDragStartListener(
-                                index: index + 2,
-                                child: const Icon(Icons.drag_indicator_outlined),
-                              ),
-                              title: Text(
-                                item.name,
-                                style: item == selectedCategory
-                                    ? ref.watch(themeProvider.notifier).selectedItemTextStyle
-                                    : null,
-                              ),
-                              trailing: IconButton(
-                                onPressed: () => _onEditCategory(item),
-                                icon: const Icon(Icons.edit),
-                              ),
-                              onTap: () => _onSelectCategory(item),
+                          return MenuItemCard(
+                            isSelected: item == selectedCategory,
+                            title: item.name,
+                            onTap: () => _onSelectCategory(item),
+                            onEdit: () => _onEditCategory(item),
+                            leading: ReorderableDragStartListener(
+                              index: index + 2,
+                              child: const Icon(Icons.drag_indicator_outlined),
                             ),
+                            key: Key(item.id),
                           );
                         },
                       ),
@@ -142,28 +131,16 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                               selectedCategory!.menuItems.length,
                               (index) {
                                 final item = selectedCategory!.menuItems[index];
-                                return Card(
-                                  key: Key(item.id),
-                                  margin: CustomTheme.cardMargin,
-                                  elevation: selectedProduct == item ? 3 : null,
-                                  child: ListTile(
-                                    selected: selectedProduct == item,
-                                    leading: ReorderableDragStartListener(
-                                      index: index + 2,
-                                      child: const Icon(Icons.drag_indicator_outlined),
-                                    ),
-                                    title: Text(
-                                      item.name,
-                                      style: selectedProduct == item
-                                          ? ref.watch(themeProvider.notifier).selectedItemTextStyle
-                                          : null,
-                                    ),
-                                    onTap: () => _onSelectProduct(item),
-                                    trailing: IconButton(
-                                      onPressed: () => _onEditProduct(item, selectedCategory!),
-                                      icon: const Icon(Icons.edit),
-                                    ),
+                                return MenuItemCard(
+                                  isSelected: item == selectedProduct,
+                                  title: item.name,
+                                  onTap: () => _onSelectProduct(item),
+                                  leading: ReorderableDragStartListener(
+                                    index: index + 2,
+                                    child: const Icon(Icons.drag_indicator_outlined),
                                   ),
+                                  key: Key(item.id),
+                                  onEdit: () => _onEditProduct(item, selectedCategory!),
                                 );
                               },
                             ),
@@ -203,17 +180,16 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
                                   product.toppings.length,
                                   (index) {
                                     final item = product.toppings[index];
-                                    return Card(
-                                      key: Key(item.id),
-                                      margin: CustomTheme.cardMargin,
-                                      child: ListTile(
-                                        leading: ReorderableDragStartListener(
-                                          index: index + 2,
-                                          child: const Icon(Icons.drag_indicator_outlined),
-                                        ),
-                                        onTap: () => _onEditTopping(item, selectedProduct!),
-                                        title: Text(item.name),
+                                    return MenuItemCard(
+                                      isSelected: item == selectedCategory,
+                                      title: item.name,
+                                      onTap: () => _onEditTopping(item, selectedProduct!),
+                                      onEdit: () => _onEditTopping(item, selectedProduct!),
+                                      leading: ReorderableDragStartListener(
+                                        index: index + 2,
+                                        child: const Icon(Icons.drag_indicator_outlined),
                                       ),
+                                      key: Key(item.id),
                                     );
                                   },
                                 ),
@@ -278,7 +254,7 @@ class _MenuTabBodyState extends ConsumerState<MenuTabBody> {
   }
 
   void _onEditTopping(Topping item, MenuItem menuItem) async {
-    AddToppingDialog.show(context: context, toppingItem: item, menuItem: menuItem);
+    await AddToppingDialog.show(context: context, toppingItem: item, menuItem: menuItem);
     if (selectedProduct != null) {
       ref.read(productProvider.notifier).productDetail(selectedProduct!.id);
     }
