@@ -177,7 +177,7 @@ class _InventoryTabBody extends ConsumerState<InventoryTabBody> {
   }
 
   void _onEditProduct(MenuItem product, Menu category) async {
-    _onSelectCategory(null);
+    //_onSelectCategory(null);
   }
 
   void _onEditTopping(Topping item, MenuItem menuItem) async {}

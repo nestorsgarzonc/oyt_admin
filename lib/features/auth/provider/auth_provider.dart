@@ -71,7 +71,7 @@ class AuthProvider extends StateNotifier<AuthState> {
           ref.read(routerProvider).router.pushReplacement(OnBoardingAdminScreen.route);
         } else if (r.restaurantsId.length > 1) {
           //TODO: GO TO CHOOSE A RESTAURANT
-      } else {
+        } else {
           state = state.copyWith(selectedRestaurantId: StateAsync.success(r.restaurantsId.first));
           await authRepository.chooseRestaurantId(r.restaurantsId.first);
           ref.read(routerProvider).router.pushReplacement(IndexHomeScreen.route);
@@ -141,8 +141,13 @@ class AuthProvider extends StateNotifier<AuthState> {
 
   Future<void> startListeningSocket() async {
     await socketIOHandler.connect();
+    socketIOHandler.onReconnect((data) => listenSocket());
+    listenSocket();
+  }
+
+  void listenSocket() {
+    //TODO: add socket listeners
     ref.read(tableProvider.notifier).startListeningSocket();
     ref.read(eventBusProvider.notifier).startListeningSocket();
-    //TODO: add socket listeners
   }
 }
