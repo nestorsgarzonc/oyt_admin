@@ -40,7 +40,7 @@ class MenuProvider extends StateNotifier<MenuState> {
       repository.updateCategory(category),
       repository.toggleCategoryAviability(category),
     ]);
-    if (failures.contains(null)) {
+    if (!failures.contains(null)) {
       final failure = failures.firstWhere((element) => element == null);
       ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
       CustomSnackbar.showSnackBar(
@@ -76,7 +76,7 @@ class MenuProvider extends StateNotifier<MenuState> {
       repository.updateMenuItem(menuItem),
       repository.toggleMenuItemAviability(menuItem),
     ]);
-    if (failures.contains(null)) {
+    if (!failures.contains(null)) {
       final failure = failures.firstWhere((element) => element == null);
       ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
       CustomSnackbar.showSnackBar(
@@ -112,7 +112,7 @@ class MenuProvider extends StateNotifier<MenuState> {
       repository.updateTopping(topping),
       repository.toggleToppingAviability(topping),
     ]);
-    if (failures.contains(null)) {
+    if (!failures.contains(null)) {
       final failure = failures.firstWhere((element) => element == null);
       ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
       CustomSnackbar.showSnackBar(
@@ -151,7 +151,7 @@ class MenuProvider extends StateNotifier<MenuState> {
       repository.updateToppingOption(toppingOption),
       repository.toggleToppingOptionAviability(toppingOption),
     ]);
-    if (failures.contains(null)) {
+    if (!failures.contains(null)) {
       final failure = failures.firstWhere((element) => element == null);
       ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
       CustomSnackbar.showSnackBar(
