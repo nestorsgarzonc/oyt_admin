@@ -19,6 +19,12 @@ class HistoricalOrders extends Equatable {
     );
   }
 
+  HistoricalOrders addMore(HistoricalOrders newElements) {
+    return copyWith(
+      orders: [...orders, ...newElements.orders],
+    );
+  }
+
   final List<Order> orders;
 
   HistoricalOrders copyWith({

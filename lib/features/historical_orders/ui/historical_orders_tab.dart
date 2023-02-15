@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/historical_orders/filter/historical_order_filter.dart';
 import 'package:oyt_admin/features/historical_orders/ui/modals/filter_historical_orders_modal.dart';
 import 'package:oyt_admin/features/historical_orders/provider/historical_orders_provider.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
@@ -15,6 +16,31 @@ class HistoricalOrdersTab extends ConsumerStatefulWidget {
 
 class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
   final _scrollController = ScrollController();
+  bool hasReachedFinal = false;
+  
+  HistoricalOrdersFilter? historicalOrdersFilter;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.read(historicalOrdersProvider.notifier).getHistoricalOrders(historicalOrdersFilter: historicalOrdersFilter);
+    });
+    _scrollController.addListener(scrollListener);
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _scrollController.removeListener(scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (_scrollController.position.maxScrollExtent - 100 < _scrollController.position.pixels && !hasReachedFinal) {
+      hasReachedFinal = true;
+      ref.read(historicalOrdersProvider.notifier).getHistoricalOrders();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +57,7 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
         Expanded(
           child: historicalOrdersState.historicalOrders.on(
             onError: (err) => Center(child: Text(err.message)),
-            onInitial: () => const Center(child: Text('No se ha hecho ninguna orden')),
+            onInitial: () => const ScreenLoadingWidget(),
             onLoading: () => const ScreenLoadingWidget(),
             onData: (data) => Scrollbar(
               controller: _scrollController,
@@ -52,7 +78,7 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

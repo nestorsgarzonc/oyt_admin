@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:oyt_admin/features/historical_orders/filter/historical_order_filter.dart';
+import 'package:oyt_admin/features/historical_orders/provider/historical_orders_provider.dart';
 import 'package:oyt_front_core/enums/payments_enum.dart';
 import 'package:oyt_front_core/theme/theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
 import 'package:oyt_front_widgets/dropdown/custom_dropdown_field.dart';
@@ -9,30 +12,31 @@ import 'package:oyt_front_widgets/text_field/date_text_field.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
-class FilterHistoricalOrdersDialog extends StatefulWidget {
-  const FilterHistoricalOrdersDialog({super.key});
+class FilterHistoricalOrdersDialog extends ConsumerStatefulWidget {
+  const FilterHistoricalOrdersDialog({super.key, HistoricalOrdersFilter? historicalOrdersFilter});
 
-  static Future<void> show({required BuildContext context}) {
+  static Future<void> show({required BuildContext context, HistoricalOrdersFilter? historicalOrdersFilter}) {
     return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const FilterHistoricalOrdersDialog(),
+      builder: (context) => FilterHistoricalOrdersDialog(historicalOrdersFilter: historicalOrdersFilter,),
     );
   }
 
   @override
-  State<FilterHistoricalOrdersDialog> createState() => _FilterHistoricalOrdersDialog();
+  ConsumerState<FilterHistoricalOrdersDialog> createState() => _FilterHistoricalOrdersDialog();
 }
 
-class _FilterHistoricalOrdersDialog extends State<FilterHistoricalOrdersDialog> {
+class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrdersDialog> {
   final _formKey = GlobalKey<FormState>();
   final _valueController = TextEditingController();
-  DateTime? _initialDate;
-  DateTime? _finalDate;
+  num value = 0;
   PaymentMethod? _selectedPaymentMethod;
+  HistoricalOrdersFilter? historicalOrdersFilter;
 
   @override
   Widget build(BuildContext context) {
+    final historicalOrdersState = ref.watch(historicalOrdersProvider);
     return AlertDialog(
       titlePadding: CustomTheme.dialogPadding.copyWith(bottom: 0),
       contentPadding: CustomTheme.dialogPadding.copyWith(top: 0),
@@ -54,18 +58,21 @@ class _FilterHistoricalOrdersDialog extends State<FilterHistoricalOrdersDialog> 
             const SectionTitle(title: 'Fecha de inicio'),
             DateTextField(
               label: 'Fecha de inicio',
-              onTap: (time) => _initialDate = time,
+              onTap: (time) => historicalOrdersState.historicalOrdersFilter?.dateStart = time,
             ),
             const SectionTitle(title: 'Fecha fin'),
             DateTextField(
               label: 'Fecha fin',
-              onTap: (time) => _finalDate = time,
+              onTap: (time) => historicalOrdersState.historicalOrdersFilter?.dateEnd = time,
             ),
             const SectionTitle(title: 'Valor de la orden'),
             CustomTextField(
               controller: _valueController,
               validator: TextFormValidator.emailValidator,
               label: 'Valor de la orden',
+              onTap: () {
+                historicalOrdersState.historicalOrdersFilter?.orderPrice = _valueController.text as num?;
+              },
               hintText: 'Ej: 10.000',
             ),
             const SectionTitle(title: 'Método de pago'),
@@ -73,7 +80,8 @@ class _FilterHistoricalOrdersDialog extends State<FilterHistoricalOrdersDialog> 
               items: PaymentMethod.values,
               value: _selectedPaymentMethod,
               itemAsString: (item) => item.title,
-              onChanged: (value) => setState(() => _selectedPaymentMethod = value),
+              onChanged: (value) => setState(() => historicalOrdersState.historicalOrdersFilter
+                ?.paymentMethod = value?.paymentValue,),
               labelText: 'Metodo de pago',
               hintText: 'Ej: ${PaymentMethod.values.first.title}}',
             ),
