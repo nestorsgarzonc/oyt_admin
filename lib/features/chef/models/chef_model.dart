@@ -1,0 +1,40 @@
+import 'package:equatable/equatable.dart';
+
+class Chef extends Equatable {
+  const Chef({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Chef.fromMap(Map<String, dynamic> map) {
+    return Chef(
+      id: map['id'] as int,
+      name: map['name'] as String,
+      email: map['email'] as String,
+      password: map['password'] as String,
+      createdAt: DateTime.parse(map['created_at'] as String),
+      updatedAt: DateTime.parse(map['updated_at'] as String),
+    );
+  }
+
+  final int id;
+  final String name;
+  final String email;
+  final String password;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        email,
+        password,
+        createdAt,
+        updatedAt,
+      ];
+}

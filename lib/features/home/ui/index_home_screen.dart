@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/auth/provider/auth_provider.dart';
+import 'package:oyt_admin/features/chef/ui/chef_tab.dart';
 import 'package:oyt_admin/features/inventory/ui/inventory_tab.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_front_widgets/drawer/drawer_layout.dart';
@@ -63,6 +64,11 @@ class _IndexHomeScreenState extends ConsumerState<IndexHomeScreen> {
       title: 'Meseros',
       icon: FontAwesomeIcons.userTie,
       tab: () => const WaitersTab(),
+    ),
+    CardItem(
+      title: 'Chefs',
+      icon: Icons.soup_kitchen_outlined,
+      tab: () => const ChefTab(),
     ),
     CardItem(
       title: 'Cajeros',
