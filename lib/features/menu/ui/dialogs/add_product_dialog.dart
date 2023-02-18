@@ -57,7 +57,7 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
     _nameController.text = menuItem.name;
     _descriptionController.text = menuItem.description;
     _priceController.text = menuItem.price.toString();
-    _isAvaliable = menuItem.isAvaliable;
+    _isAvaliable = menuItem.isAvailable;
   }
 
   @override
@@ -181,7 +181,7 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
               description: _descriptionController.text,
               name: _nameController.text,
               price: int.tryParse(_priceController.text),
-              isAvaliable: _isAvaliable,
+              isAvailable: _isAvaliable,
               img: _imgBytes?.toBase64,
             ),
           );
@@ -192,7 +192,7 @@ class _AddProductDialog extends ConsumerState<AddProductDialog> {
               description: _descriptionController.text,
               name: _nameController.text,
               price: int.tryParse(_priceController.text) ?? 0,
-              isAvaliable: _isAvaliable,
+              isAvailable: _isAvaliable,
               imgUrl: _imgBytes?.toBase64 ?? '',
               id: '',
             ),

@@ -68,7 +68,7 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
             const SectionTitle(title: 'Valor de la orden'),
             CustomTextField(
               controller: _valueController,
-              validator: TextFormValidator.emailValidator,
+              validator: TextFormValidator.orderPriceValidator,
               label: 'Valor de la orden',
               onTap: () {
                 historicalOrdersState.historicalOrdersFilter?.orderPrice = _valueController.text as num?;

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/historical_orders/filter/historical_order_filter.dart';
 import 'package:oyt_admin/features/historical_orders/ui/modals/filter_historical_orders_modal.dart';
 import 'package:oyt_admin/features/historical_orders/provider/historical_orders_provider.dart';
+import 'package:oyt_admin/features/historical_orders/ui/filters_chips.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
@@ -36,8 +37,7 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
   }
 
   void scrollListener() {
-    if (_scrollController.position.maxScrollExtent - 100 < _scrollController.position.pixels && !hasReachedFinal) {
-      hasReachedFinal = true;
+    if (_scrollController.position.maxScrollExtent - 100 < _scrollController.position.pixels) {
       ref.read(historicalOrdersProvider.notifier).getHistoricalOrders();
     }
   }
@@ -54,6 +54,9 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
         ),
         AddButton(text: 'Filtrar órdenes', icon: Icons.filter_list, onTap: _onFilterOrders),
         const Divider(),
+        FilterChips(
+          historicalOrdersFilter: historicalOrdersFilter,
+        ),
         Expanded(
           child: historicalOrdersState.historicalOrders.on(
             onError: (err) => Center(child: Text(err.message)),

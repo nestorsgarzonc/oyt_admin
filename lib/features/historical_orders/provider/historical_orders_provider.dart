@@ -25,7 +25,7 @@ class HistoricalOrdersProvider extends StateNotifier<HistoricalOrdersState> {
 
   Future<void> getHistoricalOrders({HistoricalOrdersFilter? historicalOrdersFilter}) async {
     state = state.copyWith(historicalOrders: StateAsync.loading());
-    final result = await historicalOrdersRepository.postHistoricalOrders(historicalOrdersFilter);
+    final result = await historicalOrdersRepository.getHistoricalOrders(historicalOrdersFilter);
     result.fold(
       (failure) => state = state.copyWith(historicalOrders: StateAsync.error(failure)),
       (historicalOrders) {
@@ -35,9 +35,9 @@ class HistoricalOrdersProvider extends StateNotifier<HistoricalOrdersState> {
   }
 
   Future<void> getMoreHistoricalOrders({HistoricalOrdersFilter? historicalOrdersFilter}) async {
-    if (state.isFetchingMore) return;
+    if (state.isFetchingMore || state.isThereNextPage) return;
     state = state.copyWith(isFetchingMore: true);
-    final result = await historicalOrdersRepository.postHistoricalOrders(historicalOrdersFilter);
+    final result = await historicalOrdersRepository.getHistoricalOrders(historicalOrdersFilter);
     result.fold(
       (failure) => state = state.copyWith(historicalOrders: StateAsync.error(failure)),
       (newHistoricalOrders) {

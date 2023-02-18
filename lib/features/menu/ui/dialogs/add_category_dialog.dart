@@ -53,7 +53,7 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
   void setInitialValues() {
     _nameController.text = categoryItem?.name ?? '';
     _descriptionController.text = categoryItem?.description ?? '';
-    _isAvaliable = categoryItem?.isAvaliable ?? true;
+    _isAvaliable = categoryItem?.isAvailable ?? true;
   }
 
   @override
@@ -171,7 +171,7 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
               imgUrl: _imgBytes!.toBase64,
               name: _nameController.text,
               description: _descriptionController.text,
-              isAvaliable: _isAvaliable,
+              isAvailable: _isAvaliable,
             ),
           );
     }

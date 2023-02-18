@@ -9,7 +9,7 @@ final historicalOrdersDataSourceProvider = Provider<HistoricalOrdersDataSource>(
 });
 
 abstract class HistoricalOrdersDataSource {
-  Future<HistoricalOrders> postHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter);
+  Future<HistoricalOrders> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter);
 }
 
 class HistoricalOrdersDataSourceImpl implements HistoricalOrdersDataSource {
@@ -22,14 +22,13 @@ class HistoricalOrdersDataSourceImpl implements HistoricalOrdersDataSource {
   final ApiHandler apiHandler;
 
   @override
-  Future<HistoricalOrders> postHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter) async {
+  Future<HistoricalOrders> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter) async {
     final Map<String, dynamic> dataForFilter = historicalOrdersFilter == null ? {} : historicalOrdersFilter.toMap();
     try {
       final res = await apiHandler.post(
-        'api/order/order-history',
+        'order/order-history',
          dataForFilter,
       );
-      Logger.log(res.toString());
       return HistoricalOrders.fromMap(res.responseMap!);
     } catch (e, s) {
       Logger.logError(e.toString(), s);
