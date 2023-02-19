@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/cashier/provider/cashier_provider.dart';
 import 'package:oyt_admin/features/cashier/ui/dialogs/add_cashier_dialog.dart';
+import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
@@ -30,6 +32,7 @@ class _CashierTabState extends ConsumerState<CashierTab> {
 
   @override
   Widget build(BuildContext context) {
+    final cashierState = ref.watch(cashierProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,17 +58,27 @@ class _CashierTabState extends ConsumerState<CashierTab> {
         ),
         const Divider(),
         Expanded(
-          child: Scrollbar(
-            controller: _scrollController,
-            child: ListView.builder(
+          child: cashierState.cashiers.on(
+            onError: (error) => Center(child: Text(error.toString())),
+            onLoading: () => const ScreenLoadingWidget(),
+            onInitial: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ref.read(cashierProvider.notifier).getCashiers();
+              });
+              return const ScreenLoadingWidget();
+            },
+            onData: (cashiers) => Scrollbar(
               controller: _scrollController,
-              itemCount: 20,
-              itemBuilder: (context, index) => Card(
-                child: ListTile(
-                  onTap: () => _onTapWaiter(),
-                  subtitle: Text('Correo: $index'),
-                  title: Text('Cajero $index'),
-                  trailing: const Icon(Icons.chevron_right),
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: 20,
+                itemBuilder: (context, index) => Card(
+                  child: ListTile(
+                    onTap: () => _onTapWaiter(),
+                    subtitle: Text('Correo: $index'),
+                    title: Text('Cajero $index'),
+                    trailing: const Icon(Icons.chevron_right),
+                  ),
                 ),
               ),
             ),

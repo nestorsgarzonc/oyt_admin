@@ -10,8 +10,7 @@ final chefProvider =
     StateNotifierProvider.autoDispose<ChefNotifier, ChefState>(ChefNotifier.fromRef);
 
 class ChefNotifier extends StateNotifier<ChefState> {
-  ChefNotifier({required this.ref, required this.chefRepository})
-      : super(ChefState.initial());
+  ChefNotifier({required this.ref, required this.chefRepository}) : super(ChefState.initial());
 
   factory ChefNotifier.fromRef(Ref ref) {
     final chefRepository = ref.read(chefRepositoryProvider);

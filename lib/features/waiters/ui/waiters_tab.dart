@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/waiters/provider/waiter_provider.dart';
+import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_admin/features/waiters/ui/dialogs/add_waiter_dialog.dart';
 import 'package:oyt_front_core/logger/logger.dart';
@@ -30,6 +32,7 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
 
   @override
   Widget build(BuildContext context) {
+    final waiterState = ref.watch(waiterProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,17 +58,27 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
         ),
         const Divider(),
         Expanded(
-          child: Scrollbar(
-            controller: _scrollController,
-            child: ListView.builder(
+          child: waiterState.waiters.on(
+            onError: (error) => Center(child: Text(error.toString())),
+            onLoading: () => const ScreenLoadingWidget(),
+            onInitial: () {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ref.read(waiterProvider.notifier).getWaiters();
+              });
+              return const ScreenLoadingWidget();
+            },
+            onData: (waiters) => Scrollbar(
               controller: _scrollController,
-              itemCount: 20,
-              itemBuilder: (context, index) => Card(
-                child: ListTile(
-                  onTap: () => _onTapWaiter(),
-                  subtitle: Text('Correo: $index'),
-                  title: Text('Mesero $index'),
-                  trailing: const Icon(Icons.chevron_right),
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: waiters.length,
+                itemBuilder: (context, i) => Card(
+                  child: ListTile(
+                    onTap: () => _onTapWaiter(),
+                    subtitle: Text('Correo: ${waiters[i].email}'),
+                    title: Text('Mesero ${waiters[i].firstName} ${waiters[i].lastName}'),
+                    trailing: const Icon(Icons.chevron_right),
+                  ),
                 ),
               ),
             ),
