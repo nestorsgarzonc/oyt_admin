@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_admin/features/tables/provider/table_provider.dart';
 import 'package:oyt_front_core/theme/theme.dart';
+import 'package:oyt_front_core/url/url_builder.dart';
 import 'package:oyt_front_core/utils/widget_to_img.dart';
 import 'package:oyt_front_table/modals/change_table_status_sheet.dart';
 import 'package:oyt_front_table/models/tables_socket_response.dart';
@@ -100,7 +101,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                       padding: const EdgeInsets.all(5),
                       child: Column(
                         children: [
-                          QrImage(data: widget.table.id),
+                          QrImage(data: UrlBuilder.dinnerWithTableId(widget.table.id)),
                           Text(
                             restaurant.name,
                             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
