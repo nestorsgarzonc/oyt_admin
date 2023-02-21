@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/cashier/ui/dialogs/add_cashier_dialog.dart';
 import 'package:oyt_admin/features/chef/provider/chef_provider.dart';
+import 'package:oyt_admin/features/chef/ui/dialogs/add_chef_dialog.dart';
+import 'package:oyt_front_widgets/error/not_found_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_core/logger/logger.dart';
@@ -67,28 +69,30 @@ class _CashierTabState extends ConsumerState<ChefTab> {
               });
               return const ScreenLoadingWidget();
             },
-            onData: (chefs) => Scrollbar(
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: 20,
-                itemBuilder: (context, index) => Card(
-                  child: ListTile(
-                    onTap: () => _onTapChef(),
-                    subtitle: Text('Correo: $index'),
-                    title: Text('Chef $index'),
-                    trailing: const Icon(Icons.chevron_right),
+            onData: (chefs) => chefs.isEmpty
+                ? const NotFoundWidget(title: 'No se encontraron chefs')
+                : Scrollbar(
+                    controller: _scrollController,
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: chefs.length,
+                      itemBuilder: (context, i) => Card(
+                        child: ListTile(
+                          onTap: () => _onTapChef(),
+                          subtitle: Text('Correo: ${chefs[i].email}'),
+                          title: Text('Chef ${chefs[i].firstName} ${chefs[i].lastName}'),
+                          trailing: const Icon(Icons.chevron_right),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
           ),
         ),
       ],
     );
   }
 
-  void _onAddChef() => AddCashierDialog.show(context: context);
+  void _onAddChef() => AddChefDialog.show(context: context);
 
   void _onTapChef() {}
 }

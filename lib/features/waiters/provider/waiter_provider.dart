@@ -4,6 +4,7 @@ import 'package:oyt_admin/features/waiters/provider/waiter_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/waiters/repository/waiter_repository.dart';
 import 'package:oyt_front_core/wrappers/state_wrapper.dart';
+import 'package:oyt_front_widgets/dialogs/custom_dialogs.dart';
 import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 
 final waiterProvider =
@@ -21,9 +22,10 @@ class WaiterNotifier extends StateNotifier<WaiterState> {
   final Ref ref;
   final WaiterRepository waiterRepository;
 
-  Future<void> getWaiters() async {
-    state = state.copyWith(waiters: StateAsync.loading());
+  Future<void> getWaiters({bool silence = false}) async {
+    if (!silence) state = state.copyWith(waiters: StateAsync.loading());
     final res = await waiterRepository.getWaiters();
+    if (!mounted) return;
     res.fold(
       (l) => state = state.copyWith(waiters: StateAsync.error(l)),
       (r) => state = state.copyWith(waiters: StateAsync.success(r)),
@@ -31,8 +33,10 @@ class WaiterNotifier extends StateNotifier<WaiterState> {
   }
 
   Future<void> createWaiter({required WaiterDto waiter}) async {
-    state = state.copyWith(waiters: StateAsync.loading());
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, 'Creando mesero');
     final res = await waiterRepository.addWaiter(waiter);
+    getWaiters(silence: true);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
     if (res != null) {
       CustomSnackbar.showSnackBar(ref.read(routerProvider).context, res.message);
     }

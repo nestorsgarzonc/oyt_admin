@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:oyt_admin/features/cashier/models/cashier_dto.dart';
+import 'package:oyt_admin/features/cashier/provider/cashier_provider.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
 import 'package:oyt_front_widgets/sizedbox/dialog_width.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddCashierDialog extends StatefulWidget {
+class AddCashierDialog extends ConsumerStatefulWidget {
   const AddCashierDialog({super.key});
 
   static Future<void> show({required BuildContext context}) {
@@ -18,10 +21,10 @@ class AddCashierDialog extends StatefulWidget {
   }
 
   @override
-  State<AddCashierDialog> createState() => _AddCashierDialog();
+  ConsumerState<AddCashierDialog> createState() => _AddCashierDialog();
 }
 
-class _AddCashierDialog extends State<AddCashierDialog> {
+class _AddCashierDialog extends ConsumerState<AddCashierDialog> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
@@ -62,8 +65,11 @@ class _AddCashierDialog extends State<AddCashierDialog> {
     );
   }
 
-  void _onConfirm() {
+  Future<void> _onConfirm() async {
     if (!_formKey.currentState!.validate()) return;
-    Navigator.of(context).pop();
+    await ref
+        .read(cashierProvider.notifier)
+        .createCashier(cashier: CashierDto(email: _emailController.text));
+    if (mounted) Navigator.of(context).pop();
   }
 }

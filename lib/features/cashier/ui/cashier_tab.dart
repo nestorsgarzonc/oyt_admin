@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/cashier/provider/cashier_provider.dart';
 import 'package:oyt_admin/features/cashier/ui/dialogs/add_cashier_dialog.dart';
+import 'package:oyt_front_widgets/error/not_found_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_core/logger/logger.dart';
@@ -67,21 +68,23 @@ class _CashierTabState extends ConsumerState<CashierTab> {
               });
               return const ScreenLoadingWidget();
             },
-            onData: (cashiers) => Scrollbar(
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: 20,
-                itemBuilder: (context, index) => Card(
-                  child: ListTile(
-                    onTap: () => _onTapWaiter(),
-                    subtitle: Text('Correo: $index'),
-                    title: Text('Cajero $index'),
-                    trailing: const Icon(Icons.chevron_right),
+            onData: (cashiers) => cashiers.isEmpty
+                ? const NotFoundWidget(title: 'No se encontraron chefs')
+                : Scrollbar(
+                    controller: _scrollController,
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: cashiers.length,
+                      itemBuilder: (context, i) => Card(
+                        child: ListTile(
+                          onTap: () => _onTapWaiter(),
+                          subtitle: Text('Correo: ${cashiers[i].email}'),
+                          title: Text('Cajero: ${cashiers[i].firstName} ${cashiers[i].lastName}'),
+                          trailing: const Icon(Icons.chevron_right),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
           ),
         ),
       ],

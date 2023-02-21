@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:oyt_admin/features/waiters/models/waiter_dto.dart';
+import 'package:oyt_admin/features/waiters/provider/waiter_provider.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/validators/text_form_validator.dart';
 import 'package:oyt_front_widgets/dialogs/widgets/dialog_header.dart';
 import 'package:oyt_front_widgets/sizedbox/dialog_width.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddWaiterDialog extends StatefulWidget {
+class AddWaiterDialog extends ConsumerStatefulWidget {
   const AddWaiterDialog({super.key});
 
   static Future<void> show({required BuildContext context}) {
@@ -18,10 +21,10 @@ class AddWaiterDialog extends StatefulWidget {
   }
 
   @override
-  State<AddWaiterDialog> createState() => _AddWaiterDialog();
+  ConsumerState<AddWaiterDialog> createState() => _AddWaiterDialog();
 }
 
-class _AddWaiterDialog extends State<AddWaiterDialog> {
+class _AddWaiterDialog extends ConsumerState<AddWaiterDialog> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
@@ -62,8 +65,11 @@ class _AddWaiterDialog extends State<AddWaiterDialog> {
     );
   }
 
-  void _onConfirm() {
-    if (!_formKey.currentState!.validate()) return;
-    Navigator.of(context).pop();
+  Future<void> _onConfirm() async{
+     if (!_formKey.currentState!.validate()) return;
+    await ref
+        .read(waiterProvider.notifier)
+        .createWaiter(waiter: WaiterDto(email: _emailController.text));
+    if (mounted) Navigator.of(context).pop();
   }
 }
