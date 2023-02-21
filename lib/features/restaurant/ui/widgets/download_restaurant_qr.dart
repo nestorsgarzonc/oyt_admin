@@ -1,9 +1,11 @@
 import 'package:download/download.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:oyt_front_core/theme/theme.dart';
 import 'package:oyt_front_core/utils/widget_to_img.dart';
+import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -60,10 +62,20 @@ class DownloadRestaurantQR extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 15),
-            FilledButton.icon(
-              onPressed: _onDownloadQr,
-              icon: const Icon(Icons.download),
-              label: const Text('Descargar código QR'),
+            Row(
+              children: [
+                FilledButton.icon(
+                  onPressed: _onDownloadQr,
+                  icon: const Icon(Icons.download),
+                  label: const Text('Descargar código QR'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton.icon(
+                  onPressed: () => _onCopyToClipboard(context),
+                  icon: const Icon(Icons.copy),
+                  label: const Text('Copiar codigo al portapapeles'),
+                ),
+              ],
             ),
           ],
         ),
@@ -71,17 +83,22 @@ class DownloadRestaurantQR extends ConsumerWidget {
     );
   }
 
+  void _onCopyToClipboard(BuildContext context) async {
+    await Clipboard.setData(ClipboardData(text: qrData));
+    if (context.mounted) CustomSnackbar.showSnackBar(context, 'Código QR copiado al portapapeles');
+  }
+
   void _onDownloadQr() async {
     final imgBytes = await WidgetToImg.capturePng(_qrKey);
     if (kIsWeb) {
       final stream = Stream.fromIterable(imgBytes);
-      await download(stream, 'qr.png');
+      await download(stream, '${restaurantName}_qr.png');
       return;
     }
     Share.shareXFiles(
       [XFile.fromData(imgBytes)],
-      // text: 'Codigo QR de la mesa ${widget.id}',
-      // subject: 'Codigo QR de la mesa ${widget.id}',
+      text: '$restaurantName codigo QR de la mesa $qrData',
+      subject: '$restaurantName codigo QR de la mesa $qrData',
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:download/download.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/restaurant/provider/restaurant_provider.dart';
 import 'package:oyt_admin/features/tables/provider/table_provider.dart';
@@ -16,6 +17,7 @@ import 'package:oyt_front_widgets/loading/loading_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/title/section_title.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
+import 'package:oyt_front_widgets/widgets/snackbar/custom_snackbar.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:oyt_front_widgets/dialogs/confirm_action_dialog.dart';
 import 'package:share_plus/share_plus.dart';
@@ -118,12 +120,18 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                   onInitial: () => const LoadingWidget(),
                 ),
                 const SizedBox(height: 10),
-                OutlinedButton.icon(
+                FilledButton.icon(
                   onPressed: _onDownloadQr,
                   icon: const Icon(Icons.download),
                   label: const Text('Descargar codigo QR'),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 5),
+                ElevatedButton.icon(
+                  onPressed: _onCopyToClipboard,
+                  icon: const Icon(Icons.download),
+                  label: const Text('Copiar codigo al portapapeles'),
+                ),
+                const Divider(),
                 FilledButton.icon(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(CustomTheme.redColor),
@@ -193,6 +201,11 @@ class _TableScreenState extends ConsumerState<TableScreen> {
         ),
       ),
     );
+  }
+
+  void _onCopyToClipboard() async {
+    await Clipboard.setData(ClipboardData(text: UrlBuilder.dinnerWithTableId(widget.table.id)));
+    if (context.mounted) CustomSnackbar.showSnackBar(context, 'Código QR copiado al portapapeles');
   }
 
   void onChangeStatus() => ChangeTableStatusSheet.show(
