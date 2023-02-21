@@ -14,7 +14,7 @@ class Waiter extends BaseRestaurantEntity {
 
   factory Waiter.fromMap(Map<String, dynamic> map) {
     return Waiter(
-      id: map['_id'] as int,
+      id: map['_id'] as String,
       firstName: map['user']['firstName'] as String,
       lastName: map['user']['lastName'] as String,
       email: map['user']['email'] as String,

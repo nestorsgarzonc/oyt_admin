@@ -14,7 +14,7 @@ class Chef extends BaseRestaurantEntity {
 
   factory Chef.fromMap(Map<String, dynamic> map) {
     return Chef(
-      id: map['_id'] as int,
+      id: map['_id'] as String,
       firstName: map['user']['firstName'] as String,
       lastName: map['user']['lastName'] as String,
       email: map['user']['email'] as String,
