@@ -23,21 +23,23 @@ class HistoricalOrdersProvider extends StateNotifier<HistoricalOrdersState> {
   final Ref ref;
   final HistoricalOrdersRepository historicalOrdersRepository;
 
-  Future<void> getHistoricalOrders({HistoricalOrdersFilter? historicalOrdersFilter}) async {
+  Future<void> getHistoricalOrders({HistoricalOrdersFilter? historicalOrdersFilter, required int pageIndex}) async {
+    if (!state.isThereNextPage) return;
     state = state.copyWith(historicalOrders: StateAsync.loading());
-    final result = await historicalOrdersRepository.getHistoricalOrders(historicalOrdersFilter);
+    final result = await historicalOrdersRepository.getHistoricalOrders(historicalOrdersFilter, pageIndex);
     result.fold(
       (failure) => state = state.copyWith(historicalOrders: StateAsync.error(failure)),
-      (historicalOrders) {
-        state = state.copyWith(historicalOrders: StateAsync.success(historicalOrders));
+      (newHistoricalOrders) {
+        state = state.copyWith(historicalOrders: StateAsync.success(newHistoricalOrders), isThereNextPage: newHistoricalOrders.isThereNextPage);
       },
     );
   }
 
-  Future<void> getMoreHistoricalOrders({HistoricalOrdersFilter? historicalOrdersFilter}) async {
-    if (state.isFetchingMore || state.isThereNextPage) return;
+  Future<void> getMoreHistoricalOrders({HistoricalOrdersFilter? historicalOrdersFilter, required int pageIndex}) async {
+    if (state.isFetchingMore || !state.isThereNextPage) return;
+    state.copyWith(isFetchingMore: true);
     state = state.copyWith(isFetchingMore: true);
-    final result = await historicalOrdersRepository.getHistoricalOrders(historicalOrdersFilter);
+    final result = await historicalOrdersRepository.getHistoricalOrders(historicalOrdersFilter, pageIndex);
     result.fold(
       (failure) => state = state.copyWith(historicalOrders: StateAsync.error(failure)),
       (newHistoricalOrders) {
@@ -46,6 +48,7 @@ class HistoricalOrdersProvider extends StateNotifier<HistoricalOrdersState> {
           historicalOrders: StateAsync.success(
             prevState.data?.addMore(newHistoricalOrders) ?? newHistoricalOrders,
           ),
+          isThereNextPage: newHistoricalOrders.isThereNextPage,
         );
       },
     );

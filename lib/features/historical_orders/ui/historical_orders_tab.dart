@@ -4,6 +4,8 @@ import 'package:oyt_admin/features/historical_orders/filter/historical_order_fil
 import 'package:oyt_admin/features/historical_orders/ui/modals/filter_historical_orders_modal.dart';
 import 'package:oyt_admin/features/historical_orders/provider/historical_orders_provider.dart';
 import 'package:oyt_admin/features/historical_orders/ui/filters_chips.dart';
+import 'package:oyt_front_core/constants/lotti_assets.dart';
+import 'package:lottie/lottie.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
@@ -18,13 +20,15 @@ class HistoricalOrdersTab extends ConsumerStatefulWidget {
 class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
   final _scrollController = ScrollController();
   bool hasReachedFinal = false;
+  int pageIndex = 1;
   
   HistoricalOrdersFilter? historicalOrdersFilter;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(historicalOrdersProvider.notifier).getHistoricalOrders(historicalOrdersFilter: historicalOrdersFilter);
+      ref.read(historicalOrdersProvider.notifier).getHistoricalOrders(historicalOrdersFilter: historicalOrdersFilter, pageIndex: pageIndex);
+      pageIndex++;
     });
     _scrollController.addListener(scrollListener);
     super.initState();
@@ -38,7 +42,8 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
 
   void scrollListener() {
     if (_scrollController.position.maxScrollExtent - 100 < _scrollController.position.pixels) {
-      ref.read(historicalOrdersProvider.notifier).getHistoricalOrders();
+      ref.read(historicalOrdersProvider.notifier).getMoreHistoricalOrders(pageIndex: pageIndex);
+      pageIndex++;
     }
   }
 
@@ -62,7 +67,7 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
             onError: (err) => Center(child: Text(err.message)),
             onInitial: () => const ScreenLoadingWidget(),
             onLoading: () => const ScreenLoadingWidget(),
-            onData: (data) => Scrollbar(
+            onData: (data) => data.orders.isNotEmpty ? Scrollbar(
               controller: _scrollController,
               child: ListView.builder(
                 controller: _scrollController,
@@ -71,7 +76,7 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
                   child: ListTile(
                     onTap: () {},
                     title: Text('Orden $i'),
-                    subtitle: Text('Fecha: ${data.orders[i].creationDate}'),
+                    subtitle: Text('Fecha: ${data.orders[i].createdAt}'),
                     trailing: Text(
                       '\$${data.orders[i].totalPrice}',
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -79,6 +84,27 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
                   ),
                 ),
               ),
+            )
+            :  ListView(
+              padding: const EdgeInsets.all(10),
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  height: 250,
+                  width: 250,
+                  child: Lottie.asset(
+              LottieAssets.notFound,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                const Text(
+                  'No orders found',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

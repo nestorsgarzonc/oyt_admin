@@ -9,7 +9,7 @@ final historicalOrdersDataSourceProvider = Provider<HistoricalOrdersDataSource>(
 });
 
 abstract class HistoricalOrdersDataSource {
-  Future<HistoricalOrders> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter);
+  Future<HistoricalOrders> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter, int pageIndex);
 }
 
 class HistoricalOrdersDataSourceImpl implements HistoricalOrdersDataSource {
@@ -22,11 +22,11 @@ class HistoricalOrdersDataSourceImpl implements HistoricalOrdersDataSource {
   final ApiHandler apiHandler;
 
   @override
-  Future<HistoricalOrders> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter) async {
+  Future<HistoricalOrders> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter, int pageIndex) async {
     final Map<String, dynamic> dataForFilter = historicalOrdersFilter == null ? {} : historicalOrdersFilter.toMap();
     try {
       final res = await apiHandler.post(
-        'order/order-history',
+        '/order/order-history/$pageIndex',
          dataForFilter,
       );
       return HistoricalOrders.fromMap(res.responseMap!);

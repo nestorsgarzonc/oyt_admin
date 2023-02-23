@@ -21,7 +21,7 @@ class HistoricalOrdersState extends Equatable {
   final bool isThereNextPage;
 
   @override
-  List<Object?> get props => [historicalOrders, historicalOrdersFilter, isFetchingMore];
+  List<Object?> get props => [historicalOrders, historicalOrdersFilter, isFetchingMore, isThereNextPage];
 
   HistoricalOrdersState copyWith({
     StateAsync<HistoricalOrders>? historicalOrders,

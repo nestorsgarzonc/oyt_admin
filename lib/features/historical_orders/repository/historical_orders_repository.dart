@@ -10,7 +10,7 @@ final historicalOrdersRepositoryProvider = Provider<HistoricalOrdersRepository>(
 });
 
 abstract class HistoricalOrdersRepository {
-  Future<Either<Failure, HistoricalOrders>> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter);
+  Future<Either<Failure, HistoricalOrders>> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter, int pageIndex);
 }
 
 class HistoricalOrdersRepositoryImpl implements HistoricalOrdersRepository {
@@ -23,9 +23,9 @@ class HistoricalOrdersRepositoryImpl implements HistoricalOrdersRepository {
   final HistoricalOrdersDataSource dataSource;
 
    @override
-  Future<Either<Failure, HistoricalOrders>> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter) async {
+  Future<Either<Failure, HistoricalOrders>> getHistoricalOrders(HistoricalOrdersFilter? historicalOrdersFilter, int pageIndex) async {
     try {
-      final historricalOrders = await dataSource.getHistoricalOrders(historicalOrdersFilter);
+      final historricalOrders = await dataSource.getHistoricalOrders(historicalOrdersFilter, pageIndex);
       return Right(historricalOrders);
     } catch (e) {
       return Left(Failure(e.toString()));

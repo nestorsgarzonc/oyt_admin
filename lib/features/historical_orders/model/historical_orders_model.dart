@@ -1,25 +1,23 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:oyt_admin/features/historical_orders/model/historical_order_response.dart';
 import 'package:oyt_front_order/models/orders_model.dart';
 
 class HistoricalOrders extends Equatable {
-
   const HistoricalOrders({required this.orders, required this.isThereNextPage});
 
   factory HistoricalOrders.fromList(List list) {
     return HistoricalOrders(
-      orders: List<Order>.from(list.map((x) => Order.fromMap(x))),
+      orders: List<HistoricalOrdersResponse>.from(list.map((x) => Order.fromMap(x))),
       isThereNextPage: true,
     );
   }
 
-
   factory HistoricalOrders.fromMap(Map<String, dynamic> rawMap) {
-    final Map map = rawMap['historicalOrders'];
     return HistoricalOrders(
-      orders: List<Order>.from(map['orders']),
-      isThereNextPage: bool.fromEnvironment(map['nextPage']),
+      orders: List<HistoricalOrdersResponse>.from((rawMap['orderPaged'] as List).map((e) => HistoricalOrdersResponse.fromMap(e))),
+      isThereNextPage: (rawMap['nextPage'] as bool),
     );
   }
 
@@ -29,11 +27,11 @@ class HistoricalOrders extends Equatable {
     );
   }
 
-  final List<Order> orders;
+  final List<HistoricalOrdersResponse> orders;
   final bool isThereNextPage;
 
   HistoricalOrders copyWith({
-    List<Order>? orders,
+    List<HistoricalOrdersResponse>? orders,
     bool? isThereNextPage,
   }) {
     return HistoricalOrders(
@@ -45,7 +43,7 @@ class HistoricalOrders extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'orders': orders.map((x) => x.toMap()).toList(),
-      'nextPage': isThereNextPage
+      'nextPage': isThereNextPage,
     };
   }
 
