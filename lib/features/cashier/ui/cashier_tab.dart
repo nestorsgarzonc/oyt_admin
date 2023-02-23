@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/cashier/provider/cashier_provider.dart';
 import 'package:oyt_admin/features/cashier/ui/dialogs/add_cashier_dialog.dart';
+import 'package:oyt_front_restaurant/models/base_restaurant_entity.dart';
 import 'package:oyt_front_widgets/error/not_found_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
-import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
@@ -19,6 +19,7 @@ class CashierTab extends ConsumerStatefulWidget {
 class _CashierTabState extends ConsumerState<CashierTab> {
   final _scrollController = ScrollController();
   final _textEditingController = TextEditingController();
+  String filter = '';
 
   @override
   void dispose() {
@@ -28,7 +29,8 @@ class _CashierTabState extends ConsumerState<CashierTab> {
   }
 
   void _onSearchWaiter(String query) {
-    Logger.log('Searching waiter: $query');
+    filter = query.toLowerCase();
+    if (mounted) setState(() {});
   }
 
   @override
@@ -54,7 +56,7 @@ class _CashierTabState extends ConsumerState<CashierTab> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
             ),
-            AddButton(onTap: _onAddWaiter, text: 'Agregar cajero'),
+            AddButton(onTap: _onAddCashier, text: 'Agregar cajero'),
           ],
         ),
         const Divider(),
@@ -68,30 +70,35 @@ class _CashierTabState extends ConsumerState<CashierTab> {
               });
               return const ScreenLoadingWidget();
             },
-            onData: (cashiers) => cashiers.isEmpty
-                ? const NotFoundWidget(title: 'No se encontraron chefs')
-                : Scrollbar(
-                    controller: _scrollController,
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: cashiers.length,
-                      itemBuilder: (context, i) => Card(
-                        child: ListTile(
-                          onTap: () => _onTapWaiter(),
-                          subtitle: Text('Correo: ${cashiers[i].email}'),
-                          title: Text('Cajero: ${cashiers[i].firstName} ${cashiers[i].lastName}'),
-                          trailing: const Icon(Icons.chevron_right),
-                        ),
-                      ),
+            onData: (cashiers) {
+              final filteredCashiers = cashiers.where((cashier) => cashier.filter(filter)).toList();
+              if (filteredCashiers.isEmpty) {
+                return const NotFoundWidget(title: 'No se encontraron cajeros');
+              }
+              return Scrollbar(
+                controller: _scrollController,
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: filteredCashiers.length,
+                  itemBuilder: (context, i) => Card(
+                    child: ListTile(
+                      onTap: () => _onTapWaiter(),
+                      subtitle: Text('Correo: ${filteredCashiers[i].email}'),
+                      title:
+                          Text('Cajero: ${filteredCashiers[i].firstName} ${cashiers[i].lastName}'),
+                      trailing: const Icon(Icons.chevron_right),
                     ),
                   ),
+                ),
+              );
+            },
           ),
         ),
       ],
     );
   }
 
-  void _onAddWaiter() => AddCashierDialog.show(context: context);
+  void _onAddCashier() => AddCashierDialog.show(context: context);
 
   void _onTapWaiter() {}
 }

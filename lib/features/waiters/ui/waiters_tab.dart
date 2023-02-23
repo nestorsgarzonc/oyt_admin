@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:oyt_admin/features/waiters/models/waiter_model.dart';
 import 'package:oyt_admin/features/waiters/provider/waiter_provider.dart';
 import 'package:oyt_front_widgets/error/not_found_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
 import 'package:oyt_admin/features/waiters/ui/dialogs/add_waiter_dialog.dart';
-import 'package:oyt_front_core/logger/logger.dart';
 import 'package:oyt_front_widgets/buttons/add_button.dart';
 import 'package:oyt_front_widgets/widgets/custom_text_field.dart';
 
@@ -19,6 +19,7 @@ class WaitersTab extends ConsumerStatefulWidget {
 class _WaitersTabState extends ConsumerState<WaitersTab> {
   final _scrollController = ScrollController();
   final _textEditingController = TextEditingController();
+  String filter = '';
 
   @override
   void dispose() {
@@ -28,7 +29,8 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
   }
 
   void _onSearchWaiter(String query) {
-    Logger.log('Searching waiter: $query');
+    filter = query;
+    if (mounted) setState(() {});
   }
 
   @override
@@ -68,23 +70,29 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
               });
               return const ScreenLoadingWidget();
             },
-            onData: (waiters) => waiters.isEmpty
-                ? const NotFoundWidget(title: 'No se encontraron chefs')
-                : Scrollbar(
-                    controller: _scrollController,
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: waiters.length,
-                      itemBuilder: (context, i) => Card(
-                        child: ListTile(
-                          onTap: () => _onTapWaiter(),
-                          subtitle: Text('Correo: ${waiters[i].email}'),
-                          title: Text('Mesero ${waiters[i].firstName} ${waiters[i].lastName}'),
-                          trailing: const Icon(Icons.chevron_right),
-                        ),
+            onData: (waiters) {
+              final filteredWaiters = waiters.where((waiter) => waiter.filter(filter)).toList();
+              if (filteredWaiters.isEmpty) {
+                return const NotFoundWidget(title: 'No se encontraron meseros');
+              }
+              return Scrollbar(
+                controller: _scrollController,
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: filteredWaiters.length,
+                  itemBuilder: (context, i) => Card(
+                    child: ListTile(
+                      onTap: () => _onTapWaiter(),
+                      subtitle: Text('Correo: ${filteredWaiters[i].email}'),
+                      title: Text(
+                        'Mesero ${filteredWaiters[i].firstName} ${filteredWaiters[i].lastName}',
                       ),
+                      trailing: const Icon(Icons.chevron_right),
                     ),
                   ),
+                ),
+              );
+            },
           ),
         ),
       ],
