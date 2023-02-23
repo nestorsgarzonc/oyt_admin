@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/chef/models/chef_model.dart';
 import 'package:oyt_admin/features/chef/provider/chef_provider.dart';
 import 'package:oyt_admin/features/chef/ui/dialogs/add_chef_dialog.dart';
+import 'package:oyt_admin/features/chef/ui/dialogs/chef_detail_dialog.dart';
 import 'package:oyt_front_widgets/error/not_found_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
@@ -82,7 +83,7 @@ class _CashierTabState extends ConsumerState<ChefTab> {
                   itemCount: filteredChefs.length,
                   itemBuilder: (context, i) => Card(
                     child: ListTile(
-                      onTap: () => _onTapChef(),
+                      onTap: () => _onTapChef(filteredChefs[i]),
                       subtitle: Text('Correo: ${filteredChefs[i].email}'),
                       title:
                           Text('Chef ${filteredChefs[i].firstName} ${filteredChefs[i].lastName}'),
@@ -100,5 +101,5 @@ class _CashierTabState extends ConsumerState<ChefTab> {
 
   void _onAddChef() => AddChefDialog.show(context: context);
 
-  void _onTapChef() {}
+  void _onTapChef(Chef chef) => ChefDetailDialog.show(context: context, chef: chef);
 }

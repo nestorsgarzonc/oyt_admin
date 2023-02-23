@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/waiters/models/waiter_model.dart';
 import 'package:oyt_admin/features/waiters/provider/waiter_provider.dart';
+import 'package:oyt_admin/features/waiters/ui/dialogs/waiter_detail_dialog.dart';
 import 'package:oyt_front_widgets/error/not_found_widget.dart';
 import 'package:oyt_front_widgets/loading/screen_loading_widget.dart';
 import 'package:oyt_front_widgets/tabs/tab_header.dart';
@@ -82,7 +83,7 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
                   itemCount: filteredWaiters.length,
                   itemBuilder: (context, i) => Card(
                     child: ListTile(
-                      onTap: () => _onTapWaiter(),
+                      onTap: () => _onTapWaiter(filteredWaiters[i]),
                       subtitle: Text('Correo: ${filteredWaiters[i].email}'),
                       title: Text(
                         'Mesero ${filteredWaiters[i].firstName} ${filteredWaiters[i].lastName}',
@@ -101,5 +102,5 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
 
   void _onAddWaiter() => AddWaiterDialog.show(context: context);
 
-  void _onTapWaiter() {}
+  void _onTapWaiter(Waiter waiter) => WaiterDetailDialog.show(context: context, waiter: waiter);
 }

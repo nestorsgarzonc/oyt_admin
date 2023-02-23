@@ -1,5 +1,6 @@
 import 'package:oyt_admin/core/router/router.dart';
 import 'package:oyt_admin/features/waiters/models/waiter_dto.dart';
+import 'package:oyt_admin/features/waiters/models/waiter_model.dart';
 import 'package:oyt_admin/features/waiters/provider/waiter_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/waiters/repository/waiter_repository.dart';
@@ -35,6 +36,16 @@ class WaiterNotifier extends StateNotifier<WaiterState> {
   Future<void> createWaiter({required WaiterDto waiter}) async {
     ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, 'Creando mesero');
     final res = await waiterRepository.addWaiter(waiter);
+    getWaiters(silence: true);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    if (res != null) {
+      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, res.message);
+    }
+  }
+
+  Future<void> updateWaiter({required Waiter waiter}) async{
+    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, 'Actualizando  mesero');
+    final res = await waiterRepository.updateWaiter(waiter);
     getWaiters(silence: true);
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
     if (res != null) {

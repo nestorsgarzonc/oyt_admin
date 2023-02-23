@@ -10,6 +10,7 @@ final waiterRepositoryProvider = Provider<WaiterRepository>(WaiterRepositoryImpl
 abstract class WaiterRepository {
   Future<Either<Failure, List<Waiter>>> getWaiters();
   Future<Failure?> addWaiter(WaiterDto waiter);
+  Future<Failure?> updateWaiter(Waiter waiter);
 }
 
 class WaiterRepositoryImpl implements WaiterRepository {
@@ -36,6 +37,16 @@ class WaiterRepositoryImpl implements WaiterRepository {
   Future<Failure?> addWaiter(WaiterDto waiter) async {
     try {
       await waiterDataSource.addWaiter(waiter);
+      return null;
+    } catch (e) {
+      return Failure(e.toString());
+    }
+  }
+  
+  @override
+  Future<Failure?> updateWaiter(Waiter waiter) async{
+    try {
+      await waiterDataSource.updateWaiter(waiter);
       return null;
     } catch (e) {
       return Failure(e.toString());

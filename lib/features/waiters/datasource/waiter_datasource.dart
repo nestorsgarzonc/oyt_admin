@@ -9,6 +9,7 @@ final waiterDatasourceProvider = Provider<WaiterDataSource>(WaiterDataSourceImpl
 abstract class WaiterDataSource {
   Future<List<Waiter>> getWaiters();
   Future<void> addWaiter(WaiterDto waiter);
+  Future<void> updateWaiter(Waiter waiter);
 }
 
 class WaiterDataSourceImpl implements WaiterDataSource {
@@ -36,6 +37,18 @@ class WaiterDataSourceImpl implements WaiterDataSource {
     try {
       final res = await apiHandler.get('/waiter');
       return res.responseList!.map((e) => Waiter.fromMap(e)).toList();
+    } catch (e, s) {
+      Logger.logError(e.toString(), s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateWaiter(Waiter waiter) async {
+    try {
+      await apiHandler.put('/waiter/${waiter.id}', {
+        'isAvailable': waiter.isAvailable,
+      });
     } catch (e, s) {
       Logger.logError(e.toString(), s);
       rethrow;
