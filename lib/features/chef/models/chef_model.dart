@@ -24,4 +24,27 @@ class Chef extends BaseRestaurantEntity {
       updatedAt: DateTime.parse(map['updatedAt']),
     );
   }
+
+  @override
+    Chef copyWith({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? email,
+    bool? isAvailable,
+    String? restaurantId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return Chef(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      isAvailable: isAvailable ?? this.isAvailable,
+      restaurantId: restaurantId ?? this.restaurantId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }

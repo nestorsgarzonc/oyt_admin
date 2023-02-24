@@ -43,13 +43,16 @@ class WaiterNotifier extends StateNotifier<WaiterState> {
     }
   }
 
-  Future<void> updateWaiter({required Waiter waiter}) async{
-    ref.read(dialogsProvider).showLoadingDialog(ref.read(routerProvider).context, 'Actualizando  mesero');
+  Future<void> updateWaiter({required Waiter waiter}) async {
+    ref
+        .read(dialogsProvider)
+        .showLoadingDialog(ref.read(routerProvider).context, 'Actualizando  mesero');
     final res = await waiterRepository.updateWaiter(waiter);
     getWaiters(silence: true);
     ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
     if (res != null) {
       CustomSnackbar.showSnackBar(ref.read(routerProvider).context, res.message);
     }
+    CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Mesero actualizado');
   }
 }

@@ -1,6 +1,7 @@
 import 'package:oyt_admin/core/router/router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oyt_admin/features/cashier/models/cashier_dto.dart';
+import 'package:oyt_admin/features/cashier/models/cashier_model.dart';
 import 'package:oyt_admin/features/cashier/provider/cashier_state.dart';
 import 'package:oyt_admin/features/cashier/repository/waiter_repository.dart';
 import 'package:oyt_front_core/wrappers/state_wrapper.dart';
@@ -40,5 +41,18 @@ class CashierNotifier extends StateNotifier<CashierState> {
     if (res != null) {
       CustomSnackbar.showSnackBar(ref.read(routerProvider).context, res.message);
     }
+  }
+
+  Future<void> updateCashier({required Cashier cashier}) async {
+    ref
+        .read(dialogsProvider)
+        .showLoadingDialog(ref.read(routerProvider).context, 'Actualizando cajero');
+    final res = await cashierRepository.updateCashier(cashier);
+    getCashiers(silence: true);
+    ref.read(dialogsProvider).removeDialog(ref.read(routerProvider).context);
+    if (res != null) {
+      CustomSnackbar.showSnackBar(ref.read(routerProvider).context, res.message);
+    }
+    CustomSnackbar.showSnackBar(ref.read(routerProvider).context, 'Cajero actualizado');
   }
 }

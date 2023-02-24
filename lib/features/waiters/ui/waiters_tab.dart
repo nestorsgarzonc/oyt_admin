@@ -83,11 +83,20 @@ class _WaitersTabState extends ConsumerState<WaitersTab> {
                   itemCount: filteredWaiters.length,
                   itemBuilder: (context, i) => Card(
                     child: ListTile(
+                      leading: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: filteredWaiters[i].isAvailable
+                              ? Colors.greenAccent
+                              : Colors.redAccent,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      minLeadingWidth: 35,
                       onTap: () => _onTapWaiter(filteredWaiters[i]),
                       subtitle: Text('Correo: ${filteredWaiters[i].email}'),
-                      title: Text(
-                        'Mesero ${filteredWaiters[i].firstName} ${filteredWaiters[i].lastName}',
-                      ),
+                      title: Text('${filteredWaiters[i].firstName} ${filteredWaiters[i].lastName}'),
                       trailing: const Icon(Icons.chevron_right),
                     ),
                   ),

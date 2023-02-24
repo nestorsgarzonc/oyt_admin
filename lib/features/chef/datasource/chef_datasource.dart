@@ -9,6 +9,7 @@ final chefDatasourceProvider = Provider<ChefDataSource>(ChefDataSourceImpl.fromR
 abstract class ChefDataSource {
   Future<List<Chef>> getChefs();
   Future<void> addChef(ChefDto chef);
+  Future<void> updateChef(Chef chef);
 }
 
 class ChefDataSourceImpl implements ChefDataSource {
@@ -36,6 +37,18 @@ class ChefDataSourceImpl implements ChefDataSource {
     try {
       final res = await apiHandler.get('/chef');
       return res.responseList!.map((e) => Chef.fromMap(e)).toList();
+    } catch (e, s) {
+      Logger.logError(e.toString(), s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateChef(Chef chef) async {
+    try {
+      await apiHandler.put('/chef/${chef.id}', {
+        'isAvailable': chef.isAvailable,
+      });
     } catch (e, s) {
       Logger.logError(e.toString(), s);
       rethrow;

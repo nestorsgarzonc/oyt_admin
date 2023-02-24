@@ -10,6 +10,7 @@ final chefRepositoryProvider = Provider<ChefRepository>(ChefRepositoryImpl.fromR
 abstract class ChefRepository {
   Future<Either<Failure, List<Chef>>> getChefs();
   Future<Failure?> addChef(ChefDto chef);
+  Future<Failure?> updateChef(Chef waiter);
 }
 
 class ChefRepositoryImpl implements ChefRepository {
@@ -36,6 +37,16 @@ class ChefRepositoryImpl implements ChefRepository {
   Future<Failure?> addChef(ChefDto chef) async {
     try {
       await chefDataSource.addChef(chef);
+      return null;
+    } catch (e) {
+      return Failure(e.toString());
+    }
+  }
+
+  @override
+  Future<Failure?> updateChef(Chef chef) async {
+    try {
+      await chefDataSource.updateChef(chef);
       return null;
     } catch (e) {
       return Failure(e.toString());

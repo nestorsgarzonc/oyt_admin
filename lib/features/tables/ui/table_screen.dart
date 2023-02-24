@@ -10,6 +10,7 @@ import 'package:oyt_front_core/url/url_builder.dart';
 import 'package:oyt_front_core/utils/widget_to_img.dart';
 import 'package:oyt_front_table/modals/change_table_status_sheet.dart';
 import 'package:oyt_front_table/models/tables_socket_response.dart';
+import 'package:oyt_front_table/models/users_table.dart';
 import 'package:oyt_front_table/widgets/table_status_card.dart';
 import 'package:oyt_front_table/widgets/table_user_card.dart';
 import 'package:oyt_front_widgets/drawer/drawer_layout.dart';
@@ -177,7 +178,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                   ),
                 ),
                 FilledButton(
-                  onPressed: onChangeStatus,
+                  onPressed: () => onChangeStatus(data),
                   child: const Text('Cambiar estado de la mesa'),
                 ),
                 data.needsWaiter
@@ -208,9 +209,10 @@ class _TableScreenState extends ConsumerState<TableScreen> {
     if (context.mounted) CustomSnackbar.showSnackBar(context, 'Código QR copiado al portapapeles');
   }
 
-  void onChangeStatus() => ChangeTableStatusSheet.show(
+  void onChangeStatus(UsersTable data) => ChangeTableStatusSheet.show(
         context: context,
         table: widget.table,
+        usersTable: data,
         onTableStatusChanged: (status) =>
             ref.read(tableProvider.notifier).changeStatus(status, widget.table),
       );

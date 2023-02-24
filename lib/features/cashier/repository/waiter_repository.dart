@@ -10,6 +10,7 @@ final cashierRepositoryProvider = Provider<CashierRepository>(CashierRepositoryI
 abstract class CashierRepository {
   Future<Either<Failure, List<Cashier>>> getCashiers();
   Future<Failure?> addCashier(CashierDto cashier);
+  Future<Failure?> updateCashier(Cashier cashier);
 }
 
 class CashierRepositoryImpl implements CashierRepository {
@@ -36,6 +37,16 @@ class CashierRepositoryImpl implements CashierRepository {
   Future<Failure?> addCashier(CashierDto cashier) async {
     try {
       await cashierDataSource.addCashier(cashier);
+      return null;
+    } catch (e) {
+      return Failure(e.toString());
+    }
+  }
+  
+  @override
+  Future<Failure?> updateCashier(Cashier cashier) async{
+    try {
+      await cashierDataSource.updateCashier(cashier);
       return null;
     } catch (e) {
       return Failure(e.toString());

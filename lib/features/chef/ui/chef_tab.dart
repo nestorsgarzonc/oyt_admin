@@ -83,10 +83,19 @@ class _CashierTabState extends ConsumerState<ChefTab> {
                   itemCount: filteredChefs.length,
                   itemBuilder: (context, i) => Card(
                     child: ListTile(
+                      leading: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color:
+                              filteredChefs[i].isAvailable ? Colors.greenAccent : Colors.redAccent,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      minLeadingWidth: 35,
                       onTap: () => _onTapChef(filteredChefs[i]),
                       subtitle: Text('Correo: ${filteredChefs[i].email}'),
-                      title:
-                          Text('Chef ${filteredChefs[i].firstName} ${filteredChefs[i].lastName}'),
+                      title: Text('${filteredChefs[i].firstName} ${filteredChefs[i].lastName}'),
                       trailing: const Icon(Icons.chevron_right),
                     ),
                   ),

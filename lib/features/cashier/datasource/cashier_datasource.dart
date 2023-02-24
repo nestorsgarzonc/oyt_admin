@@ -9,6 +9,7 @@ final cashierDatasourceProvider = Provider<CashierDataSource>(CashierDataSourceI
 abstract class CashierDataSource {
   Future<List<Cashier>> getCashiers();
   Future<void> addCashier(CashierDto cashier);
+  Future<void> updateCashier(Cashier cashier);
 }
 
 class CashierDataSourceImpl implements CashierDataSource {
@@ -36,6 +37,18 @@ class CashierDataSourceImpl implements CashierDataSource {
     try {
       final res = await apiHandler.get('/cashier');
       return res.responseList!.map((e) => Cashier.fromMap(e)).toList();
+    } catch (e, s) {
+      Logger.logError(e.toString(), s);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateCashier(Cashier cashier) async {
+    try {
+      await apiHandler.put('/cashier/${cashier.id}', {
+        'isAvailable': cashier.isAvailable,
+      });
     } catch (e, s) {
       Logger.logError(e.toString(), s);
       rethrow;

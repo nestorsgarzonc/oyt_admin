@@ -48,7 +48,9 @@ class _WaiterDetailDialogState extends ConsumerState<WaiterDetailDialog> {
               TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
               TextButton(onPressed: _onEdit, child: const Text('Editar')),
             ]
-          : null,
+          : [
+              TextButton(onPressed: Navigator.of(context).pop, child: const Text('Salir')),
+            ],
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -66,6 +68,12 @@ class _WaiterDetailDialogState extends ConsumerState<WaiterDetailDialog> {
             enabled: false,
             controller: TextEditingController(text: widget.waiter.email),
             label: 'Correo electrónico',
+          ),
+          const SectionTitle(title: 'Fecha de creación'),
+          CustomTextField(
+            enabled: false,
+            controller: TextEditingController(text: widget.waiter.createdAt.toString()),
+            label: 'Fecha de creación',
           ),
           const SectionTitle(title: 'Esta activo'),
           Card(
