@@ -115,7 +115,7 @@ class TableProvider extends StateNotifier<TableState> {
   void joinToTable(TableResponse table) {
     state = state.copyWith(tableUsers: StateAsync.loading());
     socketIOHandler.onMap(SocketConstants.listOfOrders, (data) {
-      if ((data['table'] as Map).isEmpty) {
+      if (data['table'] == null || data['table'] is! Map || (data['table'] as Map).isEmpty) {
         state = state.copyWith(
           tableUsers: StateAsync.error(const Failure('No hay usuarios en la mesa')),
         );
