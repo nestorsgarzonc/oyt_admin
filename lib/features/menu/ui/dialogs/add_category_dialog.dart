@@ -160,7 +160,7 @@ class _AddCategoryDialog extends ConsumerState<AddCategoryDialog> {
               img: _imgBytes?.toBase64,
               name: _nameController.text,
               description: _descriptionController.text,
-              isAvaliable: _isAvaliable,
+              isAvailable: _isAvaliable,
             ),
           );
     } else {
