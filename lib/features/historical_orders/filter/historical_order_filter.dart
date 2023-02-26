@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class HistoricalOrdersFilter extends Equatable {
@@ -10,12 +12,14 @@ class HistoricalOrdersFilter extends Equatable {
   
   Map<String, dynamic> toMap() {
     return {
-      'fechaInicio': dateStart,
-      'fechaFin':dateEnd,
+      'fechaInicio': dateStart?.toString(),
+      'fechaFin': dateEnd?.toString(),
       'valorOrden':orderPrice,
       'paymentMethod':paymentMethod,
     };
   }
+
+  String toJson() => json.encode(toMap());
 
   @override
   List<Object?> get props => [dateStart, dateEnd, orderPrice, paymentMethod];

@@ -21,18 +21,20 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
   final _scrollController = ScrollController();
   bool hasReachedFinal = false;
   int pageIndex = 1;
-  
+
   HistoricalOrdersFilter? historicalOrdersFilter;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(historicalOrdersProvider.notifier).getHistoricalOrders(historicalOrdersFilter: historicalOrdersFilter, pageIndex: pageIndex);
+      ref.read(historicalOrdersProvider.notifier).getHistoricalOrders(
+          historicalOrdersFilter: historicalOrdersFilter, pageIndex: pageIndex);
       pageIndex++;
     });
     _scrollController.addListener(scrollListener);
     super.initState();
   }
+
   @override
   void dispose() {
     _scrollController.removeListener(scrollListener);
@@ -64,48 +66,72 @@ class _HistoricalOrdersTab extends ConsumerState<HistoricalOrdersTab> {
         ),
         Expanded(
           child: historicalOrdersState.historicalOrders.on(
-            onError: (err) => Center(child: Text(err.message)),
+            onError: (err) => err.message != 'No orders found'
+                ? Center(child: Text(err.message))
+                : Center(
+                  child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          height: 250,
+                          width: 250,
+                          child: Lottie.asset(
+                            LottieAssets.notFound,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        const Text(
+                          'No se han encontrado órdenes',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                ),
             onInitial: () => const ScreenLoadingWidget(),
             onLoading: () => const ScreenLoadingWidget(),
-            onData: (data) => data.orders.isNotEmpty ? Scrollbar(
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: data.orders.length,
-                itemBuilder: (context, i) => Card(
-                  child: ListTile(
-                    onTap: () {},
-                    title: Text('Orden $i'),
-                    subtitle: Text('Fecha: ${data.orders[i].createdAt}'),
-                    trailing: Text(
-                      '\$${data.orders[i].totalPrice}',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            onData: (data) => data.orders.isNotEmpty
+                ? Scrollbar(
+                    controller: _scrollController,
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: data.orders.length,
+                      itemBuilder: (context, i) => Card(
+                        child: ListTile(
+                          onTap: () {},
+                          title: Text('Orden $i'),
+                          subtitle: Text('Fecha: ${data.orders[i].createdAt}'),
+                          trailing: Text(
+                            '\$${data.orders[i].totalPrice}',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
                     ),
+                  )
+                : ListView(
+                    padding: const EdgeInsets.all(10),
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        height: 250,
+                        width: 250,
+                        child: Lottie.asset(
+                          LottieAssets.notFound,
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      const Text(
+                        'No se han encontrado órdenes',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-            )
-            :  ListView(
-              padding: const EdgeInsets.all(10),
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  height: 250,
-                  width: 250,
-                  child: Lottie.asset(
-              LottieAssets.notFound,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                const Text(
-                  'No orders found',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18.0,
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ],

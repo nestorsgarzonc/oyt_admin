@@ -46,7 +46,7 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
       title: const DialogHeader(title: 'Filtra las ordenes'),
       actions: [
         TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
-        TextButton(onPressed: () => _onConfirm(historicalOrdersState.historicalOrdersFilter), child: const Text('Filtrar')),
+        TextButton(onPressed: () => _onConfirm(), child: const Text('Filtrar')),
       ],
       content: Form(
         key: _formKey,
@@ -70,9 +70,9 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
               controller: _valueController,
               validator: TextFormValidator.orderPriceValidator,
               label: 'Valor de la orden',
-              onTap: () {
+              onChanged: (value) {
                 if(_valueController.text.isNotEmpty) {
-                  historicalOrdersFilter?.orderPrice = _valueController.text as num?;
+                  historicalOrdersFilter?.orderPrice = num.parse(value);
                 }
               },
               hintText: 'Ej: 10.000',
@@ -93,7 +93,7 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
     );
   }
 
-  void _onConfirm(HistoricalOrdersFilter? ordersfilter) {
+  void _onConfirm() {
     if (!_formKey.currentState!.validate()) return;
     ref.read(historicalOrdersProvider.notifier).resetState();
     ref.read(historicalOrdersProvider.notifier).getMoreHistoricalOrders(pageIndex: 1, historicalOrdersFilter: historicalOrdersFilter);
