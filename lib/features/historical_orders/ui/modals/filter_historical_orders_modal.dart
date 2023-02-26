@@ -32,7 +32,7 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
   final _valueController = TextEditingController();
   num value = 0;
   PaymentMethod? _selectedPaymentMethod;
-  HistoricalOrdersFilter? historicalOrdersFilter;
+  HistoricalOrdersFilter? historicalOrdersFilter = HistoricalOrdersFilter();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
       title: const DialogHeader(title: 'Filtra las ordenes'),
       actions: [
         TextButton(onPressed: Navigator.of(context).pop, child: const Text('Cancelar')),
-        TextButton(onPressed: _onConfirm, child: const Text('Filtrar')),
+        TextButton(onPressed: () => _onConfirm(historicalOrdersState.historicalOrdersFilter), child: const Text('Filtrar')),
       ],
       content: Form(
         key: _formKey,
@@ -58,12 +58,12 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
             const SectionTitle(title: 'Fecha de inicio'),
             DateTextField(
               label: 'Fecha de inicio',
-              onTap: (time) => historicalOrdersState.historicalOrdersFilter?.dateStart = time,
+              onTap: (time) => historicalOrdersFilter?.dateStart = time,
             ),
             const SectionTitle(title: 'Fecha fin'),
             DateTextField(
               label: 'Fecha fin',
-              onTap: (time) => historicalOrdersState.historicalOrdersFilter?.dateEnd = time,
+              onTap: (time) => historicalOrdersFilter?.dateEnd = time,
             ),
             const SectionTitle(title: 'Valor de la orden'),
             CustomTextField(
@@ -71,7 +71,9 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
               validator: TextFormValidator.orderPriceValidator,
               label: 'Valor de la orden',
               onTap: () {
-                historicalOrdersState.historicalOrdersFilter?.orderPrice = _valueController.text as num?;
+                if(_valueController.text.isNotEmpty) {
+                  historicalOrdersFilter?.orderPrice = _valueController.text as num?;
+                }
               },
               hintText: 'Ej: 10.000',
             ),
@@ -80,7 +82,7 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
               items: PaymentMethod.values,
               value: _selectedPaymentMethod,
               itemAsString: (item) => item.title,
-              onChanged: (value) => setState(() => historicalOrdersState.historicalOrdersFilter
+              onChanged: (value) => setState(() => historicalOrdersFilter
                 ?.paymentMethod = value?.paymentValue,),
               labelText: 'Metodo de pago',
               hintText: 'Ej: ${PaymentMethod.values.first.title}}',
@@ -91,8 +93,10 @@ class _FilterHistoricalOrdersDialog extends ConsumerState<FilterHistoricalOrders
     );
   }
 
-  void _onConfirm() {
+  void _onConfirm(HistoricalOrdersFilter? ordersfilter) {
     if (!_formKey.currentState!.validate()) return;
+    ref.read(historicalOrdersProvider.notifier).resetState();
+    ref.read(historicalOrdersProvider.notifier).getMoreHistoricalOrders(pageIndex: 1, historicalOrdersFilter: historicalOrdersFilter);
     Navigator.of(context).pop();
   }
 }

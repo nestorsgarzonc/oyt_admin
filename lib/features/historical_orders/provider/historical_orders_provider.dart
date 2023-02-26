@@ -37,7 +37,6 @@ class HistoricalOrdersProvider extends StateNotifier<HistoricalOrdersState> {
 
   Future<void> getMoreHistoricalOrders({HistoricalOrdersFilter? historicalOrdersFilter, required int pageIndex}) async {
     if (state.isFetchingMore || !state.isThereNextPage) return;
-    state.copyWith(isFetchingMore: true);
     state = state.copyWith(isFetchingMore: true);
     final result = await historicalOrdersRepository.getHistoricalOrders(historicalOrdersFilter, pageIndex);
     result.fold(
@@ -53,5 +52,9 @@ class HistoricalOrdersProvider extends StateNotifier<HistoricalOrdersState> {
       },
     );
     state = state.copyWith(isFetchingMore: false);
+  }
+
+  void resetState() {
+    state = state.copyWith(isFetchingMore: false, isThereNextPage: true);
   }
 }
