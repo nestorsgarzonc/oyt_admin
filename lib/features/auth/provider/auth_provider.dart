@@ -74,7 +74,7 @@ class AuthProvider extends StateNotifier<AuthState> {
         } else {
           state = state.copyWith(selectedRestaurantId: StateAsync.success(r.restaurantsId.first));
           await authRepository.chooseRestaurantId(r.restaurantsId.first);
-          ref.read(routerProvider).router.pushReplacement(IndexHomeScreen.route);
+          ref.read(routerProvider).router.go(IndexHomeScreen.route);
           //TODO: START LISTENING SOCKET WHEN USER SELECT RESTAURANT OR CREATE IT
           startListeningSocket();
         }
